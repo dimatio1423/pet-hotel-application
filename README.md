@@ -1,1 +1,2 @@
 # pet-hotel-application
+The Pet Hotel Management System is an online system designed to streamline operations for pet boarding facilities. It enables pet owners to register, book services, and receive updates about their pets. The system manages various services including boarding, daycare, grooming, and training, while tracking vaccination records and handling payments. By providing features such as emergency contact management and daily updates, it ensures the safety and well-being of pets, offering convenience and peace of mind to their owners.

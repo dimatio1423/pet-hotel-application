@@ -1,0 +1,77 @@
+using BusinessObjects.Entities;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Repositories.AccommodationRepo;
+using Repositories.Repositories.BookingInformationRepo;
+using Repositories.Repositories.FeedbackRepo;
+using Repositories.Repositories.PaymentRecordRepo;
+using Repositories.Repositories.PetCareServiceRepo;
+using Repositories.Repositories.PetRepo;
+using Repositories.Repositories.RoleRepo;
+using Repositories.Repositories.ServiceBookingRepo;
+using Repositories.Repositories.UserRepo;
+using Services.Services.AccommodationService;
+using Services.Services.BookingInformationService;
+using Services.Services.FeedbackService;
+using Services.Services.PaymentRecordService;
+using Services.Services.PetCareServices;
+using Services.Services.PetService;
+using Services.Services.RoleService;
+using Services.Services.ServicesBookingService;
+using Services.Services.UserService;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddRazorPages();
+
+//builder.Services.AddControllersWithViews();
+//--------------------------------------------------------------------------------------------------------------
+builder.Services.AddScoped<IAccommodationRepository, AccommodationRepository>();
+builder.Services.AddScoped<IBookingInformationRepository, BookingInformationRepository>();
+builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+builder.Services.AddScoped<IPaymentRecordRepository, PaymentRecordRepository>();
+builder.Services.AddScoped<IPetCareServiceRepository, PetCareServiceRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IServiceBookingRepository, ServiceBookingRepository>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+//--------------------------------------------------------------------------------------------------------------
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccommodationService, AccommodationService>();
+builder.Services.AddScoped<IBookingInformationService, BookingInformatonService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+builder.Services.AddScoped<IPaymentRecordService, PaymenRecordService>();
+builder.Services.AddScoped<IPetCareService, PetCareServices>();
+builder.Services.AddScoped<IPetService, PetService>();
+builder.Services.AddScoped<IServiceBookingService, ServiceBookingService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+
+builder.Services.AddDbContext<PetHotelApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PetHotelApplication"));
+});
+
+
+var app = builder.Build();
+
+
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapRazorPages();
+
+app.Run();
