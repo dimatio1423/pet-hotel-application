@@ -10,16 +10,11 @@ namespace Repositories.Repositories.PetCareServiceRepo
 {
     public class PetCareServiceRepository : IPetCareServiceRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public PetCareServiceRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
         public void Add(PetCareService petCareService)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.PetCareServices.Add(petCareService);
                 _context.SaveChanges();
             }
@@ -33,6 +28,7 @@ namespace Repositories.Repositories.PetCareServiceRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currPetCareService = _context.PetCareServices.FirstOrDefault(x => x.Id.Equals(petCareService.Id));
 
                 currPetCareService.Status = "Inactive";
@@ -51,6 +47,7 @@ namespace Repositories.Repositories.PetCareServiceRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.PetCareServices.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -63,6 +60,7 @@ namespace Repositories.Repositories.PetCareServiceRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.PetCareServices.ToList();
             }
             catch (Exception ex)
@@ -75,6 +73,7 @@ namespace Repositories.Repositories.PetCareServiceRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<PetCareService>(petCareService).State = EntityState.Modified;
                 _context.SaveChanges();

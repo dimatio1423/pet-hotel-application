@@ -10,16 +10,11 @@ namespace Repositories.Repositories.FeedbackRepo
 {
     public class FeedbackRepository : IFeedbackRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public FeedbackRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
         public void Add(Feedback feedback)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Feedbacks.Add(feedback);
                 _context.SaveChanges();
             }
@@ -33,6 +28,7 @@ namespace Repositories.Repositories.FeedbackRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currFeedback = _context.Feedbacks.FirstOrDefault(x => x.Id.Equals(feedback.Id));
 
                 _context.Remove(currFeedback);
@@ -49,6 +45,7 @@ namespace Repositories.Repositories.FeedbackRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Feedbacks.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -61,6 +58,7 @@ namespace Repositories.Repositories.FeedbackRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Feedbacks.ToList();
             }
             catch (Exception ex)
@@ -73,6 +71,7 @@ namespace Repositories.Repositories.FeedbackRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<Feedback>(feedback).State = EntityState.Modified;
                 _context.SaveChanges();

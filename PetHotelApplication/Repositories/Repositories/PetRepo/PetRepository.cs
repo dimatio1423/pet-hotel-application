@@ -11,16 +11,11 @@ namespace Repositories.Repositories.PetRepo
 {
     public class PetRepository : IPetRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public PetRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
         public void Add(Pet pet)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Pets.Add(pet);
                 _context.SaveChanges();
             }
@@ -34,6 +29,7 @@ namespace Repositories.Repositories.PetRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currPet = _context.Pets.FirstOrDefault(x => x.Id.Equals(pet.Id));
 
                 currPet.Status = "Inactive";
@@ -52,6 +48,7 @@ namespace Repositories.Repositories.PetRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Pets.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -64,6 +61,7 @@ namespace Repositories.Repositories.PetRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Pets.ToList();
             }
             catch (Exception ex)
@@ -76,6 +74,7 @@ namespace Repositories.Repositories.PetRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<Pet>(pet).State = EntityState.Modified;
                 _context.SaveChanges();

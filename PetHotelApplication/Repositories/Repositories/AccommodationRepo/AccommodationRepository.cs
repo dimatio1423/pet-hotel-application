@@ -11,16 +11,11 @@ namespace Repositories.Repositories.AccommodationRepo
 {
     public class AccommodationRepository : IAccommodationRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public AccommodationRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
         public void Add(Accommodation accommodation)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Accommodations.Add(accommodation);
                 _context.SaveChanges();
             }
@@ -34,6 +29,7 @@ namespace Repositories.Repositories.AccommodationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currAccommodation = _context.Accommodations.FirstOrDefault(x => x.Id.Equals(accommodation.Id));
                 _context.Remove(currAccommodation);
                 _context.SaveChanges();
@@ -48,6 +44,7 @@ namespace Repositories.Repositories.AccommodationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Accommodations.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -60,6 +57,7 @@ namespace Repositories.Repositories.AccommodationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Accommodations.ToList();
             }
             catch (Exception ex)
@@ -72,6 +70,7 @@ namespace Repositories.Repositories.AccommodationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<Accommodation>(accommodation).State = EntityState.Modified;
                 _context.SaveChanges();

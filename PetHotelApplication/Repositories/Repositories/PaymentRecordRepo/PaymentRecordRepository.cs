@@ -10,16 +10,11 @@ namespace Repositories.Repositories.PaymentRecordRepo
 {
     public class PaymentRecordRepository : IPaymentRecordRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public PaymentRecordRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
         public void Add(PaymentRecord paymentRecord)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currPaymentRecord = _context.PaymentRecords.FirstOrDefault(x => x.Id.Equals(paymentRecord.Id));
 
                 currPaymentRecord.Status = "Inactive";
@@ -43,6 +38,7 @@ namespace Repositories.Repositories.PaymentRecordRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.PaymentRecords.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -55,6 +51,7 @@ namespace Repositories.Repositories.PaymentRecordRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.PaymentRecords.ToList();
             }
             catch (Exception ex)
@@ -67,6 +64,7 @@ namespace Repositories.Repositories.PaymentRecordRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<PaymentRecord>(paymentRecord).State = EntityState.Modified;
                 _context.SaveChanges();

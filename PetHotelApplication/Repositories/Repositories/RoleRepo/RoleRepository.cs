@@ -10,17 +10,11 @@ namespace Repositories.Repositories.RoleRepo
 {
     public class RoleRepository : IRoleRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public RoleRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public void Add(Role role)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Roles.Add(role);
                 _context.SaveChanges();
             }
@@ -34,6 +28,7 @@ namespace Repositories.Repositories.RoleRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currRole = _context.Pets.FirstOrDefault(x => x.Id.Equals(role.Id));
 
                 _context.Remove(currRole);
@@ -50,6 +45,7 @@ namespace Repositories.Repositories.RoleRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Roles.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -62,6 +58,7 @@ namespace Repositories.Repositories.RoleRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Roles.ToList();
             }
             catch (Exception ex)
@@ -74,6 +71,7 @@ namespace Repositories.Repositories.RoleRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<Role>(role).State = EntityState.Modified;
                 _context.SaveChanges();

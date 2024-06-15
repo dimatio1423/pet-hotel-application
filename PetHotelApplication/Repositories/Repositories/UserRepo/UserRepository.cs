@@ -10,16 +10,11 @@ namespace Repositories.Repositories.UserRepo
 {
     public class UserRepository : IUserRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public UserRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
         public void Add(User user)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Users.Add(user);
                 _context.SaveChanges();
             }
@@ -33,6 +28,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currUser = _context.Pets.FirstOrDefault(x => x.Id.Equals(user.Id));
 
                 currUser.Status = "Inactive";
@@ -51,6 +47,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Users.FirstOrDefault(x => x.Email.Equals(email));
             }
             catch (Exception ex)
@@ -63,6 +60,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Users.ToList();
             }
             catch (Exception ex)
@@ -75,6 +73,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<User>(user).State = EntityState.Modified;
                 _context.SaveChanges();

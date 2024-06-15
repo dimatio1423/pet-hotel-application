@@ -47,10 +47,10 @@ builder.Services.AddScoped<IServiceBookingService, ServiceBookingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
 
-builder.Services.AddDbContext<PetHotelApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PetHotelApplication"));
-});
+//builder.Services.AddDbContext<PetHotelApplicationDbContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("PetHotelApplication"));
+//});
 
 
 var app = builder.Build();

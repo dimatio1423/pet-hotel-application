@@ -10,16 +10,11 @@ namespace Repositories.Repositories.BookingInformationRepo
 {
     public class BookingInformationRepository : IBookingInformationRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public BookingInformationRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
         public void Add(BookingInformation bookingInformation)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.BookingInformations.Add(bookingInformation);
                 _context.SaveChanges();
             }
@@ -33,6 +28,7 @@ namespace Repositories.Repositories.BookingInformationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currBooking = _context.BookingInformations.FirstOrDefault(x => x.Id.Equals(bookingInformation.Id));
 
                 currBooking.Status = "Inactive";
@@ -51,6 +47,7 @@ namespace Repositories.Repositories.BookingInformationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.BookingInformations.ToList();
             }
             catch (Exception ex)
@@ -63,6 +60,7 @@ namespace Repositories.Repositories.BookingInformationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.BookingInformations.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -75,6 +73,7 @@ namespace Repositories.Repositories.BookingInformationRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<BookingInformation>(bookingInformation).State = EntityState.Modified;
                 _context.SaveChanges();

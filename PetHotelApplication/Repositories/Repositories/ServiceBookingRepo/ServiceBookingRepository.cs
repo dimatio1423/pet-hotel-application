@@ -10,17 +10,11 @@ namespace Repositories.Repositories.ServiceBookingRepo
 {
     public class ServiceBookingRepository : IServiceBookingRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-
-        public ServiceBookingRepository(PetHotelApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public void Add(ServiceBooking serviceBooking)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.ServiceBookings.Add(serviceBooking);
                 _context.SaveChanges();
             }
@@ -34,6 +28,7 @@ namespace Repositories.Repositories.ServiceBookingRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currServiceBooking = _context.Feedbacks.FirstOrDefault(x => x.Id.Equals(serviceBooking.Id));
 
                 _context.Remove(currServiceBooking);
@@ -50,6 +45,7 @@ namespace Repositories.Repositories.ServiceBookingRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.ServiceBookings.Where(x => x.BookingId.Equals(Id)).ToList();
             }
             catch (Exception ex)
@@ -62,6 +58,7 @@ namespace Repositories.Repositories.ServiceBookingRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<ServiceBooking>(serviceBooking).State = EntityState.Modified;
                 _context.SaveChanges();
