@@ -8,23 +8,29 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Entities;
 using Services.Services.PetCareServices;
 using Repositories;
+using BusinessObjects.Models.PetCareModel.Response;
+using AutoMapper;
 
 namespace PetHotelApplicationRazorPage.Pages.Pet
 {
     public class ServicesModel : PageModel
     {
         private readonly IPetCareService _petCareService;
+        private readonly IMapper _mapper;
 
-        public ServicesModel(IPetCareService petCareService)
+        public ServicesModel(IPetCareService petCareService,
+                             IMapper mapper)
         {
             _petCareService = petCareService;
+            _mapper = mapper;
         }
 
-        public IList<PetCareService> PetCareService { get;set; } = default!;
+        public IList<PetCareResModel> PetCareService { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            PetCareService = _petCareService.GetPetCareServices();
+            var list = _petCareService.GetPetCareServices();
+            PetCareService = _mapper.Map<List<PetCareResModel>>(list);
         }
     }
 }
