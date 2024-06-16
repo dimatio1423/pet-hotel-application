@@ -1,0 +1,68 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.Pet.ServiceDetailsModel
+@{
+    var service = Model.Service;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Service Details - Pet Hotel</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .service-details {
+            border: 1px solid #000;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .service-name {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .service-description {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .service-image {
+            border: 1px solid #000;
+            padding: 10px;
+        }
+
+            .service-image img {
+                width: 100%;
+                height: auto;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="service-details">
+            <div class="service-name">
+                <h2>@service.Type</h2>
+            </div>
+            <div class="service-description">
+                <p>@service.Description</p>
+            </div>
+            @* <div class="service-image">
+                <img src="@service.ImageUrl" alt="Service Image" />
+            </div> *@
+        </div>
+    </div>
+</body>
+
+</html>
