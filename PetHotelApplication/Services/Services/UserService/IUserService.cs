@@ -10,6 +10,7 @@ namespace Services.Services.UserService
 {
     public interface IUserService
     {
+        List<User> GetUsers();
         User GetUserByEmail(string email);
         void RegisterUser(RegisterUserReqModel registerUserReq);
         void CreateUserReq(CreateUserReqModel createUserReqModel);

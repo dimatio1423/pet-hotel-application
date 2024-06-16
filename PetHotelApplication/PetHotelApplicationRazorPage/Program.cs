@@ -24,6 +24,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Add session
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromMinutes(10);
+});
+
 //builder.Services.AddControllersWithViews();
 //--------------------------------------------------------------------------------------------------------------
 builder.Services.AddScoped<IAccommodationRepository, AccommodationRepository>();
@@ -67,6 +73,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.UseRouting();
 

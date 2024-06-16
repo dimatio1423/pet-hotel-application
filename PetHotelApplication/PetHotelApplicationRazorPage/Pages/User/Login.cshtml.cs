@@ -21,19 +21,22 @@ namespace PetHotelApplicationRazorPage.Pages.User
 
         public async Task<IActionResult> OnPost()
         {
+            var currEmail = loginModel.Email;
             BusinessObjects.Entities.User currUser = _userService.GetUserByEmail(loginModel.Email);
             if (currUser != null)
             {
                 var isPasswordValid = _userService.VerifyPassword(loginModel.Password, currUser.Password);
                 if (isPasswordValid)
                 {
-                    return RedirectToPage("/Privacy");
+                    HttpContext.Session.SetString("AccountEmail", currUser.Email);
+                    return RedirectToPage("/Index");
                 }
-                TempData["Error"] = "Mật khẩu sai. Vui lòng nhập lại";
-                return RedirectToPage("./Login");
+                TempData["Error"] = "Wrong password. Please try again !!!";
+                loginModel.Email = currEmail;
+                return Page();
             }
-            TempData["Error"] = "Email không tồn tại";
-            return RedirectToPage("./Login");
+            TempData["Error"] = "Account does not exist";
+            return Page();
         }
     }
 }

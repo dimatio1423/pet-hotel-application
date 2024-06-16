@@ -72,5 +72,10 @@ namespace Services.Services.UserService
         {
             return _userRepository.GetUserByEmail(email);
         }
+
+        public List<User> GetUsers()
+        {
+            return _userRepository.GetUsers();
+        }
     }
 }

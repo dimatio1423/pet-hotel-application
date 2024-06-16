@@ -24,9 +24,17 @@ namespace PetHotelApplicationRazorPage.Pages.User
         public async Task<IActionResult> OnPost()
         {
             var currUser = _userService.GetUserByEmail(register.Email);
+            var currUserPhoneNumber = _userService.GetUsers().FirstOrDefault(x => x.PhoneNumber.Equals(register.PhoneNumber));
+
             if (currUser != null)
             {
-                TempData["Error"] = "Email đã tồn tại";
+                TempData["Error"] = "Email is already taken";
+                return RedirectToPage("./Register");
+            }
+
+            if (currUserPhoneNumber != null)
+            {
+                TempData["Error"] = "Phone Number is already taken";
                 return RedirectToPage("./Register");
             }
 

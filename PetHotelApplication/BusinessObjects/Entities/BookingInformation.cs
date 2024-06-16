@@ -15,10 +15,6 @@ public partial class BookingInformation
 
     public string Note { get; set; }
 
-    public string FeedingSchedule { get; set; }
-
-    public string ExerciseRoutine { get; set; }
-
     public string Status { get; set; }
 
     public string UserId { get; set; }

@@ -5,8 +5,14 @@
 }
 
 <div>
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @{
+        if (HttpContext.Session.GetString("AccountEmail") != null)
+        {
+            <div class="" style="text-align:center">
+            <h5 class="display-4">Welcome, @Model.currentUser.FullName</h5>
+            </div>
+        }
+    }
     <!-- Hero Start -->
     <div class="container-fluid bg-primary py-5 mb-5 hero-header">
         <div class="container py-5">
@@ -14,7 +20,7 @@
                 <div class="col-lg-8 text-center text-lg-start">
                     <h1 class="display-1 text-uppercase text-dark mb-lg-4">Your Pet’s Home Away From Home</h1>
                     <h1 class="text-uppercase text-white mb-lg-4">Make Your Pets Happy</h1>
-                    <p class="fs-4 text-white mb-lg-4">Welcome to [Your Pet Hotel Name], where your pets enjoy luxurious accommodations, personalized care, and a fun-filled stay.
+                    <p class="fs-4 text-black mb-lg-4">Welcome to [Your Pet Hotel Name], where your pets enjoy luxurious accommodations, personalized care, and a fun-filled stay.
                         From spacious rooms and grooming services to 24/7 supervision and real-time updates,
                         we ensure your furry friends are pampered and happy. Book their perfect getaway today!</p>
                     <div class="d-flex align-items-center justify-content-center justify-content-lg-start pt-5">
@@ -77,16 +83,18 @@
                                 <button class="nav-link text-uppercase w-100" id="pills-2-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-2" type="button" role="tab" aria-controls="pills-2"
                                         aria-selected="false">
-                                    Our Vission
+                                    Our Vision
                                 </button>
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
-                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna</p>
+                                <p class="mb-0">Our mission at [Your Pet Hotel Name] is to provide a home-away-from-home experience for pets,
+                                    ensuring their well-being and happiness while fostering trust and peace of mind for their owners.</p>
                             </div>
                             <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
-                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna</p>
+                                <p class="mb-0">To be the premier pet hotel, renowned for providing exceptional care, comfort, and joy to pets, 
+                                    while offering peace of mind to pet owners through innovative and personalized services.</p>
                             </div>
                         </div>
                     </div>

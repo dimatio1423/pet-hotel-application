@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace BusinessObjects.Entities;
 
@@ -34,24 +33,15 @@ public partial class PetHotelApplicationDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    private string GetConnectionString()
-    {
-        IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true).Build();
-        return configuration["ConnectionStrings:PetHotelApplication"];
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(GetConnectionString());
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=12345;database= PetHotelApplicationDB;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Accommodation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC27358D4547");
+            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC27F3EE556E");
 
             entity.ToTable("Accommodation");
 
@@ -73,7 +63,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<BookingInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC2716AFCEA0");
+            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC2739048A78");
 
             entity.ToTable("BookingInformation");
 
@@ -108,22 +98,22 @@ public partial class PetHotelApplicationDbContext : DbContext
             entity.HasOne(d => d.Accommodation).WithMany(p => p.BookingInformations)
                 .HasForeignKey(d => d.AccommodationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BookingIn__Accom__46E78A0C");
+                .HasConstraintName("FK__BookingIn__Accom__4222D4EF");
 
             entity.HasOne(d => d.Pet).WithMany(p => p.BookingInformations)
                 .HasForeignKey(d => d.PetId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BookingIn__PetID__45F365D3");
+                .HasConstraintName("FK__BookingIn__PetID__412EB0B6");
 
             entity.HasOne(d => d.User).WithMany(p => p.BookingInformations)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__BookingIn__UserI__44FF419A");
+                .HasConstraintName("FK__BookingIn__UserI__403A8C7D");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC272E22C864");
+            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC273E2B5F9B");
 
             entity.Property(e => e.Id)
                 .HasMaxLength(100)
@@ -142,12 +132,12 @@ public partial class PetHotelApplicationDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Feedbacks__UserI__534D60F1");
+                .HasConstraintName("FK__Feedbacks__UserI__4E88ABD4");
         });
 
         modelBuilder.Entity<PaymentRecord>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC27C54B248D");
+            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC275B9FE89F");
 
             entity.ToTable("PaymentRecord");
 
@@ -182,17 +172,17 @@ public partial class PetHotelApplicationDbContext : DbContext
             entity.HasOne(d => d.Booking).WithMany(p => p.PaymentRecords)
                 .HasForeignKey(d => d.BookingId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PaymentRe__Booki__5070F446");
+                .HasConstraintName("FK__PaymentRe__Booki__4BAC3F29");
 
             entity.HasOne(d => d.User).WithMany(p => p.PaymentRecords)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PaymentRe__UserI__4F7CD00D");
+                .HasConstraintName("FK__PaymentRe__UserI__4AB81AF0");
         });
 
         modelBuilder.Entity<Pet>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC27FC7C9B65");
+            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC273790DD0B");
 
             entity.ToTable("Pet");
 
@@ -221,12 +211,12 @@ public partial class PetHotelApplicationDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Pets)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Pet__UserID__403A8C7D");
+                .HasConstraintName("FK__Pet__UserID__3B75D760");
         });
 
         modelBuilder.Entity<PetCareService>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC27568BD328");
+            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC270DFB7AB3");
 
             entity.ToTable("PetCareService");
 
@@ -246,7 +236,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC27935015AF");
+            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC27C3CB9C50");
 
             entity.ToTable("Role");
 
@@ -262,7 +252,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<ServiceBooking>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27AB2E21E9");
+            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27F498E6C7");
 
             entity.ToTable("ServiceBooking");
 
@@ -283,17 +273,17 @@ public partial class PetHotelApplicationDbContext : DbContext
             entity.HasOne(d => d.Booking).WithMany(p => p.ServiceBookings)
                 .HasForeignKey(d => d.BookingId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ServiceBo__Booki__4CA06362");
+                .HasConstraintName("FK__ServiceBo__Booki__47DBAE45");
 
             entity.HasOne(d => d.Service).WithMany(p => p.ServiceBookings)
                 .HasForeignKey(d => d.ServiceId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ServiceBo__Servi__4BAC3F29");
+                .HasConstraintName("FK__ServiceBo__Servi__46E78A0C");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC27042B43C0");
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC27AACB9BED");
 
             entity.ToTable("User");
 

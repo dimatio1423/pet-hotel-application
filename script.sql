@@ -50,8 +50,6 @@ BoardingType NVARCHAR(50) NOT NULL,
 StartDate DATETIME NOT NULL,
 EndDate DATETIME NOT NULL,
 Note NVARCHAR(max),
-FeedingSchedule NVARCHAR(max),
-ExerciseRoutine NVARCHAR(max),
 Status NVARCHAR(20) NOT NULL,
 UserID VARCHAR(100) NOT NULL,
 AccommodationID VARCHAR(100) NOT NULL,
@@ -127,10 +125,10 @@ INSERT INTO Accommodation (ID, Name, Type, Capacity, Status, Description) VALUES
 ('3', 'Communal Area C', 'Communal Area', 15, 'Available', 'Large communal area for pets to play and socialize');
 
 -- Sample data for BookingInformation table
-INSERT INTO BookingInformation (ID, BoardingType, StartDate, EndDate, Note, FeedingSchedule, ExerciseRoutine, Status, UserID, AccommodationID, PetID) VALUES 
-('1', 'Overnight', '2024-06-01 10:00:00', '2024-06-05 10:00:00', 'No special notes', 'Twice a day', 'Daily walk', 'Confirmed', '2', '1', '1'),
-('2', 'Daycare', '2024-06-02 08:00:00', '2024-06-02 18:00:00', 'Prefers wet food', 'Three times a day', 'Playtime in the yard', 'Confirmed', '2', '2', '2'),
-('3', 'Extended Stay', '2024-06-03 08:00:00', '2024-06-10 18:00:00', 'Requires medication twice daily', 'Twice a day', 'Morning and evening walks', 'Confirmed', '2', '3', '1');
+INSERT INTO BookingInformation (ID, BoardingType, StartDate, EndDate, Note, Status, UserID, AccommodationID, PetID) VALUES 
+('1', 'Overnight', '2024-06-01 10:00:00', '2024-06-05 10:00:00', 'No special notes', 'Confirmed', '2', '1', '1'),
+('2', 'Daycare', '2024-06-02 08:00:00', '2024-06-02 18:00:00', 'Prefers wet food', 'Confirmed', '2', '2', '2'),
+('3', 'Extended Stay', '2024-06-03 08:00:00', '2024-06-10 18:00:00', 'Morning and evening walks', 'Confirmed', '2', '3', '1');
 
 -- Sample data for PetCareService table
 INSERT INTO PetCareService (ID, Type, Description, Status) VALUES 
