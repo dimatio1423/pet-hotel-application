@@ -9,6 +9,7 @@ using Repositories.Repositories.PetRepo;
 using Repositories.Repositories.RoleRepo;
 using Repositories.Repositories.ServiceBookingRepo;
 using Repositories.Repositories.UserRepo;
+using Services.MapperProfiles;
 using Services.Services.AccommodationService;
 using Services.Services.BookingInformationService;
 using Services.Services.FeedbackService;
@@ -32,6 +33,8 @@ builder.Services.AddSession(option =>
 
 //builder.Services.AddControllersWithViews();
 //--------------------------------------------------------------------------------------------------------------
+builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+
 builder.Services.AddScoped<IAccommodationRepository, AccommodationRepository>();
 builder.Services.AddScoped<IBookingInformationRepository, BookingInformationRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
