@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Entities;
-using Repositories.Models.UserModel;
+using BusinessObjects.Models.UserModel;
 using Repositories.Repositories.UserRepo;
 using System;
 using System.Collections.Generic;

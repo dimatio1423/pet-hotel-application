@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Models.UserModel
+namespace BusinessObjects.Models.UserModel
 {
     public class CreateUserReqModel
     {
