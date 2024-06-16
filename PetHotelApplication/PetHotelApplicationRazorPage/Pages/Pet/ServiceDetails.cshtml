@@ -1,7 +1,16 @@
-﻿@page
+﻿@page "{id}"
 @model PetHotelApplicationRazorPage.Pages.Pet.ServiceDetailsModel
 @{
+    ViewData["Title"] = "Service Details";
     var service = Model.Service;
+    // Sample image URLs for demonstration
+    var imageUrls = new List<string>
+    {
+        "https://mcdn.coolmate.me/image/January2024/mem-meo-tet-2024-thumb.jpg",
+        "https://icdn.24h.com.vn/upload/2-2024/images/2024-04-26//1714088816-tp-hcm-co-the-thi-diem-gan-chip-de-quan-ly-cho-meo-4271-width1000height750.jpeg",
+        "https://image.plo.vn/w1000/Uploaded/2024/rptkbun/2024_03_25/ho-dan-nuoi-cho-26-3-7248.jpg.webp",
+        "https://cf.shopee.vn/file/907c2c6fffb8bf806bd6db303f467c3d_tn"
+    };
 }
 
 <!DOCTYPE html>
@@ -11,6 +20,14 @@
     <meta charset="utf-8">
     <title>Service Details - Pet Hotel</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="~/img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/lib/flaticon/font/flaticon.css" rel="stylesheet">
+    <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
     <style>
         .container {
             width: 100%;
@@ -20,36 +37,75 @@
         }
 
         .service-details {
-            border: 1px solid #000;
             padding: 20px;
             margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: #fff;
         }
 
         .service-name {
-            border: 1px solid #000;
             padding: 10px;
             margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
         }
 
         .service-description {
-            border: 1px solid #000;
             padding: 10px;
             margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #666;
         }
 
         .service-image {
-            border: 1px solid #000;
             padding: 10px;
+            text-align: center;
         }
 
-            .service-image img {
-                width: 100%;
-                height: auto;
-            }
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-book-now {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-back {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 
 <body>
+
     <div class="container">
         <div class="service-details">
             <div class="service-name">
@@ -58,11 +114,40 @@
             <div class="service-description">
                 <p>@service.Description</p>
             </div>
-            @* <div class="service-image">
-                <img src="@service.ImageUrl" alt="Service Image" />
-            </div> *@
+            <div class="service-image">
+                <div id="petCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < imageUrls.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@imageUrls[i]" alt="Service Image @i" />
+                            </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#petCarousel" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#petCarousel" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            </div>
+            <div class="buttons">
+                <a href="/Pet/Services" class="btn btn-custom btn-back">Back to Services</a>
+                <a href="/Pet/BookNow" class="btn btn-custom btn-book-now">Book Now</a>
+            </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/js/main.js"></script>
+
 </body>
 
 </html>
