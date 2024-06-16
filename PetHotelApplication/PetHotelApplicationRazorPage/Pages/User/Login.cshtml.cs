@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Repositories.Models.UserModel;
+using BusinessObjects.Models.UserModel;
 using Services.Services.UserService;
 
 namespace PetHotelApplicationRazorPage.Pages.User
