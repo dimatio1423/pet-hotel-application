@@ -29,13 +29,13 @@ namespace PetHotelApplicationRazorPage.Pages.User
             if (currUser != null)
             {
                 TempData["Error"] = "Email is already taken";
-                return RedirectToPage("./Register");
+                return Page();
             }
 
             if (currUserPhoneNumber != null)
             {
                 TempData["Error"] = "Phone Number is already taken";
-                return RedirectToPage("./Register");
+                return Page();
             }
 
             _userService.RegisterUser(register);

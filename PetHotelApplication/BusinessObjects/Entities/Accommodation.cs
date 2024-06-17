@@ -17,5 +17,7 @@ public partial class Accommodation
 
     public string Description { get; set; }
 
+    public decimal Price { get; set; }
+
     public virtual ICollection<BookingInformation> BookingInformations { get; set; } = new List<BookingInformation>();
 }

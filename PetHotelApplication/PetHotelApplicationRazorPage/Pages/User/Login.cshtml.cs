@@ -15,8 +15,13 @@ namespace PetHotelApplicationRazorPage.Pages.User
         }
         [BindProperty]
         public LoginUserReqModel loginModel { get; set; } = default;
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            if (HttpContext.Session.GetString("AccountEmail") != null)
+            {
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()

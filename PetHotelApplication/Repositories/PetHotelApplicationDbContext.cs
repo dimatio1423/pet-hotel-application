@@ -46,12 +46,11 @@ public partial class PetHotelApplicationDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(GetConnectionString());
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Accommodation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC27F3EE556E");
+            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC27A1704205");
 
             entity.ToTable("Accommodation");
 
@@ -63,6 +62,7 @@ public partial class PetHotelApplicationDbContext : DbContext
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasMaxLength(20);
@@ -73,7 +73,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<BookingInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC2739048A78");
+            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC27E984F0DE");
 
             entity.ToTable("BookingInformation");
 
@@ -123,7 +123,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC273E2B5F9B");
+            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC273926254C");
 
             entity.Property(e => e.Id)
                 .HasMaxLength(100)
@@ -147,7 +147,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<PaymentRecord>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC275B9FE89F");
+            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC27DDEDE7B9");
 
             entity.ToTable("PaymentRecord");
 
@@ -192,7 +192,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Pet>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC273790DD0B");
+            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC27C0391F5D");
 
             entity.ToTable("Pet");
 
@@ -226,7 +226,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<PetCareService>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC270DFB7AB3");
+            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC27AADFC314");
 
             entity.ToTable("PetCareService");
 
@@ -235,6 +235,7 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasMaxLength(20);
@@ -246,7 +247,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC27C3CB9C50");
+            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC27F2E1781A");
 
             entity.ToTable("Role");
 
@@ -262,7 +263,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<ServiceBooking>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27F498E6C7");
+            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27E6C31E53");
 
             entity.ToTable("ServiceBooking");
 
@@ -293,7 +294,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC27AACB9BED");
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC2778A72169");
 
             entity.ToTable("User");
 
