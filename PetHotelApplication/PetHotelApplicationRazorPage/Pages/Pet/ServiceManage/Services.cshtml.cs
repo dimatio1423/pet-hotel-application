@@ -11,26 +11,35 @@ using Repositories;
 using BusinessObjects.Models.PetCareModel.Response;
 using AutoMapper;
 
-namespace PetHotelApplicationRazorPage.Pages.Pet
+namespace PetHotelApplicationRazorPage.Pages.Pet.ServiceManage
 {
     public class ServicesModel : PageModel
     {
         private readonly IPetCareService _petCareService;
         private readonly IMapper _mapper;
 
-        public ServicesModel(IPetCareService petCareService,
-                             IMapper mapper)
+        public ServicesModel(IPetCareService petCareService, IMapper mapper)
         {
             _petCareService = petCareService;
             _mapper = mapper;
         }
 
-        public IList<PetCareResModel> PetCareService { get;set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public string SearchServices { get; set; }
+
+        public IList<PetCareResModel> PetCareService { get; set; } = new List<PetCareResModel>();
 
         public async Task OnGetAsync()
         {
             var list = _petCareService.GetPetCareServices();
+
+            if (!string.IsNullOrEmpty(SearchServices))
+            {
+                list = list.Where(l => l.Type.ToLower().Contains(SearchServices.ToLower())).ToList();
+            }
+
             PetCareService = _mapper.Map<List<PetCareResModel>>(list);
         }
     }
+
 }

@@ -1,5 +1,5 @@
 ﻿@page
-@model PetHotelApplicationRazorPage.Pages.Pet.ServicesModel
+@model ServicesModel
 
 @{
     ViewData["Title"] = "Services";
@@ -11,6 +11,15 @@
             <h6 class="text-primary text-uppercase">Services</h6>
             <h1 class="display-5 text-uppercase mb-0">Our Excellent Pet Care Services</h1>
         </div>
+
+        <form method="get">
+            <div class="form-group">
+                <label asp-for="SearchServices">Search</label>
+                <input asp-for="SearchServices" class="form-control" placeholder="Search services..." />
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
         <div class="row g-5">
             @foreach (var item in Model.PetCareService)
             {
