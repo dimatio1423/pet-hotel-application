@@ -13,5 +13,7 @@ public partial class PetCareService
 
     public string Status { get; set; }
 
+    public decimal Price { get; set; }
+
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; } = new List<ServiceBooking>();
 }
