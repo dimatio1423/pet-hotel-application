@@ -3,10 +3,13 @@
 @{
     ViewData["Title"] = "Service Details";
     var service = Model.Service;
-    // Sample image URLs for demonstration
     var imageUrls = new List<string>
     {
-        "https://icdn.24h.com.vn/upload/2-2024/images/2024-04-26//1714088816-tp-hcm-co-the-thi-diem-gan-chip-de-quan-ly-cho-meo-4271-width1000height750.jpeg",   
+        "https://images.summitmedia-digital.com/spotph/images/2017/08/08/pethotels-640.jpg",
+        "https://cdn.prod.website-files.com/6139cf517cd6d2b4af548b94/613dfb9b8dc97bb6b8255761_pet-hotel-780x440%20(2).jpeg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg9lKxnOl46JhMsToTV5SSqpADS0-nRoyZ0Q&s",
+        "https://content.petbacker.com/images/blog/2018/pet-hotel-relax.jpg",
+        "https://image.cnbcfm.com/api/v1/image/104661266-pet-hotels-2.jpg?v=1503071272"
     };
 }
 
@@ -43,10 +46,18 @@
 
         .service-name {
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 24px;
             font-weight: bold;
             color: #333;
+        }
+
+        .service-price {
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #28a745;
         }
 
         .service-description {
@@ -64,8 +75,8 @@
 
         .carousel-item img {
             width: 100%;
-            height: auto;
-            max-width: 600px;
+            height: 500px;
+            object-fit: cover;
             border-radius: 8px;
         }
 
@@ -84,13 +95,13 @@
         }
 
         .btn-book-now {
-            background-color: #28a745;
+            background-color: #ff6347;
             color: #fff;
             border: none;
         }
 
         .btn-back {
-            background-color: #007bff;
+            background-color: #20b2aa;
             color: #fff;
             border: none;
         }
@@ -107,6 +118,9 @@
         <div class="service-details">
             <div class="service-name">
                 <h2>@service.Type</h2>
+            </div>
+            <div class="service-price">
+                Price: @string.Format("{0:N0} VND", service.Price)
             </div>
             <div class="service-description">
                 <p>@service.Description</p>
