@@ -1,5 +1,5 @@
 ﻿@page "{id}"
-@model PetHotelApplicationRazorPage.Pages.Pet.ServiceDetailsModel
+@model PetCareServices.ServiceManage.ServiceDetailsModel
 @{
     ViewData["Title"] = "Service Details";
     var service = Model.Service;
@@ -117,13 +117,13 @@
     <div class="container">
         <div class="service-details">
             <div class="service-name">
-                <h2>@service.Type</h2>
+                <h2>@Model.Service.Type</h2>
             </div>
             <div class="service-price">
-                Price: @string.Format("{0:N0} VND", service.Price)
+                Price: @string.Format("{0:N0} VND", @Model.Service.Price)
             </div>
             <div class="service-description">
-                <p>@service.Description</p>
+                <p>@Model.Service.Description</p>
             </div>
             <div class="service-image">
                 <div id="petCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -146,8 +146,8 @@
                 </div>
             </div>
             <div class="buttons">
-                <a asp-page="/Pet/ServiceManage/Services" class="btn btn-custom btn-back">Back to Services</a>
-                <a asp-page="/Pet/BookNow" class="btn btn-custom btn-book-now">Book Now</a>
+                <a asp-page="/PetCareServices/ServiceManage/Services" class="btn btn-custom btn-back">Back to Services</a>
+                <a asp-page="/PetCareServices/BookNow" class="btn btn-custom btn-book-now">Book Now</a>
             </div>
         </div>
     </div>

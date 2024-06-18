@@ -1,5 +1,6 @@
 ﻿
 using BusinessObjects.Entities;
+using BusinessObjects.Enums.StatusEnums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace Repositories.Repositories.PetRepo
                 using var _context = new PetHotelApplicationDbContext();
                 var currPet = _context.Pets.FirstOrDefault(x => x.Id.Equals(pet.Id));
 
-                currPet.Status = "Inactive";
+                currPet.Status = StatusEnums.Inactive.ToString();
 
                 _context.Update(currPet);
 

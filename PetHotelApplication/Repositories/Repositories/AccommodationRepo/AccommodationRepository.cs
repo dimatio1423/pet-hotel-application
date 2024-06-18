@@ -1,5 +1,6 @@
 ﻿using Azure;
 using BusinessObjects.Entities;
+using BusinessObjects.Enums.StatusEnums;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using System;
@@ -32,7 +33,10 @@ namespace Repositories.Repositories.AccommodationRepo
             {
                 using var _context = new PetHotelApplicationDbContext();
                 var currAccommodation = _context.Accommodations.FirstOrDefault(x => x.Id.Equals(accommodation.Id));
-                _context.Remove(currAccommodation);
+
+                currAccommodation.Status = StatusEnums.Inactive.ToString();
+
+                _context.Update(currAccommodation);
                 _context.SaveChanges();
             }
             catch (Exception ex)

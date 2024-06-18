@@ -105,8 +105,8 @@ FOREIGN KEY (UserID) REFERENCES "User"(ID)
 INSERT INTO "Role" (ID, RoleName) VALUES 
 ('1', 'Admin'),
 ('2', 'Customer'),
-('3', 'Pet Hotel Manager'),
-('4', 'Pet Hotel Staff');
+('3', 'Manager'),
+('4', 'Staff');
 
 -- Sample data for User table
 INSERT INTO "User" (ID, FullName, PhoneNumber, Email, Password, Address, Status, RoleID) VALUES 

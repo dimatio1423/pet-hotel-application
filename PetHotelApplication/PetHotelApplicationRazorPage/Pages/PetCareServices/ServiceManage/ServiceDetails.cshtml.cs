@@ -2,9 +2,9 @@ using BusinessObjects.Entities;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Services.PetCareServices;
 
-namespace PetHotelApplicationRazorPage.Pages.Pet
+namespace PetHotelApplicationRazorPage.Pages.PetCareServices.ServiceManage
 {
-    public class ServiceDetailsModel : PageModel
+    public class ServiceDetailsModel : AuthorizePageModel
     {
         private readonly IPetCareService _petCareService;
 
