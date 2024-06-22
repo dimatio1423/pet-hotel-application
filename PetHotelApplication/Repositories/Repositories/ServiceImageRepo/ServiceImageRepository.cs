@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Repositories.ServiceBookingRepo
+namespace Repositories.Repositories.ServiceImageRepo
 {
-    public class ServiceBookingRepository : IServiceBookingRepository
+    public class ServiceImageRepository : IServiceImageRepository
     {
-        public void Add(ServiceBooking serviceBooking)
+        public void Add(ServiceImage serviceImage)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                _context.ServiceBookings.Add(serviceBooking);
+                _context.ServiceImages.Add(serviceImage);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -24,14 +24,14 @@ namespace Repositories.Repositories.ServiceBookingRepo
             }
         }
 
-        public void Delete(ServiceBooking serviceBooking)
+        public void Delete(ServiceImage serviceImage)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                var currServiceBooking = _context.ServiceBookings.FirstOrDefault(x => x.Id.Equals(serviceBooking.Id));
+                var currServiceImage = _context.ServiceImages.FirstOrDefault(x => x.Id.Equals(serviceImage.Id));
 
-                _context.Remove(currServiceBooking);
+                _context.Remove(currServiceImage);
 
                 _context.SaveChanges();
             }
@@ -41,12 +41,12 @@ namespace Repositories.Repositories.ServiceBookingRepo
             }
         }
 
-        public List<ServiceBooking> GetServiceBookingsByBookingId(string Id)
+        public List<ServiceImage> GetServiceImagesByServiceId(string Id)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.ServiceBookings.Where(x => x.BookingId.Equals(Id)).ToList();
+                return _context.ServiceImages.Where(x => x.ServiceId.Equals(Id)).ToList();
             }
             catch (Exception ex)
             {
@@ -54,13 +54,13 @@ namespace Repositories.Repositories.ServiceBookingRepo
             }
         }
 
-        public void Update(ServiceBooking serviceBooking)
+        public void Update(ServiceImage serviceImage)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
-                _context.Entry<ServiceBooking>(serviceBooking).State = EntityState.Modified;
+                _context.Entry<ServiceImage>(serviceImage).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)

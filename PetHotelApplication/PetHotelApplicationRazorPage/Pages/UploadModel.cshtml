@@ -1,0 +1,24 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.UploadModel
+@{
+}
+
+
+<h1>Upload Image</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="ImageFile" />
+    <button type="submit">Upload</button>
+</form>
+
+@if (TempData["Error"] != null){
+    <div class="alert alert-danger">
+        <span>@TempData["Error"] </span>
+    </div>
+}
+
+@if (Model.ImageUrl != null)
+{
+    <p>Image uploaded:</p>
+    <img src="@Model.ImageUrl" />
+}

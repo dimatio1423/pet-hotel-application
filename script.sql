@@ -10,6 +10,7 @@ CREATE TABLE "Role" (
 -- Customer table
 CREATE TABLE "User" (
 ID VARCHAR(100) PRIMARY KEY,
+Avatar VARCHAR(MAX),
 FullName NVARCHAR(100) NOT NULL,
 PhoneNumber VARCHAR(15) NOT NULL,
 Email NVARCHAR(100) NOT NULL,
@@ -24,6 +25,7 @@ FOREIGN KEY (RoleID) REFERENCES "Role"(ID)
 -- Pet table
 CREATE TABLE Pet (
 ID VARCHAR(100) PRIMARY KEY,
+Avatar VARCHAR(MAX),
 PetName NVARCHAR(100) NOT NULL,
 Species NVARCHAR(50) NOT NULL,
 Breed NVARCHAR(50) NOT NULL,
@@ -68,6 +70,13 @@ CREATE TABLE PetCareService (
     Description VARCHAR(MAX),
     Status NVARCHAR(20) NOT NULL,
     Price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE ServiceImage (
+ID VARCHAR(100) PRIMARY KEY,
+Image VARCHAR(MAX) NOT NULL,
+ServiceID VARCHAR(100) NOT NULL,
+FOREIGN KEY (ServiceID) REFERENCES PetCareService(ID),
 );
 
 CREATE TABLE ServiceBooking (
@@ -147,7 +156,6 @@ INSERT INTO PetCareService (ID, Type, Description, Status, Price) VALUES
 ('7', 'Dietary Accommodation', 'Special dietary plans and accommodations', 'Available', 10000),
 ('8', 'Hotel', 'Overnight accommodation for pets', 'Available', 100000),
 ('9', 'Day Care', 'Daytime care and supervision', 'Available', 50000);
-
 
 
 -- Sample data for ServiceBooking table
