@@ -1,4 +1,6 @@
-﻿using BusinessObjects.Entities;
+﻿using AutoMapper;
+using BusinessObjects.Entities;
+using BusinessObjects.Models.PetModel.Response;
 using Repositories.Repositories.PetRepo;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,12 @@ namespace Services.Services.PetService
     public class PetService : IPetService
     {
         private readonly IPetRepository _petRepo;
+        private readonly IMapper _mapper;
 
-        public PetService(IPetRepository petRepo)
+        public PetService(IPetRepository petRepo, IMapper mapper)
         {
             _petRepo = petRepo;
+            _mapper = mapper;
         }
         public void Add(Pet pet)
         {
@@ -31,14 +35,38 @@ namespace Services.Services.PetService
             return _petRepo.GetPetById(id);
         }
 
-        public List<Pet> GetPets()
+        public List<PetResModel> GetPets()
         {
-            return _petRepo.GetPets();
+            var list = _mapper.Map<List<PetResModel>>(_petRepo.GetPets());
+            return list;
         }
 
         public void Update(Pet pet)
         {
             _petRepo.Update(pet);
+        }
+
+        public List<PetResModel> GetActivePets(string userId)
+        {
+            var list = _mapper.Map<List<PetResModel>>(_petRepo.GetActivePets(userId));
+            return list;
+        }
+
+        public PetResModel GetPetDetailsById(string id)
+        {
+            var pet = _mapper.Map<PetResModel>(_petRepo.GetPetDetailsById(id));
+            return pet;
+        }
+
+        public void Update(PetResModel pet)
+        {
+            Pet currentPet = GetPetById(pet.Id);
+            Pet updatePet = _mapper.Map<Pet>(pet);
+
+            updatePet.Status = currentPet.Status;
+            updatePet.UserId = currentPet.UserId;
+
+            _petRepo.Update(updatePet);
         }
     }
 }
