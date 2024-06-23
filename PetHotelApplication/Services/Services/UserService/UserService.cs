@@ -30,6 +30,7 @@ namespace Services.Services.UserService
             User newUser = new User
             {
                 Id = Guid.NewGuid().ToString(),
+                Avatar = "",
                 FullName = registerUserReq.FullName,
                 PhoneNumber = registerUserReq.PhoneNumber,
                 Email = registerUserReq.Email,
