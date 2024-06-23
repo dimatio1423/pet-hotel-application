@@ -7,6 +7,8 @@ public partial class Pet
 {
     public string Id { get; set; }
 
+    public string Avatar { get; set; }
+
     public string PetName { get; set; }
 
     public string Species { get; set; }

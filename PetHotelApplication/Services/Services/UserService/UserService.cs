@@ -1,4 +1,6 @@
 ﻿using BusinessObjects.Entities;
+using BusinessObjects.Enums.RoleEnums;
+using BusinessObjects.Enums.StatusEnums;
 using BusinessObjects.Models.UserModel;
 using Repositories.Repositories.UserRepo;
 using System;
@@ -28,13 +30,14 @@ namespace Services.Services.UserService
             User newUser = new User
             {
                 Id = Guid.NewGuid().ToString(),
+                Avatar = "",
                 FullName = registerUserReq.FullName,
                 PhoneNumber = registerUserReq.PhoneNumber,
                 Email = registerUserReq.Email,
                 Password = HashPassword(registerUserReq.Password),
                 Address = registerUserReq.Address,
-                Status = "Active",
-                RoleId = 1.ToString(),
+                Status = StatusEnums.Active.ToString(),
+                RoleId = (((int)RoleEnums.Customer)+1).ToString(),
             };
 
             _userRepository.Add(newUser);

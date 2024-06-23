@@ -6,7 +6,8 @@
 
 <div>
     @{
-        if (HttpContext.Session.GetString("AccountEmail") != null)
+        var user = SessionHelper.GetObjectSession<BusinessObjects.Entities.User>(HttpContext.Session, "Account");
+        if (user != null)
         {
             <div class="" style="text-align:center">
             <h5 class="display-4">Welcome, @Model.currentUser.FullName</h5>
@@ -20,7 +21,7 @@
                 <div class="col-lg-8 text-center text-lg-start">
                     <h1 class="display-1 text-uppercase text-dark mb-lg-4">Your Pet’s Home Away From Home</h1>
                     <h1 class="text-uppercase text-white mb-lg-4">Make Your Pets Happy</h1>
-                    <p class="fs-4 text-black mb-lg-4">Welcome to [Your Pet Hotel Name], where your pets enjoy luxurious accommodations, personalized care, and a fun-filled stay.
+                    <p class="fs-4 text-black mb-lg-4">Welcome to Happy Pets, where your pets enjoy luxurious accommodations, personalized care, and a fun-filled stay.
                         From spacious rooms and grooming services to 24/7 supervision and real-time updates,
                         we ensure your furry friends are pampered and happy. Book their perfect getaway today!</p>
                     <div class="d-flex align-items-center justify-content-center justify-content-lg-start pt-5">
@@ -69,7 +70,9 @@
                         <h6 class="text-primary text-uppercase">About Us</h6>
                         <h1 class="display-5 text-uppercase mb-0">We Keep Your Pets Happy All Time</h1>
                     </div>
-                    <h4 class="text-body mb-4">Diam dolor diam ipsum tempor sit. Clita erat ipsum et lorem stet no labore lorem sit clita duo justo magna dolore</h4>
+                    <h4 class="text-body mb-4">At Happy Pets, we are dedicated to creating a joyful and nurturing environment for your beloved pets. 
+                        Our experienced team ensures that every pet feels at home, receiving the highest quality care and attention. 
+                        From luxurious accommodations to engaging activities, we strive to make each stay a memorable one.</h4>
                     <div class="bg-light p-4">
                         <ul class="nav nav-pills justify-content-between mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item w-50" role="presentation">
@@ -89,7 +92,7 @@
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
-                                <p class="mb-0">Our mission at [Your Pet Hotel Name] is to provide a home-away-from-home experience for pets,
+                                <p class="mb-0">Our mission at Happy Pets is to provide a home-away-from-home experience for pets,
                                     ensuring their well-being and happiness while fostering trust and peace of mind for their owners.</p>
                             </div>
                             <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
@@ -111,66 +114,19 @@
                 <h1 class="display-5 text-uppercase mb-0">Our Excellent Pet Care Services</h1>
             </div>
             <div class="row g-5">
-                <div class="col-md-6">
-                    <div class="service-item bg-light d-flex p-4">
-                        <i class="flaticon-house display-1 text-primary me-4"></i>
-                        <div>
-                            <h5 class="text-uppercase mb-3">Pet Boarding</h5>
-                            <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                @foreach (var item in Model.PetCareServices)
+                {
+                    <div class="col-md-6">
+                        <div class="service-item bg-light d-flex p-4 h-100 ">
+                            <i class="flaticon-house display-1 text-primary me-4 d-flex align-items-center"></i>
+                            <div class="overflow-hidden">
+                                <h5 class="text-uppercase">@item.Type</h5>
+                                <p class="text-truncate">@item.Description</p>
+                                <a asp-page="/PetCareService/ServiceManage/ServiceDetails" asp-route-id="@item.Id" class="btn btn-primary">Read More</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="service-item bg-light d-flex p-4">
-                        <i class="flaticon-food display-1 text-primary me-4"></i>
-                        <div>
-                            <h5 class="text-uppercase mb-3">Pet Feeding</h5>
-                            <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="service-item bg-light d-flex p-4">
-                        <i class="flaticon-grooming display-1 text-primary me-4"></i>
-                        <div>
-                            <h5 class="text-uppercase mb-3">Pet Grooming</h5>
-                            <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="service-item bg-light d-flex p-4">
-                        <i class="flaticon-cat display-1 text-primary me-4"></i>
-                        <div>
-                            <h5 class="text-uppercase mb-3">Pet Training</h5>
-                            <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="service-item bg-light d-flex p-4">
-                        <i class="flaticon-dog display-1 text-primary me-4"></i>
-                        <div>
-                            <h5 class="text-uppercase mb-3">Pet Exercise</h5>
-                            <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="service-item bg-light d-flex p-4">
-                        <i class="flaticon-vaccine display-1 text-primary me-4"></i>
-                        <div>
-                            <h5 class="text-uppercase mb-3">Pet Treatment</h5>
-                            <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>

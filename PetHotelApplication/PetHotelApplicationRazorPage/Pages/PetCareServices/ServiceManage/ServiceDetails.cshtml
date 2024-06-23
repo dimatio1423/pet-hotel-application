@@ -1,0 +1,164 @@
+﻿@page "{id}"
+@model PetCareServices.ServiceManage.ServiceDetailsModel
+@{
+    ViewData["Title"] = "Service Details";
+    var service = Model.Service;
+    var imageUrls = new List<string>
+    {
+        "https://images.summitmedia-digital.com/spotph/images/2017/08/08/pethotels-640.jpg",
+        "https://cdn.prod.website-files.com/6139cf517cd6d2b4af548b94/613dfb9b8dc97bb6b8255761_pet-hotel-780x440%20(2).jpeg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg9lKxnOl46JhMsToTV5SSqpADS0-nRoyZ0Q&s",
+        "https://content.petbacker.com/images/blog/2018/pet-hotel-relax.jpg",
+        "https://image.cnbcfm.com/api/v1/image/104661266-pet-hotels-2.jpg?v=1503071272"
+    };
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Service Details - Pet Hotel</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="~/img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/lib/flaticon/font/flaticon.css" rel="stylesheet">
+    <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .service-details {
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .service-name {
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .service-price {
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .service-description {
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        .service-image {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-book-now {
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-back {
+            background-color: #20b2aa;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="service-details">
+            <div class="service-name">
+                <h2>@Model.Service.Type</h2>
+            </div>
+            <div class="service-price">
+                Price: @string.Format("{0:N0} VND", @Model.Service.Price)
+            </div>
+            <div class="service-description">
+                <p>@Model.Service.Description</p>
+            </div>
+            <div class="service-image">
+                <div id="petCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < imageUrls.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@imageUrls[i]" alt="Service Image @i" />
+                            </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#petCarousel" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#petCarousel" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            </div>
+            <div class="buttons">
+                <a asp-page="/PetCareServices/ServiceManage/Services" class="btn btn-custom btn-back">Back to Services</a>
+                <a asp-page="/PetCareServices/BookNow" class="btn btn-custom btn-book-now">Book Now</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/js/main.js"></script>
+
+</body>
+
+</html>

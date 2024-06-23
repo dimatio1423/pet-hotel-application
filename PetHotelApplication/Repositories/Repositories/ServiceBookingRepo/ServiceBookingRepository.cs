@@ -29,7 +29,7 @@ namespace Repositories.Repositories.ServiceBookingRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                var currServiceBooking = _context.Feedbacks.FirstOrDefault(x => x.Id.Equals(serviceBooking.Id));
+                var currServiceBooking = _context.ServiceBookings.FirstOrDefault(x => x.Id.Equals(serviceBooking.Id));
 
                 _context.Remove(currServiceBooking);
 

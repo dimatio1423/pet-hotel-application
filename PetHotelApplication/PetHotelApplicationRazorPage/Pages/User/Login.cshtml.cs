@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BusinessObjects.Models.UserModel;
 using Services.Services.UserService;
+using BusinessObjects.Enums.RoleEnums;
 
 namespace PetHotelApplicationRazorPage.Pages.User
 {
-    public class LoginModel : PageModel
+    public class LoginModel : AuthorizePageModel
     {
         private readonly IUserService _userService;
 
@@ -15,8 +16,13 @@ namespace PetHotelApplicationRazorPage.Pages.User
         }
         [BindProperty]
         public LoginUserReqModel loginModel { get; set; } = default;
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            if (HttpContext.Session.GetString("Account") != null)
+            {
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
@@ -28,7 +34,7 @@ namespace PetHotelApplicationRazorPage.Pages.User
                 var isPasswordValid = _userService.VerifyPassword(loginModel.Password, currUser.Password);
                 if (isPasswordValid)
                 {
-                    HttpContext.Session.SetString("AccountEmail", currUser.Email);
+                    SessionHelper.SetObjectSession(HttpContext.Session, "Account", currUser);
                     return RedirectToPage("/Index");
                 }
                 TempData["Error"] = "Wrong password. Please try again !!!";

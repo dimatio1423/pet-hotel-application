@@ -11,9 +11,9 @@ using Repositories;
 using BusinessObjects.Models.PetCareModel.Response;
 using AutoMapper;
 
-namespace PetHotelApplicationRazorPage.Pages.Pet.ServiceManage
+namespace PetHotelApplicationRazorPage.Pages.PetCareServices.ServiceManage
 {
-    public class ServicesModel : PageModel
+    public class ServicesModel : AuthorizePageModel
     {
         private readonly IPetCareService _petCareService;
         private readonly IMapper _mapper;

@@ -1,5 +1,6 @@
 ﻿
 using BusinessObjects.Entities;
+using BusinessObjects.Enums.StatusEnums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace Repositories.Repositories.PetRepo
                 using var _context = new PetHotelApplicationDbContext();
                 var currPet = _context.Pets.FirstOrDefault(x => x.Id.Equals(pet.Id));
 
-                currPet.Status = "Inactive";
+                currPet.Status = StatusEnums.Inactive.ToString();
 
                 _context.Update(currPet);
 
@@ -50,6 +51,27 @@ namespace Repositories.Repositories.PetRepo
             {
                 using var _context = new PetHotelApplicationDbContext();
                 return _context.Pets.FirstOrDefault(x => x.Id.Equals(id));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Pet? GetPetDetailsById(string id)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Pets
+                            .Include(p => p.BookingInformations)
+                                .ThenInclude(b => b.Accommodation)
+                            .Include(p => p.BookingInformations)
+                                .ThenInclude(b => b.PaymentRecords)                                
+                            .Include(p => p.BookingInformations)
+                                .ThenInclude(b => b.ServiceBookings)
+                                    .ThenInclude(s => s.Service)
+                            .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
             {
@@ -78,6 +100,26 @@ namespace Repositories.Repositories.PetRepo
                 //_context.Categories.Update(category);
                 _context.Entry<Pet>(pet).State = EntityState.Modified;
                 _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<Pet> GetActivePets(string userId, string petName)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Pets
+                        .Include(p => p.User)
+                        .Where(p => p.UserId.Equals(userId) && 
+                                    p.Status.Equals(nameof(StatusEnums.Active)) && 
+                                    (string.IsNullOrEmpty(petName) || p.PetName.Contains(petName))
+                              )
+                        .OrderBy(p => p.PetName)
+                        .ToList();
             }
             catch (Exception ex)
             {
