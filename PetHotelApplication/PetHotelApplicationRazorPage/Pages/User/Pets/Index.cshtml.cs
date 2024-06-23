@@ -21,11 +21,29 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
             _petService = petService;
         }
 
-        public IList<PetResModel> Pet { get;set; } = default!;
+        public PaginatedList<PetResModel> Pet { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public string CurrentFilter { get; set; }
+
+        private const int pageSize = 4;
+
+        public async Task OnGetAsync(string currentFilter, string searchString, int? pageIndex)
         {
-            Pet = _petService.GetActivePets("2");
+            if (searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
+
+            var currentUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
+            var list = _petService.GetActivePets(currentUser.Id, searchString);
+
+            Pet = PaginatedList<PetResModel>.Create(list, pageIndex ?? 1, pageSize);
         }
     }
 }

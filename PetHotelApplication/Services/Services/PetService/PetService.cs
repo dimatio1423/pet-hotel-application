@@ -46,9 +46,9 @@ namespace Services.Services.PetService
             _petRepo.Update(pet);
         }
 
-        public List<PetResModel> GetActivePets(string userId)
+        public List<PetResModel> GetActivePets(string userId, string petName)
         {
-            var list = _mapper.Map<List<PetResModel>>(_petRepo.GetActivePets(userId));
+            var list = _mapper.Map<List<PetResModel>>(_petRepo.GetActivePets(userId, petName));
             return list;
         }
 

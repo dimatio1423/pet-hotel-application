@@ -15,6 +15,6 @@ namespace Repositories.Repositories.PetRepo
         void Add(Pet pet);
         void Delete(Pet pet);
         void Update(Pet pet);
-        public List<Pet> GetActivePets(string userId);
+        public List<Pet> GetActivePets(string userId, string petName);
     }
 }

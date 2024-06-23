@@ -15,7 +15,7 @@ namespace Services.Services.PetService
         void Add(Pet pet);
         void Delete(Pet pet);
         void Update(Pet pet);
-        List<PetResModel> GetActivePets(string userId);
+        List<PetResModel> GetActivePets(string userId, string petName);
         PetResModel GetPetDetailsById(string id);
         public void Update(PetResModel pet);
     }

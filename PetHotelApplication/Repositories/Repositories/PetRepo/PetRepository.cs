@@ -107,14 +107,18 @@ namespace Repositories.Repositories.PetRepo
             }
         }
 
-        public List<Pet> GetActivePets(string userId)
+        public List<Pet> GetActivePets(string userId, string petName)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
                 return _context.Pets
                         .Include(p => p.User)
-                        .Where(p => p.UserId.Equals(userId) && p.Status.Equals(nameof(StatusEnums.Active)))
+                        .Where(p => p.UserId.Equals(userId) && 
+                                    p.Status.Equals(nameof(StatusEnums.Active)) && 
+                                    (string.IsNullOrEmpty(petName) || p.PetName.Contains(petName))
+                              )
+                        .OrderBy(p => p.PetName)
                         .ToList();
             }
             catch (Exception ex)
