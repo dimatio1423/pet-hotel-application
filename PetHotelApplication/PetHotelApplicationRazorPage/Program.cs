@@ -1,5 +1,6 @@
 using BusinessObjects.Entities;
 using Microsoft.EntityFrameworkCore;
+using PetHotelApplicationRazorPage;
 using Repositories.Repositories.AccommodationRepo;
 using Repositories.Repositories.BookingInformationRepo;
 using Repositories.Repositories.FeedbackRepo;
@@ -54,7 +55,10 @@ builder.Services.AddScoped<IPetCareService, PetCareServices>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IServiceBookingService, ServiceBookingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<CloudinaryService>();
 
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 //builder.Services.AddDbContext<PetHotelApplicationDbContext>(options =>
 //{

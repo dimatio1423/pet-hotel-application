@@ -6,7 +6,8 @@
 
 <div>
     @{
-        if (HttpContext.Session.GetString("AccountEmail") != null)
+        var user = SessionHelper.GetObjectSession<BusinessObjects.Entities.User>(HttpContext.Session, "Account");
+        if (user != null)
         {
             <div class="" style="text-align:center">
             <h5 class="display-4">Welcome, @Model.currentUser.FullName</h5>
@@ -121,7 +122,7 @@
                             <div class="overflow-hidden">
                                 <h5 class="text-uppercase">@item.Type</h5>
                                 <p class="text-truncate">@item.Description</p>
-                                <a asp-page="/Pet/ServiceManage/ServiceDetails" asp-route-id="@item.Id" class="btn btn-primary">Read More</a>
+                                <a asp-page="/PetCareService/ServiceManage/ServiceDetails" asp-route-id="@item.Id" class="btn btn-primary">Read More</a>
                             </div>
                         </div>
                     </div>

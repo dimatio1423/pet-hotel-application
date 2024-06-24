@@ -70,7 +70,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Pet\AccommodationManage\" />
+    <Folder Include="Pages\PetCareServices\AccommodationManage\" />
   </ItemGroup>
 
 </Project>
