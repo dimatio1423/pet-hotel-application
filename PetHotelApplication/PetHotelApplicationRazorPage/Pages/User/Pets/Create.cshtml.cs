@@ -10,6 +10,8 @@ using Services.Services.PetService;
 using AutoMapper;
 using BusinessObjects.Models.PetModel.Request;
 using BusinessObjects.CustomValidators;
+using BusinessObjects.Models.PetModel.Response;
+using System.ComponentModel.DataAnnotations;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
@@ -28,6 +30,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
 
         public IActionResult OnGet()
         {
+            PetSpecies = new SelectList(_petService.GetPetSpecies(), "Name", "Name");
             return Page();
         }
 
@@ -37,11 +40,16 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
         [BindProperty]
         [MaxFileSize(5 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".png" })]
-        public IFormFile? Image { get; set; }
+        [Required(ErrorMessage = "Please upload your pet image")]
+        public IFormFile Image { get; set; }
+
+        public SelectList PetSpecies { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            PetSpecies = new SelectList(_petService.GetPetSpecies(), "Name", "Name");
+
             if (!ModelState.IsValid)
             {
                 return Page();

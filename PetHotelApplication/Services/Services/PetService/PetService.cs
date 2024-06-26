@@ -70,5 +70,20 @@ namespace Services.Services.PetService
 
             _petRepo.Update(updatePet);
         }
+
+        public List<PetSpeciesResModel> GetPetSpecies()
+        {
+            return new List<PetSpeciesResModel>
+            {
+                new PetSpeciesResModel
+                {
+                    Name = "Dog"
+                },
+                new PetSpeciesResModel
+                {
+                    Name = "Cat"
+                }
+            };
+        }
     }
 }

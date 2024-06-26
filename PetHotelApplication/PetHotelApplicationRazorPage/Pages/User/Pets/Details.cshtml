@@ -54,7 +54,8 @@
                         <!-- Form Group (first name)-->
                         <div class="col-md-6">
                             <label asp-for="Pet.Species" class="small mb-1">Species</label>
-                            <input asp-for="Pet.Species" class="form-control" placeholder="Enter your pet species (Dog, Cat,...)">
+                            <select asp-for="Pet.Species" class="form-control bg-white" asp-items="Model.PetSpecies">
+                            </select>
                             <span asp-validation-for="Pet.Species" class="text-danger"></span>
                         </div>
                         <!-- Form Group (last name)-->
