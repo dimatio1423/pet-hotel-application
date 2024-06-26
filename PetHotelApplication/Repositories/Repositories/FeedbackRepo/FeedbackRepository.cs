@@ -59,7 +59,7 @@ namespace Repositories.Repositories.FeedbackRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Feedbacks.ToList();
+                return _context.Feedbacks.Include(x => x.User).ToList();
             }
             catch (Exception ex)
             {

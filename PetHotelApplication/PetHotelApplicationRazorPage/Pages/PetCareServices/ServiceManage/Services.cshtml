@@ -45,30 +45,41 @@
         <div class="row justify-content-end">
             <div class="col-lg-7">
                 <div class="owl-carousel testimonial-carousel bg-white p-5">
-                    <div class="testimonial-item text-center">
-                        <div class="position-relative mb-4">
-                            <img class="img-fluid mx-auto" src="~/img/testimonial-1.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white" style="width: 45px; height: 45px;">
-                                <i class="bi bi-chat-square-quote text-primary"></i>
+                    @foreach (var item in Model.Feedbacks)
+                    {
+                        <div class="testimonial-item text-center">
+                            <div class="position-relative mb-4">
+                                @if (string.IsNullOrEmpty(item.User.Avatar) || item.User.Avatar.Equals("link"))
+                                {
+                                    <img class="img-fluid mx-auto" src="~/img/avatar-trang-4.jpg" alt="">
+                                }
+                                else
+                                {
+                                    <img class="img-fluid mx-auto" src="@item.User.Avatar" alt="">
+                                }
+                                <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white" style="width: 45px; height: 45px;">
+                                    <i class="bi bi-chat-square-quote text-primary"></i>
+                                </div>
+                            </div>
+                            <p>@item.Comment</p>
+                            <hr class="w-25 mx-auto">
+                            <h5 class="text-uppercase">@item.User.FullName</h5>
+                            <span>@item.Date.ToString("dd/MM/yyyy")</span>
+                            <div class="mt-2">
+                                @for (var i = 1; i <= 5; i++)
+                                {
+                                    if (i <= item.Rating)
+                                    {
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-star text-warning"></i>
+                                    }
+                                }
                             </div>
                         </div>
-                        <p>Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat. Erat dolor rebum sit ipsum.</p>
-                        <hr class="w-25 mx-auto">
-                        <h5 class="text-uppercase">Client Name</h5>
-                        <span>Profession</span>
-                    </div>
-                    <div class="testimonial-item text-center">
-                        <div class="position-relative mb-4">
-                            <img class="img-fluid mx-auto" src="~/img/testimonial-2.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white" style="width: 45px; height: 45px;">
-                                <i class="bi bi-chat-square-quote text-primary"></i>
-                            </div>
-                        </div>
-                        <p>Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat. Erat dolor rebum sit ipsum.</p>
-                        <hr class="w-25 mx-auto">
-                        <h5 class="text-uppercase">Client Name</h5>
-                        <span>Profession</span>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
