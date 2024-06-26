@@ -3,11 +3,13 @@ using BusinessObjects.Entities;
 using BusinessObjects.Models.PetCareModel.Response;
 using BusinessObjects.Models.PetModel.Request;
 using BusinessObjects.Models.PetModel.Response;
+using BusinessObjects.Models.BookingModel.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects.Models.PaymentRecordModel.Response;
 
 namespace Services.MapperProfiles
 {
@@ -19,9 +21,12 @@ namespace Services.MapperProfiles
 
             CreateMap<Pet, PetResModel>()
                 .ReverseMap();
+
             CreateMap<BookingInformation, BookingInformationResModel>()
                 .ForMember(dest => dest.PetCareServices, opt => opt.MapFrom(src => string.Join(", ", src.ServiceBookings.Select(sb => sb.Service.Type))));
+
             CreateMap<Accommodation, AccommodationResModel>();
+
             CreateMap<PaymentRecord, PaymentRecordResModel>();
 
             CreateMap<PetCreateReqModel, Pet>()
