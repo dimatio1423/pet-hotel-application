@@ -12,7 +12,7 @@ using BusinessObjects.Models.PetModel.Response;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AuthorizePageModel
     {
         private readonly IPetService _petService;
             

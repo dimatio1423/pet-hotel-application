@@ -9,6 +9,7 @@ using Repositories.Repositories.PetCareServiceRepo;
 using Repositories.Repositories.PetRepo;
 using Repositories.Repositories.RoleRepo;
 using Repositories.Repositories.ServiceBookingRepo;
+using Repositories.Repositories.ServiceImageRepo;
 using Repositories.Repositories.UserRepo;
 using Services.MapperProfiles;
 using Services.Services.AccommodationService;
@@ -18,6 +19,7 @@ using Services.Services.PaymentRecordService;
 using Services.Services.PetCareServices;
 using Services.Services.PetService;
 using Services.Services.RoleService;
+using Services.Services.ServiceImageService;
 using Services.Services.ServicesBookingService;
 using Services.Services.UserService;
 
@@ -45,7 +47,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IServiceBookingRepository, ServiceBookingRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddScoped<IServiceImageRepository, ServiceImageRepository>();
 //--------------------------------------------------------------------------------------------------------------
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccommodationService, AccommodationService>();
@@ -56,6 +58,7 @@ builder.Services.AddScoped<IPetCareService, PetCareServices>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IServiceBookingService, ServiceBookingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IServiceImageService, ServiceImageService>();
 builder.Services.AddScoped<CloudinaryService>();
 
 

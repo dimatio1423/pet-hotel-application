@@ -9,6 +9,8 @@ namespace BusinessObjects.Enums.StatusEnums
     public enum StatusEnums
     {
         Active,
-        Inactive
+        Inactive,
+        Available,
+        Unavailable
     }
 }
