@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\BookingModel\Request\" />
+    <Folder Include="Models\PaymentRecordModel\Request\" />
     <Folder Include="Models\PetCareModel\Request\" />
   </ItemGroup>
 

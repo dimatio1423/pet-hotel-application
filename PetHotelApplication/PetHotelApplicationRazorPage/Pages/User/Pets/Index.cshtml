@@ -23,7 +23,9 @@
         <div class="col-lg-8">
             @if (Model.Pet == null || Model.Pet.Count == 0)
             {
-                <h3>You have no pet</h3>
+                <div class="alert alert-info">
+                    You do not have any pet
+                </div>
             }
             else
             {
