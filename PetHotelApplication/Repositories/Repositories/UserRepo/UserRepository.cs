@@ -64,7 +64,7 @@ namespace Repositories.Repositories.UserRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Users.Where(x => x.RoleId != "1").ToList();
+                return _context.Users.Where(x => x.RoleId != "1").Include(x => x.Role).ToList();
             }
             catch (Exception ex)
             {
@@ -84,19 +84,6 @@ namespace Repositories.Repositories.UserRepo
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-        public IQueryable<User> GetListUsers()
-        {
-            try
-            {
-                using var _context = new PetHotelApplicationDbContext();
-                return _context.Users.AsQueryable();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        }       
     }
 }

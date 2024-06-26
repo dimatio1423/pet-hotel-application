@@ -95,11 +95,6 @@ namespace Services.Services.UserService
         public List<User> GetUsers()
         {
             return _userRepository.GetUsers();
-        }
-
-        public IQueryable<User> GetListUsers()
-        {
-            return _userRepository.GetListUsers();
-        }
+        }        
     }
 }
