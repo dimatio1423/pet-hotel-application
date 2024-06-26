@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.Entities;
+using BusinessObjects.Enums.StatusEnums;
 using BusinessObjects.Models.PetModel.Response;
 using Repositories.Repositories.PetRepo;
 using System;
@@ -22,6 +23,7 @@ namespace Services.Services.PetService
         }
         public void Add(Pet pet)
         {
+            pet.Status = StatusEnums.Active.ToString();
             _petRepo.Add(pet);
         }
 
