@@ -12,6 +12,7 @@ using BusinessObjects.Models.PetModel.Request;
 using BusinessObjects.CustomValidators;
 using BusinessObjects.Models.PetModel.Response;
 using System.ComponentModel.DataAnnotations;
+using Services.Utils;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
@@ -68,7 +69,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
                 var newPet = _mapper.Map<Pet>(Pet);
                 newPet.UserId = currentUser.Id;
 
-                _petService.Add(newPet);
+                _petService.Add(Utils.TrimWhiteSpace(newPet));
             }
             catch (Exception ex)
             {

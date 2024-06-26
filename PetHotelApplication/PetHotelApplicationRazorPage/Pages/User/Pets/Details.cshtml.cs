@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Services.Utils;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
@@ -76,7 +77,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
 
             try
             {
-                _petService.Update(Pet);
+                _petService.Update(Utils.TrimWhiteSpace(Pet));
             }
             catch (Exception ex)
             {
