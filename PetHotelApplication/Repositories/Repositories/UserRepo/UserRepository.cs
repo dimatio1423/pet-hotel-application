@@ -64,7 +64,7 @@ namespace Repositories.Repositories.UserRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Users.ToList();
+                return _context.Users.Where(x => x.RoleId != "1").ToList();
             }
             catch (Exception ex)
             {
