@@ -4,27 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Entities;
-using Repositories;
 using Services.Services.UserService;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AuthorizePageModel
     {
         private readonly IUserService _userService;
 
         public IndexModel(IUserService userService)
-        {
+        {      
             _userService = userService;
         }
 
-        public IList<BusinessObjects.Entities.User> User { get;set; } = default!;
+        public PaginatedList<BusinessObjects.Entities.User> Users { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? pageIndex)
         {
-            User = _userService.GetUsers();
+            var users = _userService.GetListUsers();
+            Users = await PaginatedList<BusinessObjects.Entities.User>.CreateAsync(users, pageIndex ?? 1, 10);
         }
     }
 }

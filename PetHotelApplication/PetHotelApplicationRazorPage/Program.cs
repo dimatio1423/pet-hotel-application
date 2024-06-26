@@ -44,7 +44,7 @@ builder.Services.AddScoped<IPetCareServiceRepository, PetCareServiceRepository>(
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IServiceBookingRepository, ServiceBookingRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository>(provider => UserRepository.Instance);
 //--------------------------------------------------------------------------------------------------------------
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccommodationService, AccommodationService>();

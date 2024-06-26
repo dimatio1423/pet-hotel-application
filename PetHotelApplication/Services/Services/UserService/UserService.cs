@@ -2,6 +2,7 @@
 using BusinessObjects.Enums.RoleEnums;
 using BusinessObjects.Enums.StatusEnums;
 using BusinessObjects.Models.UserModel;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Repositories.UserRepo;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,11 @@ namespace Services.Services.UserService
         public List<User> GetUsers()
         {
             return _userRepository.GetUsers();
+        }
+
+        public IQueryable<User> GetListUsers()
+        {
+            return _userRepository.GetListUsers();
         }
     }
 }

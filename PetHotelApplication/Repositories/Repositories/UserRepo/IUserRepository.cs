@@ -14,5 +14,6 @@ namespace Repositories.Repositories.UserRepo
         void Add(User user);
         void Delete(User user);
         void Update(User user);
+        IQueryable<User> GetListUsers();
     }
 }
