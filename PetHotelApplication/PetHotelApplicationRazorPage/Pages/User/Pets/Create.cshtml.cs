@@ -10,7 +10,7 @@ using Services.Services.PetService;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
-    public class CreateModel : PageModel
+    public class CreateModel : AuthorizePageModel
     {
         private readonly IPetService _petService;
 

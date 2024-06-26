@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : AuthorizePageModel
     {
         private readonly IPetService _petService;
         private readonly CloudinaryService _cloudinaryService;

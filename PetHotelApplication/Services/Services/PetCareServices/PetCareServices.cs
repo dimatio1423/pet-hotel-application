@@ -17,9 +17,10 @@ namespace Services.Services.PetCareServices
             _petCareServiceRepo = petCareServiceRepo;
         }
 
-        public void Add(PetCareService petCareService)
+        public string Add(PetCareService petCareService)
         {
-            _petCareServiceRepo.Add(petCareService);
+            var result = _petCareServiceRepo.Add(petCareService);
+            return result;
         }
 
         public void Delete(PetCareService petCareService)
@@ -30,6 +31,11 @@ namespace Services.Services.PetCareServices
         public PetCareService GetPetCareServiceById(string id)
         {
             return _petCareServiceRepo.GetPetCareServiceById(id);
+        }
+
+        public PetCareService GetPetCareServiceByType(string type)
+        {
+            return _petCareServiceRepo.GetPetCareServiceByType(type);
         }
 
         public List<PetCareService> GetPetCareServices()
