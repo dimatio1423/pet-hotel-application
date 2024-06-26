@@ -95,6 +95,16 @@ namespace Services.Services.UserService
         public List<User> GetUsers()
         {
             return _userRepository.GetUsers();
-        }        
+        }
+
+        public bool isEmailExist(string email)
+        {
+            return _userRepository.isEmailExist(email);
+        }
+
+        public bool isPhoneNumberExist(string phoneNumber)
+        {
+            return _userRepository.isPhoneNumberExist(phoneNumber);
+        }
     }
 }

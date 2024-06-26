@@ -84,6 +84,32 @@ namespace Repositories.Repositories.UserRepo
             {
                 throw new Exception(ex.Message);
             }
-        }       
+        }
+
+        public bool isEmailExist(string email)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.Any(x => x.Email.Equals(email));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        public bool isPhoneNumberExist(string phoneNumber)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.Any(x => x.PhoneNumber.Equals(phoneNumber));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
     }
 }

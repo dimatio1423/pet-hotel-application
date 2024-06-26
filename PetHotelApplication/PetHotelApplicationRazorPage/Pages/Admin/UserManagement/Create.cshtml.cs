@@ -56,6 +56,18 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
                 return Page();
             }
 
+            if (_userService.isEmailExist(User.Email))
+            {
+                ModelState.AddModelError("User.Email", "Email already exists.");
+                return Page();
+            }
+
+            if (_userService.isPhoneNumberExist(User.PhoneNumber))
+            {
+                ModelState.AddModelError("User.PhoneNumber", "Phone number already exists.");
+                return Page();
+            }
+
             if (Image != null)
             {
                 var uploadResult = await _cloudinaryService.AddPhoto(Image);

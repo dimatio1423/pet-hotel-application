@@ -16,5 +16,7 @@ namespace Services.Services.UserService
         void CreateUserReq(CreateUserReqModel createUserReqModel);
         string HashPassword(string password);
         bool VerifyPassword(string password, string hashedPassword);
+        bool isEmailExist(string email);
+        bool isPhoneNumberExist(string phoneNumber);
     }
 }
