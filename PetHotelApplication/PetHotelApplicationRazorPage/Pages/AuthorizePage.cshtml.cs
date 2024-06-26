@@ -37,6 +37,11 @@ namespace PetHotelApplicationRazorPage.Pages
                     context.Result = Redirect("/User/Login");
                 }
 
+                if (path.Value.ToLower().Contains("/user/booking/create"))
+                {
+                    context.Result = Redirect("/User/Login");
+                }
+
             }
             else
             {
@@ -137,6 +142,22 @@ namespace PetHotelApplicationRazorPage.Pages
                 }
 
                 if (path.Value.ToLower().Contains("/user/feedbacks"))
+                {
+                    if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Staff");
+                    }
+                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Admin");
+                    }
+                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Manager");
+                    }
+                }
+
+                if (path.Value.ToLower().Contains("/user/booking/create"))
                 {
                     if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
                     {

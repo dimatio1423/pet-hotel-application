@@ -1,0 +1,48 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Payment.PaymentModel
+@{
+}
+
+<div class="container mt-5">
+    <h2>Payment Form</h2>
+    <form method="post" class="needs-validation" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Payment.NameOnCard">Name on Card</label>
+            <input asp-for="Payment.NameOnCard" class="form-control" />
+            <span asp-validation-for="Payment.NameOnCard" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Payment.CardNumber">Card Number</label>
+            <input asp-for="Payment.CardNumber" class="form-control" />
+            <span asp-validation-for="Payment.CardNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Payment.ExpirationDate">Expiration Date</label>
+                <input asp-for="Payment.ExpirationDate" class="form-control" />
+                <span asp-validation-for="Payment.ExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Payment.CVV">CVV</label>
+                <input asp-for="Payment.CVV" class="form-control" />
+                <span asp-validation-for="Payment.CVV" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Payment.Amount">Amount</label>
+            <input asp-for="Payment.Amount" class="form-control" />
+            <span asp-validation-for="Payment.Amount" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Payment</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -19,5 +19,6 @@ namespace Services.Services.PetService
         PetResModel GetPetDetailsById(string id);
         public void Update(PetResModel pet);
         public List<PetSpeciesResModel> GetPetSpecies();
+        List<Pet> GetListOfPets();
     }
 }

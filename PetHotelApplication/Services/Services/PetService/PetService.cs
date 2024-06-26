@@ -85,5 +85,10 @@ namespace Services.Services.PetService
                 }
             };
         }
+
+        public List<Pet> GetListOfPets()
+        {
+            return _petRepo.GetPets();
+        }
     }
 }

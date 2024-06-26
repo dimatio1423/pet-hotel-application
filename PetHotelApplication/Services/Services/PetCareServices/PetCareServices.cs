@@ -43,6 +43,11 @@ namespace Services.Services.PetCareServices
             return _petCareServiceRepo.GetPetCareServices();
         }
 
+        public List<PetCareService> GetPetCareServicesByIds(List<string> Ids)
+        {
+            return _petCareServiceRepo.GetPetCareServicesByIds(Ids);
+        }
+
         public void Update(PetCareService petCareService)
         {
             _petCareServiceRepo.Update(petCareService);
