@@ -22,8 +22,8 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 
         public async Task OnGetAsync(int? pageIndex)
         {
-            var users = _userService.GetListUsers();
-            Users = await PaginatedList<BusinessObjects.Entities.User>.CreateAsync(users, pageIndex ?? 1, 10);
+            var users = _userService.GetUsers();
+            Users = PaginatedList<BusinessObjects.Entities.User>.Create(users, pageIndex ?? 1, 10);
         }
     }
 }

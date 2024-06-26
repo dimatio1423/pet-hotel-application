@@ -9,34 +9,11 @@ namespace Repositories.Repositories.UserRepo
 {
     public class UserRepository : IUserRepository
     {
-        private readonly PetHotelApplicationDbContext _context;
-        private static UserRepository instance = null;
-        private static readonly object padlock = new object();
-
-        private UserRepository()
-        {
-            _context = new PetHotelApplicationDbContext(new DbContextOptions<PetHotelApplicationDbContext>());
-        }
-
-        public static UserRepository Instance
-        {
-            get
-            {
-                lock (padlock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new UserRepository();
-                    }
-                    return instance;
-                }
-            }
-        }
-
         public void Add(User user)
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Users.Add(user);
                 _context.SaveChanges();
             }
@@ -50,6 +27,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 var currUser = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
                 if (currUser != null)
                 {
@@ -72,6 +50,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Users.FirstOrDefault(x => x.Email.Equals(email));
             }
             catch (Exception ex)
@@ -84,6 +63,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Users.ToList();
             }
             catch (Exception ex)
@@ -96,6 +76,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Entry(user).State = EntityState.Modified;
                 _context.SaveChanges();
             }
@@ -109,6 +90,7 @@ namespace Repositories.Repositories.UserRepo
         {
             try
             {
+                using var _context = new PetHotelApplicationDbContext();
                 return _context.Users.AsQueryable();
             }
             catch (Exception ex)
