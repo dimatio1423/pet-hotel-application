@@ -20,7 +20,7 @@ namespace PetHotelApplicationRazorPage.Pages
 
             if (currentAccount == null)
             {
-                if (path.Value.Contains("/Staff") || path.Value.Contains("/Admin") || path.Value.Contains("/Manager"))
+                if (path.Value.ToLower().Contains("/staff") || path.Value.ToLower().Contains("/admin") || path.Value.ToLower().Contains("/manager"))
                 {
                     context.Result = Redirect("/User/Login");
                 }
