@@ -103,7 +103,7 @@ FOREIGN KEY (BookingID) REFERENCES BookingInformation(ID)
 -- Feedbacks table
 CREATE TABLE Feedbacks (
 ID VARCHAR(100) PRIMARY KEY,
-Comment VARCHAR(50),
+Comment VARCHAR(MAX),
 Rating INT NOT NULL,
 Date DATETIME NOT NULL,
 UserID VARCHAR(100) NOT NULL,
