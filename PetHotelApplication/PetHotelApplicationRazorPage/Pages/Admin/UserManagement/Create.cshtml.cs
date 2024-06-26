@@ -4,40 +4,65 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 using BusinessObjects.Entities;
-using Repositories;
+using Services.Services.UserService;
+using BusinessObjects.Models.UserModel;
+using BusinessObjects.CustomValidators;
+using Services.Services.RoleService;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
-    public class CreateModel : PageModel
+    public class CreateModel : AuthorizePageModel
     {
-        private readonly Repositories.PetHotelApplicationDbContext _context;
+        private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
+        private readonly CloudinaryService _cloudinaryService;
 
-        public CreateModel(Repositories.PetHotelApplicationDbContext context)
+        public CreateModel(IUserService userService, IRoleService roleService, CloudinaryService cloudinaryService)
         {
-            _context = context;
+            _userService = userService;
+            _roleService = roleService;
+            _cloudinaryService = cloudinaryService;
         }
+
+        public List<Role> Roles { get; set; }
 
         public IActionResult OnGet()
         {
-        ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id");
+            Roles = _roleService.GetRoles();
+            if (Roles == null || !Roles.Any())
+            {
+                ModelState.AddModelError("", "No roles available.");
+                return Page();
+            }
+
             return Page();
         }
 
         [BindProperty]
-        public BusinessObjects.Entities.User User { get; set; } = default!;
+        public RegisterUserReqModel User { get; set; } = default!;
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        [BindProperty]
+        [MaxFileSize(5 * 1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png" })]
+        public IFormFile? Image { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
+            Roles = _roleService.GetRoles();
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Users.Add(User);
-            await _context.SaveChangesAsync();
+            if (Image != null)
+            {
+                var uploadResult = await _cloudinaryService.AddPhoto(Image);
+                User.Avatar = uploadResult.SecureUrl.ToString();
+            }
+
+            _userService.RegisterUser(User);
 
             return RedirectToPage("./Index");
         }

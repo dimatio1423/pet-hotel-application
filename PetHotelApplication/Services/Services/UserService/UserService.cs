@@ -31,18 +31,19 @@ namespace Services.Services.UserService
             User newUser = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                Avatar = "",
+                Avatar = registerUserReq.Avatar ?? "link",
                 FullName = registerUserReq.FullName,
                 PhoneNumber = registerUserReq.PhoneNumber,
                 Email = registerUserReq.Email,
                 Password = HashPassword(registerUserReq.Password),
                 Address = registerUserReq.Address,
                 Status = StatusEnums.Active.ToString(),
-                RoleId = (((int)RoleEnums.Customer)+1).ToString(),
+                RoleId = registerUserReq.RoleId
             };
 
             _userRepository.Add(newUser);
         }
+
 
         public string HashPassword(string password)
         {
