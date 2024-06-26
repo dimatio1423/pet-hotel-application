@@ -41,7 +41,7 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
         }
 
         [BindProperty]
-        public RegisterUserReqModel User { get; set; } = default!;
+        public CreateUserReqModel User { get; set; } = default!;
 
         [BindProperty]
         [MaxFileSize(5 * 1024 * 1024)]
@@ -62,7 +62,7 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
                 User.Avatar = uploadResult.SecureUrl.ToString();
             }
 
-            _userService.RegisterUser(User);
+            _userService.CreateUserReq(User);
 
             return RedirectToPage("./Index");
         }

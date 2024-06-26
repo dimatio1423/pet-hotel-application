@@ -23,7 +23,20 @@ namespace Services.Services.UserService
         }
         public void CreateUserReq(CreateUserReqModel createUserReqModel)
         {
-            
+            User newUser = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                Avatar = createUserReqModel.Avatar ?? "link",
+                FullName = createUserReqModel.FullName,
+                PhoneNumber = createUserReqModel.PhoneNumber,
+                Email = createUserReqModel.Email,
+                Password = HashPassword(createUserReqModel.Password),
+                Address = createUserReqModel.Address,
+                Status = StatusEnums.Active.ToString(),
+                RoleId = createUserReqModel.RoleId
+            };
+
+            _userRepository.Add(newUser);
         }
 
         public void RegisterUser(RegisterUserReqModel registerUserReq)
@@ -31,17 +44,18 @@ namespace Services.Services.UserService
             User newUser = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                Avatar = registerUserReq.Avatar ?? "link",
+                Avatar = "",
                 FullName = registerUserReq.FullName,
                 PhoneNumber = registerUserReq.PhoneNumber,
                 Email = registerUserReq.Email,
                 Password = HashPassword(registerUserReq.Password),
                 Address = registerUserReq.Address,
                 Status = StatusEnums.Active.ToString(),
-                RoleId = registerUserReq.RoleId
+                RoleId = (((int)RoleEnums.Customer) + 1).ToString(),
             };
 
             _userRepository.Add(newUser);
+
         }
 
 
