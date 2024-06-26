@@ -83,6 +83,7 @@ namespace Repositories.Repositories.PaymentRecordRepo
                 return _context.PaymentRecords
                             .Include(p => p.Booking)
                             .Where(p => p.Booking.Id.Equals(bookingId))
+                            .OrderByDescending(p => p.Date)
                             .ToList();
             }
             catch (Exception ex)
