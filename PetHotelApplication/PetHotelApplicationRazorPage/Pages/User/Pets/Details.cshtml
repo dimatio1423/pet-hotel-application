@@ -8,6 +8,7 @@
 <div class="container-xl px-4 mt-4">
     <!-- Account page navigation-->
     <nav class="nav nav-borders">
+        <a class="nav-link active ms-0" asp-page="./Index">Go back</a>
         <a class="nav-link active ms-0" href="" target="__blank">Booking History</a>
     </nav>
     <hr class="mt-0 mb-4">
@@ -73,6 +74,7 @@
                         </div>
                     </div>
                     <!-- Save changes button-->
+                    <button class="btn btn-warning" type="submit"><a asp-page="./Index" class="text-white">Cancel</a></button>
                     <button class="btn btn-primary" type="submit">Save changes</button>
                 </div>
             </div>

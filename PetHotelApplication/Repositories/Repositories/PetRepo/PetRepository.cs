@@ -16,7 +16,8 @@ namespace Repositories.Repositories.PetRepo
         {
             try
             {
-                using var _context = new PetHotelApplicationDbContext();
+                using var _context = new PetHotelApplicationDbContext();                
+
                 _context.Pets.Add(pet);
                 _context.SaveChanges();
             }

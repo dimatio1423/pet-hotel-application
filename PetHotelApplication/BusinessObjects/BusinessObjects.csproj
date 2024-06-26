@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Models\PetCareModel\Request\" />
-    <Folder Include="Models\PetModel\Request\" />
   </ItemGroup>
 
 </Project>
