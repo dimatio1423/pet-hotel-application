@@ -111,5 +111,18 @@ namespace Repositories.Repositories.UserRepo
                 throw new Exception(ex.ToString());
             }
         }
+
+        public User GetUserById(string id)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.FirstOrDefault(x => x.Id.Equals(id.ToString()));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
     }
 }

@@ -1,63 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Entities;
-using Repositories;
+using Services.Services.UserService;
+using Services.Services.RoleService;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using BusinessObjects.Models.UserModel;
+using BusinessObjects.CustomValidators;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
-    public class EditModel : PageModel
+    public class EditModel : AuthorizePageModel
     {
-        private readonly Repositories.PetHotelApplicationDbContext _context;
+        private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
+        private readonly CloudinaryService _cloudinaryService;
 
-        public EditModel(Repositories.PetHotelApplicationDbContext context)
+        public EditModel(IUserService userService, IRoleService roleService, CloudinaryService cloudinaryService)
         {
-            _context = context;
+            _userService = userService;
+            _roleService = roleService;
+            _cloudinaryService = cloudinaryService;
         }
 
         [BindProperty]
-        public BusinessObjects.Entities.User User { get; set; } = default!;
+        public UpdateUserReqModel User { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        [BindProperty]
+        public string UserId { get; set; } = default!;
+
+        [BindProperty]
+        [MaxFileSize(5 * 1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png" })]
+        public IFormFile? Image { get; set; }
+
+        public List<Role> Roles { get; set; }
+
+        public IActionResult OnGet(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user =  await _context.Users.FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            var userEntity = _userService.GetUserById(id);
+            if (userEntity == null)
             {
                 return NotFound();
             }
-            User = user;
-           ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id");
+
+            UserId = id;
+            User = new UpdateUserReqModel
+            {
+                FullName = userEntity.FullName,
+                PhoneNumber = userEntity.PhoneNumber,
+                Address = userEntity.Address,
+                Avatar = userEntity.Avatar,
+                RoleId = userEntity.RoleId
+            };
+
+            Roles = _roleService.GetRoles();
+            if (Roles == null || !Roles.Any())
+            {
+                ModelState.AddModelError("", "No roles available.");
+                return Page();
+            }
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                Roles = _roleService.GetRoles();
                 return Page();
             }
 
-            _context.Attach(User).State = EntityState.Modified;
+            var userEntity = _userService.GetUserById(UserId);
+            if (userEntity == null)
+            {
+                return NotFound();
+            }
+
+            if (Image != null)
+            {
+                var uploadResult = await _cloudinaryService.AddPhoto(Image);
+                User.Avatar = uploadResult.SecureUrl.ToString();
+            }
+            else
+            {
+                User.Avatar = userEntity.Avatar;
+            }
+
+            userEntity.FullName = User.FullName;
+            userEntity.PhoneNumber = User.PhoneNumber;
+            userEntity.Address = User.Address;
+            userEntity.Avatar = User.Avatar;
+            userEntity.RoleId = User.RoleId;
+
+            if (_userService.isPhoneNumberExist(User.PhoneNumber) && userEntity.PhoneNumber != User.PhoneNumber)
+            {
+                ModelState.AddModelError("User.PhoneNumber", "Phone number already exists.");
+                Roles = _roleService.GetRoles();
+                return Page();
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                _userService.UpdateUser(userEntity);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(User.Id))
+                if (_userService.GetUserById(userEntity.Id) == null)
                 {
                     return NotFound();
                 }
@@ -68,11 +126,6 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
             }
 
             return RedirectToPage("./Index");
-        }
-
-        private bool UserExists(string id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

@@ -106,5 +106,14 @@ namespace Services.Services.UserService
         {
             return _userRepository.isPhoneNumberExist(phoneNumber);
         }
+
+        public User GetUserById(string id)
+        {
+            return _userRepository.GetUserById(id);
+        }
+        public void UpdateUser(User user)
+        {
+            _userRepository.Update(user);
+        }
     }
 }
