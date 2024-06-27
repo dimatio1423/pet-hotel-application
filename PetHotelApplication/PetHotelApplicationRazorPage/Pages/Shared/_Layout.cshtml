@@ -84,15 +84,17 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
                         <a asp-page="/Index" class="dropdown-item">The Team</a>
-                        <a asp-page="/Index" class="dropdown-item">Feedback</a>
+                        <a asp-page="/User/Feedbacks/Index" class="dropdown-item">Feedback</a>
                         @{
                             if (user != null)
                             {
                                 <a asp-page="/User/Pets/Index" class="dropdown-item">My Pet</a>
+                                <a asp-page="/User/Booking/BookingHistory" class="dropdown-item">Booking History</a>
                             }
                         }
                     </div>
                 </div>
+                <a asp-page="/User/Booking/Create" class="nav-item nav-link">Booking</a>
                 @{
                     if (user != null)
                     {
