@@ -1,0 +1,118 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.BookingHistoryModel
+
+@{
+    ViewData["Title"] = "Booking History";
+
+    var prevDisabled = !Model.BookingInfos.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.BookingInfos.HasNextPage ? "disabled" : "";
+
+    // Paging to show at max 5 pages
+    var minPage = Math.Max(1, Model.BookingInfos.PageIndex - 2);
+    var maxPage = Math.Min(minPage + 4, Model.BookingInfos.TotalPages);
+}
+
+<div class="container-xl px-4 mt-4">
+    <h2 class="card-title mb-4">Booking Histories</h2>
+    @if (Model.BookingInfos.Count == 0)
+    {
+        <div class="alert alert-info">
+            No booking records found.
+        </div>
+    }
+    else
+    {
+        @foreach (var booking in Model.BookingInfos)
+        {
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 d-flex flex-column align-items-center">
+                            <!-- Profile picture -->
+                            <div class="rounded-circle mb-3" style="width: 200px; height: 200px; overflow: hidden;">
+                                <img class="img-fluid"
+                                     src="@booking.Pet.Avatar"
+                                     alt="Pet Avatar"
+                                     id="ImageView"
+                                     style="object-fit: cover; object-position: center; height: 100%; width: 100%;">
+                            </div>
+                            <div class="small font-italic text-muted fw-bold">@booking.Pet.PetName</div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label asp-for="@booking.Id" class="mb-1 fw-bold">ID: </label>
+                                <span class="text-muted">@booking.Id</span>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label asp-for="@booking.StartDate" class="mb-1 fw-bold">Start date:</label>
+                                    <span class="text-muted">@booking.StartDate</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="@booking.EndDate" class="mb-1 fw-bold">End date:</label>
+                                    <span class="text-muted">@booking.EndDate</span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label asp-for="@booking.BoardingType" class="mb-1 fw-bold">Boarding type:</label>
+                                    <span class="text-muted">@booking.BoardingType</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="@booking.Accommodation.Type" class="mb-1 fw-bold">Accommodation type:</label>
+                                    <span class="text-muted">@booking.Accommodation.Type</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="@booking.PetCareServices" class="mb-1 fw-bold">Services:</label>
+                                <span class="text-muted">@booking.PetCareServices</span>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-primary" type="submit"><a asp-page="./PaymentRecords" asp-route-id="@booking.Id" class="text-white">Payment records</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    <!-- Paging Start -->
+    @if (Model.BookingInfos.Count > 0)
+    {
+        <div class="col-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-lg m-0 justify-content-center">
+                    <li class="page-item @prevDisabled">
+                        <a class="page-link rounded-0" aria-label="Previous"
+                           asp-page="./BookingHistory"
+                           asp-route-pageIndex="@(Model.BookingInfos.PageIndex - 1)"
+                           asp-route-currentFilter="@Model.CurrentFilter">
+                            <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+                        </a>
+                    </li>
+
+                    @for (var i = minPage; i <= maxPage; i++)
+                    {
+                        <li class="page-item @(Model.BookingInfos.PageIndex == i ? "active" : "")">
+                            <a class="page-link"
+                               asp-page="./BookingHistory"
+                               asp-route-pageIndex="@i"
+                               asp-route-currentFilter="@Model.CurrentFilter">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @nextDisabled">
+                        <a class="page-link rounded-0" aria-label="Next"
+                           asp-page="./BookingHistory"
+                           asp-route-pageIndex="@(Model.BookingInfos.PageIndex + 1)"
+                           asp-route-currentFilter="@Model.CurrentFilter">
+                            <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+    <!-- Paging End -->
+</div>

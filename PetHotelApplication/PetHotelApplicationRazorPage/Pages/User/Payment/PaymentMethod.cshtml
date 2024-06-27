@@ -1,0 +1,27 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Payment.PaymentMethodModel
+@{
+}
+
+<div class="container-fluid mt-5">
+    <div class="container">
+        <h2>Select Payment Method</h2>
+        <form method="post">
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="SelectedPaymentMethod" value="Cash" id="paymentCash" />
+                    <label class="form-check-label" for="paymentCash">Cash</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="SelectedPaymentMethod" value="TransferCash" id="paymentTransferCash" />
+                    <label class="form-check-label" for="transferCash">Transfer cash</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

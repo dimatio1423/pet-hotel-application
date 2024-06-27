@@ -78,6 +78,19 @@ namespace Repositories.Repositories.PetCareServiceRepo
             }
         }
 
+        public List<PetCareService> GetPetCareServicesByIds(List<string> Ids)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.PetCareServices.Where(x => Ids.Contains(x.Id)).ToList(); 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public void Update(PetCareService petCareService)
         {
             try

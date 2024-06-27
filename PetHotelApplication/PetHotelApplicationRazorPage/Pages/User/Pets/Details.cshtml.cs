@@ -13,6 +13,8 @@ using BusinessObjects.CustomValidators;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Services.Utils;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
@@ -35,8 +37,12 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
         [AllowedExtensions(new string[] { ".jpg", ".png" })]
         public IFormFile? Image { get; set; }
 
+        public SelectList PetSpecies { get; set; } = default!;
+
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            PetSpecies = new SelectList(_petService.GetPetSpecies(), "Name", "Name");
+
             if (id == null)
             {
                 return NotFound();
@@ -56,6 +62,8 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
 
         public async Task<IActionResult> OnPostAsync()
         {
+            PetSpecies = new SelectList(_petService.GetPetSpecies(), "Name", "Name");
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -69,7 +77,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
 
             try
             {
-                _petService.Update(Pet);
+                _petService.Update(Utils.TrimWhiteSpace(Pet));
             }
             catch (Exception ex)
             {
