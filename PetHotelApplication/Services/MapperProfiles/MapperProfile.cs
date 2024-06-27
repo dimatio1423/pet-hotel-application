@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.Entities;
+using BusinessObjects.Models.AccommodationModel.Request;
 using BusinessObjects.Models.PetCareModel.Response;
 using BusinessObjects.Models.PetModel.Request;
 using BusinessObjects.Models.PetModel.Response;
@@ -26,6 +27,8 @@ namespace Services.MapperProfiles
 
             CreateMap<PetCreateReqModel, Pet>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+            CreateMap<AccommodationCreateReqModel, Accommodation>();
+            CreateMap<AccommodationUpdateReqModel, Accommodation>().ReverseMap();
         }
     }
 }
