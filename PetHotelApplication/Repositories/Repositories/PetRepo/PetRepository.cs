@@ -64,14 +64,7 @@ namespace Repositories.Repositories.PetRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Pets
-                            .Include(p => p.BookingInformations)
-                                .ThenInclude(b => b.Accommodation)
-                            .Include(p => p.BookingInformations)
-                                .ThenInclude(b => b.PaymentRecords)                                
-                            .Include(p => p.BookingInformations)
-                                .ThenInclude(b => b.ServiceBookings)
-                                    .ThenInclude(s => s.Service)
+                return _context.Pets                            
                             .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)

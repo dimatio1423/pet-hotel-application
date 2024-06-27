@@ -30,6 +30,18 @@ namespace PetHotelApplicationRazorPage.Pages
                     context.Result = Redirect("/User/Login");
                 }
 
+                if (path.Value.ToLower().Contains("/user/feedbacks/create") 
+                    || path.Value.ToLower().Contains("/user/feedbacks/details") 
+                    || path.Value.ToLower().Contains("/user/feedbacks/delete"))
+                {
+                    context.Result = Redirect("/User/Login");
+                }
+
+                if (path.Value.ToLower().Contains("/user/booking"))
+                {
+                    context.Result = Redirect("/User/Login");
+                }
+
             }
             else
             {
@@ -126,6 +138,38 @@ namespace PetHotelApplicationRazorPage.Pages
                 {
                     if (!currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString())) {
                         context.Result = Redirect("/Forbidden");
+                    }
+                }
+
+                if (path.Value.ToLower().Contains("/user/feedbacks"))
+                {
+                    if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Staff");
+                    }
+                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Admin");
+                    }
+                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Manager");
+                    }
+                }
+
+                if (path.Value.ToLower().Contains("/user/booking"))
+                {
+                    if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Staff");
+                    }
+                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Admin");
+                    }
+                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString()))
+                    {
+                        context.Result = Redirect("/Manager");
                     }
                 }
             }

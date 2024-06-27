@@ -26,48 +26,5 @@ namespace BusinessObjects.Models.PetModel.Response
         [Required(ErrorMessage = "Pet age is required")]
         [Range(1, 50, ErrorMessage = "Pet age must be in range {1} and {2}")]
         public int Age { get; set; }
-    }
-
-    public class BookingInformationResModel
-    {
-        public string Id { get; set; }
-
-        public string BoardingType { get; set; }
-
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
-
-        public string Note { get; set; }
-
-        public string Status { get; set; }
-
-        public AccommodationResModel Accommodation { get; set; }
-
-        public ICollection<PaymentRecordResModel> PaymentRecords { get; set; } = new List<PaymentRecordResModel>();
-
-        public string PetCareServices { get; set; }
-    }
-
-    public class AccommodationResModel
-    {
-        public string Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Type { get; set; }
-    }
-
-    public class PaymentRecordResModel
-    {
-        public string Id { get; set; }
-
-        public string Price { get; set; }
-
-        public DateTime Date { get; set; }
-
-        public string Method { get; set; }
-
-        public string Status { get; set; }
-    }
+    }    
 }

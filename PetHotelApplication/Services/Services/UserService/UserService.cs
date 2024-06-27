@@ -2,6 +2,7 @@
 using BusinessObjects.Enums.RoleEnums;
 using BusinessObjects.Enums.StatusEnums;
 using BusinessObjects.Models.UserModel;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Repositories.UserRepo;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,20 @@ namespace Services.Services.UserService
         }
         public void CreateUserReq(CreateUserReqModel createUserReqModel)
         {
-            
+            User newUser = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                Avatar = createUserReqModel.Avatar ?? "link",
+                FullName = createUserReqModel.FullName,
+                PhoneNumber = createUserReqModel.PhoneNumber,
+                Email = createUserReqModel.Email,
+                Password = HashPassword(createUserReqModel.Password),
+                Address = createUserReqModel.Address,
+                Status = StatusEnums.Active.ToString(),
+                RoleId = createUserReqModel.RoleId
+            };
+
+            _userRepository.Add(newUser);
         }
 
         public void RegisterUser(RegisterUserReqModel registerUserReq)
@@ -37,11 +51,13 @@ namespace Services.Services.UserService
                 Password = HashPassword(registerUserReq.Password),
                 Address = registerUserReq.Address,
                 Status = StatusEnums.Active.ToString(),
-                RoleId = (((int)RoleEnums.Customer)+1).ToString(),
+                RoleId = (((int)RoleEnums.Customer) + 1).ToString(),
             };
 
             _userRepository.Add(newUser);
+
         }
+
 
         public string HashPassword(string password)
         {
@@ -79,6 +95,25 @@ namespace Services.Services.UserService
         public List<User> GetUsers()
         {
             return _userRepository.GetUsers();
+        }
+
+        public bool isEmailExist(string email)
+        {
+            return _userRepository.isEmailExist(email);
+        }
+
+        public bool isPhoneNumberExist(string phoneNumber)
+        {
+            return _userRepository.isPhoneNumberExist(phoneNumber);
+        }
+
+        public User GetUserById(string id)
+        {
+            return _userRepository.GetUserById(id);
+        }
+        public void UpdateUser(User user)
+        {
+            _userRepository.Update(user);
         }
     }
 }
