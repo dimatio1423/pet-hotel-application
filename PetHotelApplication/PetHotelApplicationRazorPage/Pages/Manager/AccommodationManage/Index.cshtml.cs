@@ -12,7 +12,7 @@ using BusinessObjects.Enums.StatusEnums;
 
 namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AuthorizePageModel
     {
         private readonly IAccommodationService _accommodationService;
 

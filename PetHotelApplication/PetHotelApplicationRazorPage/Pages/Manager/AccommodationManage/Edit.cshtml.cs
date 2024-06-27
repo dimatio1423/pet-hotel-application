@@ -15,7 +15,7 @@ using AutoMapper;
 
 namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
 {
-    public class EditModel : PageModel
+    public class EditModel : AuthorizePageModel
     {
         private readonly IAccommodationService _accommodationService;
         private readonly IMapper _mapper;
