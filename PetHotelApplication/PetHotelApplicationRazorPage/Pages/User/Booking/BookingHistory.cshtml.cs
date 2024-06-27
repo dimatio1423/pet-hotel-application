@@ -13,7 +13,7 @@ using BusinessObjects.Models.PetModel.Response;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Booking
 {
-    public class BookingHistoryModel : PageModel
+    public class BookingHistoryModel : AuthorizePageModel
     {
         private readonly IBookingInformationService _bookingInformationService;
 

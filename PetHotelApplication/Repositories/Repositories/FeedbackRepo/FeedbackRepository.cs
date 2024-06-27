@@ -46,7 +46,7 @@ namespace Repositories.Repositories.FeedbackRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Feedbacks.FirstOrDefault(x => x.Id.Equals(id));
+                return _context.Feedbacks.Include(x => x.User).FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
             {

@@ -37,7 +37,7 @@ namespace PetHotelApplicationRazorPage.Pages
                     context.Result = Redirect("/User/Login");
                 }
 
-                if (path.Value.ToLower().Contains("/user/booking/create"))
+                if (path.Value.ToLower().Contains("/user/booking"))
                 {
                     context.Result = Redirect("/User/Login");
                 }
@@ -157,7 +157,7 @@ namespace PetHotelApplicationRazorPage.Pages
                     }
                 }
 
-                if (path.Value.ToLower().Contains("/user/booking/create"))
+                if (path.Value.ToLower().Contains("/user/booking"))
                 {
                     if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
                     {
