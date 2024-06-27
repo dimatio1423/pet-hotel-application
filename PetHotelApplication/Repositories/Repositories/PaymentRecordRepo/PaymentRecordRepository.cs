@@ -74,5 +74,22 @@ namespace Repositories.Repositories.PaymentRecordRepo
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<PaymentRecord> GetPaymentRecordsFromBookingId(string bookingId)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.PaymentRecords
+                            .Include(p => p.Booking)
+                            .Where(p => p.Booking.Id.Equals(bookingId))
+                            .OrderByDescending(p => p.Date)
+                            .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
