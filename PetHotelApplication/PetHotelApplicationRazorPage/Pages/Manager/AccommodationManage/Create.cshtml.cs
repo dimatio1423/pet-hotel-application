@@ -49,6 +49,12 @@ namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
                 return Page();
             }
             var newAccommodation = _mapper.Map<Accommodation>(Accommodation);
+            var allAccommodationNames = _accommodationService.GetAccommodations().Select(a => a.Name.ToLower()).ToList();
+            if (allAccommodationNames.Contains(newAccommodation.Name.ToLower()))
+            {
+                ModelState.AddModelError(string.Empty, "Accommodation name is already existed");
+                return Page();
+            }
             newAccommodation.Id = Guid.NewGuid().ToString();
             newAccommodation.Status = StatusEnums.Available.ToString();
             _accommodationService.Add(newAccommodation);

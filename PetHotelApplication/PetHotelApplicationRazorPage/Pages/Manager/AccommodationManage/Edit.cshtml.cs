@@ -55,13 +55,21 @@ namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var accommodationType = Accommodation.Type;
             if (!ModelState.IsValid)
             {
                 return Page();
             }
             var accommodation = _accommodationService.GetAccommodationById(Accommodation.Id);
             _mapper.Map(Accommodation, accommodation);
+            var allAccommodationNames = _accommodationService.GetAccommodations().Where(a => a.Id != Accommodation.Id)
+                                                             .Select(a => a.Name.ToLower())
+                                                             .ToList();
+
+            if (allAccommodationNames.Contains(accommodation.Name.ToLower()))
+            {
+                ModelState.AddModelError(string.Empty, "Accommodation name is already existed");
+                return Page();
+            }
             _accommodationService.Update(accommodation);
 
             return RedirectToPage("./Index");
