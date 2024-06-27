@@ -11,7 +11,7 @@ using Services.Services.AccommodationService;
 
 namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : AuthorizePageModel
     {
         private readonly IAccommodationService _accommodationService;
 

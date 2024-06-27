@@ -15,7 +15,7 @@ using BusinessObjects.Enums.AccommodationTypeEnums;
 
 namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
 {
-    public class CreateModel : PageModel
+    public class CreateModel : AuthorizePageModel
     {
         private readonly IAccommodationService _accommodationService;
         private readonly IMapper _mapper;
