@@ -14,5 +14,6 @@ namespace Repositories.Repositories.PaymentRecordRepo
         void Add(PaymentRecord paymentRecord);
         void Delete(PaymentRecord paymentRecord);
         void Update(PaymentRecord paymentRecord);
+        List<PaymentRecord> GetPaymentRecordsFromBookingId(string bookingId);
     }
 }
