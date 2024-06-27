@@ -20,7 +20,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Payment
             {
                 return RedirectToPage("/Index");
             }
-            else if (SelectedPaymentMethod == "CreditCard")
+            else if (SelectedPaymentMethod == "TransferCash")
             {
                 return RedirectToPage("Payment");
             }
