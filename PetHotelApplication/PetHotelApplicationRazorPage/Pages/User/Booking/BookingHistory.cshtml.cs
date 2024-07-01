@@ -25,10 +25,13 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         public PaginatedList<BookingInformationResModel> BookingInfos { get; set; } = default!;
 
         public string CurrentFilter { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         private const int pageSize = 4;
 
-        public async Task OnGetAsync(string currentFilter, string searchString, int? pageIndex)
+        public async Task OnGetAsync(string currentFilter, string searchString, int? pageIndex,
+            DateTime? startDate, DateTime? endDate)
         {
             if (searchString != null)
             {
@@ -41,8 +44,27 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             CurrentFilter = searchString;
 
+            StartDate = startDate;
+            EndDate = endDate;
+
             var currentUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
-            var list = _bookingInformationService.GetBookingInformationByUserId(currentUser.Id);
+            var list = _bookingInformationService.GetBookingInformationByUserId(currentUser.Id)
+                                                .AsEnumerable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                list = list.Where(e => e.Pet.PetName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (startDate.HasValue)
+            {
+                list = list.Where(e => e.StartDate >= startDate.Value);
+            }
+            
+            if (endDate.HasValue)
+            {
+                list = list.Where(e => e.StartDate <= endDate.Value);
+            }
 
             BookingInfos = PaginatedList<BookingInformationResModel>.Create(list, pageIndex ?? 1, pageSize);
         }
