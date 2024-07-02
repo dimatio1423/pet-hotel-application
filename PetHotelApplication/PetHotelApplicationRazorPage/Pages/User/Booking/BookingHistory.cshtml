@@ -14,6 +14,31 @@
 
 <div class="container-xl px-4 mt-4">
     <h2 class="card-title mb-4">Booking Histories</h2>
+
+    <!-- Search & Filter -->
+    <form asp-page="./BookingHistory" method="get" class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <div class="row gx-3 mb-3">
+                <div class="col-md-3">
+                    <label for="startDate" class="mb-1 fw-bold">Start Date:</label>
+                    <input type="date" id="startDate" name="StartDate" class="form-control w-75" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("yyyy-MM-dd") : "")">
+                </div>
+                <div class="col-md-3">
+                    <label for="endDate" class="mb-1 fw-bold">End Date:</label>
+                    <input type="date" id="endDate" name="EndDate" class="form-control w-75" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search by pet name" name="SearchString" value="@Model.CurrentFilter">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-warning" type="button"><a asp-page="./BookingHistory" class="text-white">Clear filter</a></button>
+            </div>
+        </div>
+    </form>
+
     @if (Model.BookingInfos.Count == 0)
     {
         <div class="alert alert-info">
