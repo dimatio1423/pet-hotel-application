@@ -23,11 +23,20 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
             _petCareService = petCareService;
         }
 
+        [BindProperty(SupportsGet = true)]
+        public string SearchServices { get; set; }
+
         public PaginatedList<PetCareService> PetCareService { get;set; } = default!;
 
         public async Task OnGetAsync(int? pageIndex)
         {
             var services = _petCareService.GetPetCareServices();
+
+            if (!string.IsNullOrEmpty(SearchServices))
+            {
+                services = services.Where(x => x.Type.ToLower().Contains(SearchServices.ToLower())).ToList();
+            }
+
             PetCareService = PaginatedList<PetCareService>.Create(services, pageIndex ?? 1, pageSize);
         }
     }

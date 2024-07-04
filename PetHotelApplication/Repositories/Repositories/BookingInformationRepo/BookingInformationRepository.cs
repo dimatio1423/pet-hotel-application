@@ -61,7 +61,11 @@ namespace Repositories.Repositories.BookingInformationRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.BookingInformations.FirstOrDefault(x => x.Id.Equals(id));
+                return _context.BookingInformations
+                    .Include(x => x.Accommodation)
+                    .Include(x => x.Pet)
+                    .Include(x => x.ServiceBookings)
+                    .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
             {

@@ -15,11 +15,8 @@ namespace Repositories.Repositories.PaymentRecordRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                var currPaymentRecord = _context.PaymentRecords.FirstOrDefault(x => x.Id.Equals(paymentRecord.Id));
-
-                currPaymentRecord.Status = "Inactive";
-
-                _context.Update(currPaymentRecord);
+               
+                _context.Add(paymentRecord);
 
                 _context.SaveChanges();
             }

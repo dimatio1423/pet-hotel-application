@@ -14,11 +14,11 @@ namespace BusinessObjects.Models.BookingInformationModel.Request
 
         [Required(ErrorMessage = "Please provide a start date")]
         [DataType(DataType.Date, ErrorMessage = "Please provide a valid start date")]
-        public DateTime StartDate { get; set; }
+        public DateOnly StartDate { get; set; }
 
         [Required(ErrorMessage = "Please provide an end date")]
         [DataType(DataType.Date, ErrorMessage = "Please provide a valid end date")]
-        public DateTime EndDate { get; set; }
+        public DateOnly EndDate { get; set; }
 
         [StringLength(500, ErrorMessage = "Note cannot be longer than 500 characters")]
         public string Note { get; set; }

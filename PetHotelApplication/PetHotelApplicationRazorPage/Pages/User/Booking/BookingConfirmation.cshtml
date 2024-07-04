@@ -1,0 +1,58 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.ConfirmationModel
+@{
+    var booking = Model.Booking;
+    var services = Model.PetCareServices;
+    <style>
+        .badge-primary {
+            background-color: #007bff;
+        }
+    </style>
+}
+
+<div class="container-fluid mt-5">
+    <div class="container p-4 bg-light rounded">
+        <h2 class="text-center mb-4">Confirm Your Booking</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="mb-3">Booking Details</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">Boarding Type:</dt>
+                    <dd class="col-sm-8">@booking.BoardingType</dd>
+
+                    <dt class="col-sm-4">Start Date:</dt>
+                    <dd class="col-sm-8">@booking.StartDate.ToString("d")</dd>
+
+                    <dt class="col-sm-4">End Date:</dt>
+                    <dd class="col-sm-8">@booking.EndDate.ToString("d")</dd>
+
+                    <dt class="col-sm-4">Note:</dt>
+                    <dd class="col-sm-8">@booking.Note</dd>
+
+                    <dt class="col-sm-4">Accommodation:</dt>
+                    <dd class="col-sm-8">@Model.AccommodationName</dd>
+
+                    <dt class="col-sm-4">Pet:</dt>
+                    <dd class="col-sm-8">@Model.PetName</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3">Selected Services</h3>
+                <ul class="list-group">
+                    @foreach (var service in services)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @service.Type
+                            <span class="badge badge-primary badge-pill">@service.Price.ToString("#,##0") VNĐ</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <a asp-page="/User/Payment/PaymentMethod" class="btn btnalert-primary btn-lg">Confirm Booking</a>
+            <a asp-page="/User/Booking/Create" class="btn btn-secondary btn-lg ml-2">Return</a>
+        </div>
+    </div>
+</div>
+

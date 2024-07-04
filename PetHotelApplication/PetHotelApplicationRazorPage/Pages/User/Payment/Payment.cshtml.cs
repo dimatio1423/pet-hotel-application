@@ -1,5 +1,7 @@
+using BusinessObjects.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using System.ComponentModel.DataAnnotations;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Payment
@@ -11,6 +13,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Payment
 
         public void OnGet()
         {
+            
         }
 
         public IActionResult OnPost()
