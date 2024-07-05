@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.Entities;
-using BusinessObjects.Models.BookingModel.Response;
+using BusinessObjects.Models.BookingInformationModel.Response;
 using Repositories.Repositories.BookingInformationRepo;
 using System;
 using System.Collections.Generic;

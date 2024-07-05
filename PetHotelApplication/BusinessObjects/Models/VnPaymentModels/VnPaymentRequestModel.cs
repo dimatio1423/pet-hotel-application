@@ -8,10 +8,9 @@ namespace BusinessObjects.Models.VnPaymentModels
 {
     public class VnPaymentRequestModel
     {
-        public string OrderId { get; set; } = Guid.NewGuid().ToString();
-        public string FullName { get; set; }
-        public string Description { get; set; }
+        public string OrderId { get; set; }
+        public string PaymentId { get; set; }
         public double Amount { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; }
     }
 }

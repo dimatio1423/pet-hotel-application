@@ -66,6 +66,7 @@ namespace Repositories.Repositories.BookingInformationRepo
                     .Include(x => x.Accommodation)
                     .Include(x => x.Pet)
                     .Include(x => x.ServiceBookings)
+                        .ThenInclude(sb => sb.Service)
                     .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)

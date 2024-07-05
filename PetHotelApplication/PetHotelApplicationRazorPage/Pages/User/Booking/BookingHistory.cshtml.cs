@@ -7,19 +7,22 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Entities;
 using Repositories;
-using BusinessObjects.Models.BookingModel.Response;
 using Services.Services.BookingInformationService;
 using BusinessObjects.Models.PetModel.Response;
+using AutoMapper;
+using BusinessObjects.Models.BookingInformationModel.Response;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Booking
 {
     public class BookingHistoryModel : AuthorizePageModel
     {
         private readonly IBookingInformationService _bookingInformationService;
+        private readonly IMapper _mapper;
 
-        public BookingHistoryModel(IBookingInformationService bookingInformationService)
+        public BookingHistoryModel(IBookingInformationService bookingInformationService, IMapper mapper)
         {
             _bookingInformationService = bookingInformationService;
+            _mapper = mapper;
         }
 
         public PaginatedList<BookingInformationResModel> BookingInfos { get; set; } = default!;
