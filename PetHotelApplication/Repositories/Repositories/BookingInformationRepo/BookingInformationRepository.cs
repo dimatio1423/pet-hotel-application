@@ -101,6 +101,7 @@ namespace Repositories.Repositories.BookingInformationRepo
                             .Include(b => b.ServiceBookings)
                                 .ThenInclude(sb => sb.Service)
                             .OrderBy(b => b.Pet.PetName)
+                            .OrderByDescending(b => b.StartDate)
                             .Where(b => b.User.Id.Equals(userId))
                             .ToList();
             }

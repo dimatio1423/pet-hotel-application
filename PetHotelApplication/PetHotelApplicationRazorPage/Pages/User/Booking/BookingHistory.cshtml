@@ -92,6 +92,10 @@
                                 <label asp-for="@booking.PetCareServices" class="mb-1 fw-bold">Services:</label>
                                 <span class="text-muted">@booking.PetCareServices</span>
                             </div>
+                            <div class="mb-3">
+                                <label asp-for="@booking.Status" class="mb-1 fw-bold">Status:</label>
+                                <span class="text-muted">@booking.Status</span>
+                            </div>
                             <div class="d-flex justify-content-end">
                                 <button class="btn btn-primary" type="submit"><a asp-page="./PaymentRecords" asp-route-bookingId="@booking.Id" class="text-white">Payment records</a></button>
                             </div>
