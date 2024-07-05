@@ -66,6 +66,7 @@ namespace Repositories.Repositories.BookingInformationRepo
                     .Include(x => x.Accommodation)
                     .Include(x => x.Pet)
                     .Include(x => x.ServiceBookings)
+                        .ThenInclude(sb => sb.Service)
                     .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
@@ -101,6 +102,7 @@ namespace Repositories.Repositories.BookingInformationRepo
                             .Include(b => b.ServiceBookings)
                                 .ThenInclude(sb => sb.Service)
                             .OrderBy(b => b.Pet.PetName)
+                            .OrderByDescending(b => b.StartDate)
                             .Where(b => b.User.Id.Equals(userId))
                             .ToList();
             }

@@ -13,5 +13,7 @@ namespace BusinessObjects.Models.PetCareModel.Response
         public string Type { get; set; }
 
         public string Description { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

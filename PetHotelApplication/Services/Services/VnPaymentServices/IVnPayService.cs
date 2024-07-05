@@ -12,6 +12,6 @@ namespace Services.Services.VnPaymentServices
     {
         string CreatePaymentUrl(HttpContext context, VnPaymentRequestModel model);
 
-        VnPaymentResponseModel MakePayment(IQueryCollection colletions);
+        VnPaymentResponseModel PaymentResponse(IQueryCollection colletions);
     }
 }

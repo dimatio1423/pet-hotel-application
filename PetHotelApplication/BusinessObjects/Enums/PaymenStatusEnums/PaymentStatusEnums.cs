@@ -9,6 +9,7 @@ namespace BusinessObjects.Enums.PaymenStatusEnums
     public enum PaymentStatusEnums
     {
         Paid,
-        Unpaid
+        Unpaid,
+        Error
     }
 }

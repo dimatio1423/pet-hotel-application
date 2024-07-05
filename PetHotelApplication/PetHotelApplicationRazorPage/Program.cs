@@ -22,6 +22,7 @@ using Services.Services.RoleService;
 using Services.Services.ServiceImageService;
 using Services.Services.ServicesBookingService;
 using Services.Services.UserService;
+using Services.Services.VnPaymentServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,7 @@ builder.Services.AddScoped<IServiceBookingService, ServiceBookingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IServiceImageService, ServiceImageService>();
 builder.Services.AddScoped<CloudinaryService>();
+builder.Services.AddScoped<IVnPayService, VnPayService>();
 
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));

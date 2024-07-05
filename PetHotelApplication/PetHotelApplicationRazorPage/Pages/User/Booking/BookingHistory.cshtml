@@ -1,6 +1,8 @@
 ﻿@page
 @model PetHotelApplicationRazorPage.Pages.User.Booking.BookingHistoryModel
 
+@using BusinessObjects.Enums.BookingStatusEnums;
+
 @{
     ViewData["Title"] = "Booking History";
 
@@ -91,6 +93,27 @@
                             <div class="mb-3">
                                 <label asp-for="@booking.PetCareServices" class="mb-1 fw-bold">Services:</label>
                                 <span class="text-muted">@booking.PetCareServices</span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="@booking.Note" class="mb-1 fw-bold">Note:</label>
+                                <span class="text-muted">@booking.Note</span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="@booking.Status" class="mb-1 fw-bold">Status:</label>
+                                @{
+                                    string statusColor;
+                                    switch (booking.Status)
+                                    {
+                                        case nameof(BookingStatusEnums.Pending): statusColor = "warning"; break;
+                                        case nameof(BookingStatusEnums.Cancelled): statusColor = "danger"; break;
+                                        default: statusColor = "success"; break;
+                                    }
+                                }
+                                <span class="text-@statusColor fw-bold">@booking.Status</span>
+
+                                @if (booking.Status.Equals(nameof(BookingStatusEnums.Pending))){
+                                    <a asp-page="./ContinuePayment" asp-route-id="@booking.Id" class="text-primary ms-3">Continue payment -></a>
+                                }
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button class="btn btn-primary" type="submit"><a asp-page="./PaymentRecords" asp-route-bookingId="@booking.Id" class="text-white">Payment records</a></button>
