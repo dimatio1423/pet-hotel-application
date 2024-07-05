@@ -62,6 +62,7 @@ namespace Repositories.Repositories.BookingInformationRepo
             {
                 using var _context = new PetHotelApplicationDbContext();
                 return _context.BookingInformations
+                    .Include(x => x.User)
                     .Include(x => x.Accommodation)
                     .Include(x => x.Pet)
                     .Include(x => x.ServiceBookings)

@@ -230,20 +230,11 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return Page();
             }
 
-            BookingInformation bookingInformation = new BookingInformation
-            {
-                Id = Guid.NewGuid().ToString(),
-                BoardingType = Booking.BoardingType,
-                StartDate = start,
-                EndDate = end,
-                Note = Booking.Note,
-                Status = BookingStatusEnums.Pending.ToString(),
-                UserId = currentUser.Id,
-                AccommodationId = Booking.AccommodationId,
-                PetId = Booking.PetId
-            };
 
-            SessionHelper.SetObjectSession(HttpContext.Session, "BookingInformation", bookingInformation);
+            SessionHelper.SetObjectSession(HttpContext.Session, "start", start);
+            SessionHelper.SetObjectSession(HttpContext.Session, "end", end);
+
+            SessionHelper.SetObjectSession(HttpContext.Session, "BookingInformation", Booking);
             SessionHelper.SetObjectSession(HttpContext.Session, "SelectedPetCareServices", BookingServices);
 
             return RedirectToPage("/User/Booking/BookingConfirmation");

@@ -17,6 +17,7 @@
             <div class="col-md-6">
                 <h3 class="mb-3">Booking Details</h3>
                 <dl class="row">
+
                     <dt class="col-sm-4">Boarding Type:</dt>
                     <dd class="col-sm-8">@booking.BoardingType</dd>
 
@@ -34,6 +35,9 @@
 
                     <dt class="col-sm-4">Pet:</dt>
                     <dd class="col-sm-8">@Model.PetName</dd>
+
+                    <h3 class="mt-3 mb-3">Total price: </h3>
+                    <dd class="col-sm-8">@Model.TotalPrice</dd>
                 </dl>
             </div>
             <div class="col-md-6">
@@ -47,11 +51,37 @@
                         </li>
                     }
                 </ul>
+
+                <h3 class="text-right mt-3 mb-3">Select Payment Method</h3>
+                <form method="post" asp-page-handler="Confirm">
+                    <div class="form-group">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" asp-for="SelectedPaymentMethod" value="Cash" id="paymentCash" />
+                            <label class="form-check-label" for="paymentCash">Cash</label>
+                             
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" asp-for="SelectedPaymentMethod" value="TransferCash" id="paymentTransferCash" />
+                            <label class="form-check-label" for="paymentTransferCash">Transfer cash</label>
+                        </div>
+                        @if (TempData["ErrorPaymentMethod"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <span>@TempData["ErrorPaymentMethod"] </span>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-left">
+                        <button type="submit" class="btn btn-primary mb-1">Confirm booking</button>
+                    </div>
+                 </form>
             </div>
         </div>
         <div class="mt-4 text-center">
-            <a asp-page="/User/Payment/PaymentMethod" class="btn btnalert-primary btn-lg">Confirm Booking</a>
-            <a asp-page="/User/Booking/Create" class="btn btn-secondary btn-lg ml-2">Return</a>
+            <a asp-page="/User/Booking/Create" class="btn btn-secondary">Return</a>
+            <form method="post" asp-page-handler="Cancel" class="d-inline">
+                <button type="submit" class="btn btn-danger">Cancel</button>
+            </form>
         </div>
     </div>
 </div>
