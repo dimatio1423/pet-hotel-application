@@ -88,5 +88,23 @@ namespace Repositories.Repositories.PaymentRecordRepo
                 throw new Exception(ex.Message);
             }
         }
+
+        public void UpdateRange(List<PaymentRecord> paymentRecords)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                //_context.Categories.Update(category);
+                foreach (var paymentRecord in paymentRecords)
+                {
+                    _context.Entry(paymentRecord).State = EntityState.Modified;
+                }
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

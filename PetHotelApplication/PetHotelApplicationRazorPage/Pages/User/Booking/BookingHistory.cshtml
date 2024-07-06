@@ -29,6 +29,12 @@
                     <label for="endDate" class="mb-1 fw-bold">End Date:</label>
                     <input type="date" id="endDate" name="EndDate" class="form-control w-75" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")">
                 </div>
+                <div class="col-md-2">
+                    <label for="status" class="mb-1 fw-bold">Status:</label>                    
+                    <select asp-for="StatusFilter" asp-items="@Model.BookingStatus" id="status" name="Status" class="form-control w-75 bg-white">
+                        <option value="">All</option>
+                    </select>
+                </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </div>
@@ -111,7 +117,8 @@
                                 }
                                 <span class="text-@statusColor fw-bold">@booking.Status</span>
 
-                                @if (booking.Status.Equals(nameof(BookingStatusEnums.Pending))){
+                                @if (booking.Status.Equals(nameof(BookingStatusEnums.Pending)))
+                                {
                                     <a asp-page="./ContinuePayment" asp-route-id="@booking.Id" class="text-primary ms-3">Continue payment -></a>
                                 }
                             </div>

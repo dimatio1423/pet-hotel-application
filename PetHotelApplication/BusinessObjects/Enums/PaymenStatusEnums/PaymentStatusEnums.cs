@@ -10,6 +10,7 @@ namespace BusinessObjects.Enums.PaymenStatusEnums
     {
         Paid,
         Unpaid,
-        Error
+        Error,
+        Canceled
     }
 }

@@ -72,8 +72,20 @@
                 </form>
             </div>
         </div>
-        <div class="mt-4 text-center">
-            <button type="submit" class="btn btn-danger"><a asp-page="./BookingHistory">Cancel</a></button>
-        </div>
+        <form method="post" asp-page-handler="CancelBooking" onsubmit="return confirmCancelBooking()">
+            <input type="hidden" asp-for="BookingId"/>
+            <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
+
+<script>
+    function confirmCancelBooking() {
+        if (confirm("Are you sure you want to cancel the booking?")) {
+            return true; // Allow form submission
+        }
+        return false; // Cancel form submission
+    }
+</script>
