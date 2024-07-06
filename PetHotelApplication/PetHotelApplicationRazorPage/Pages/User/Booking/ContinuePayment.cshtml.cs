@@ -87,6 +87,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 BookingId = BookingInfo.Id
             };
 
+            _paymentRecordService.CancelBookingPaymentRecords(paymentRecord.BookingId);
             _paymentRecordService.Add(paymentRecord);
 
             if (SelectedPaymentMethod.Equals("Cash"))
@@ -98,11 +99,22 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             {
                 OrderId = paymentRecord.BookingId,
                 PaymentId = paymentRecord.Id,
-                Amount = double.Parse(paymentRecord.Price),
+                Amount = decimal.Parse(paymentRecord.Price),
                 CreatedDate = paymentRecord.Date
             };
 
             return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnpay));
+        }
+
+        public IActionResult OnPostCancelBooking()
+        {
+            _paymentRecordService.CancelBookingPaymentRecords(BookingId);
+
+            var currentBooking = _bookingInformationService.GetBookingInformationById(BookingId);
+            currentBooking.Status = nameof(BookingStatusEnums.Cancelled);
+            _bookingInformationService.Update(currentBooking);
+
+            return RedirectToPage("./BookingHistory");
         }
     }
 }
