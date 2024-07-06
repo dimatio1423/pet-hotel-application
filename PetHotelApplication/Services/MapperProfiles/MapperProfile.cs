@@ -14,6 +14,9 @@ using BusinessObjects.Models.PaymentRecordModel.Response;
 using BusinessObjects.Models.BookingInformationModel.Response;
 using System.Collections;
 using System.Linq.Expressions;
+using BusinessObjects.Models.BookingInformationModel.Request;
+using Services.Resolver.BookingInformationResolver;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Services.MapperProfiles
 {
@@ -60,6 +63,14 @@ namespace Services.MapperProfiles
                 .ForMember(dest => dest.PetId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PetName))
                 .ReverseMap();
-    }
+            CreateMap<BookingCreateReqModel, BookingInformationViewResModel>()
+                    .ForMember(dest => dest.BoardingType, opt => opt.MapFrom(src => src.BoardingType))
+                    .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                    .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                    .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
+                    .ForMember(dest => dest.Accommodation, opt => opt.MapFrom<BookingAccommodationResolver>())
+                    .ForMember(dest => dest.Pet, opt => opt.MapFrom<BookingPetResolver>());
+        }
+
 }
 }

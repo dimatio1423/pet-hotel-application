@@ -3,7 +3,9 @@ using BusinessObjects.Entities;
 using BusinessObjects.Enums.BookingStatusEnums;
 using BusinessObjects.Enums.PaymenStatusEnums;
 using BusinessObjects.Models.BookingInformationModel.Request;
+using BusinessObjects.Models.BookingInformationModel.Response;
 using BusinessObjects.Models.PetCareModel.Response;
+using BusinessObjects.Models.VnPaymentModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Services.AccommodationService;
@@ -12,6 +14,7 @@ using Services.Services.PaymentRecordService;
 using Services.Services.PetCareServices;
 using Services.Services.PetService;
 using Services.Services.ServicesBookingService;
+using Services.Services.VnPaymentServices;
 using System.ComponentModel.DataAnnotations;
 using System.Net.WebSockets;
 
@@ -25,6 +28,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         private readonly IPetService _petService;
         private readonly IPetCareService _petCareService;
         private readonly IPaymentRecordService _paymentRecordService;
+        private readonly IVnPayService _vnPayService;
         private readonly IMapper _mapper;
 
         public ConfirmationModel(IBookingInformationService bookingInformationService,
@@ -33,6 +37,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             IPetService petService,
             IPetCareService petCareService,
             IPaymentRecordService paymentRecordService,
+            IVnPayService vnPayService,
             IMapper mapper)
         {
             _bookingInformationService = bookingInformationService;
@@ -41,6 +46,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             _petService = petService;
             _petCareService = petCareService;
             _paymentRecordService = paymentRecordService;
+            _vnPayService = vnPayService;
             _mapper = mapper;
         }
         [BindProperty]
@@ -51,7 +57,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         public string SelectedPaymentMethod { get; set; }
 
         [BindProperty]
-        public BookingCreateReqModel Booking { get; set; }
+        public BookingInformationViewResModel Booking { get; set; }
 
         [BindProperty]
         public List<PetCareViewListResModel> PetCareServices { get; set; }
@@ -62,7 +68,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
         public async Task <IActionResult> OnGet()
         {
-            return await loadData();
+            return await viewData();
         }
 
         public async Task <IActionResult> OnPostConfirm()
@@ -75,63 +81,65 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             {
                 TempData["ErrorPaymentMethod"] = "Please select a payment method.";
 
-                return await loadData();
+                return await viewData();
 
                 //return Page();
             }
 
-            if (SelectedPaymentMethod == "Cash")
+            var currUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
+
+            var bookingInformation = SessionHelper.GetObjectSession<BookingCreateReqModel>(HttpContext.Session, "BookingInformation");
+
+            var selectedServiceId = SessionHelper.GetObjectSession<List<string>>(HttpContext.Session, "SelectedPetCareServices");
+
+            var start = SessionHelper.GetObjectSession<DateTime>(HttpContext.Session, "start");
+
+            var end = SessionHelper.GetObjectSession<DateTime>(HttpContext.Session, "end");
+
+            if (bookingInformation != null)
             {
-                var currUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
-
-                var bookingInformation = SessionHelper.GetObjectSession<BookingCreateReqModel>(HttpContext.Session, "BookingInformation");
-
-                var selectedServiceId = SessionHelper.GetObjectSession<List<string>>(HttpContext.Session, "SelectedPetCareServices");
-
-                var start = SessionHelper.GetObjectSession<DateTime>(HttpContext.Session, "start");
-
-                var end = SessionHelper.GetObjectSession<DateTime>(HttpContext.Session, "end");
-
-                if (bookingInformation != null)
+                BookingInformation newBookingInformation = new BookingInformation
                 {
-                    BookingInformation newBookingInformation = new BookingInformation
+                    Id = Guid.NewGuid().ToString(),
+                    BoardingType = bookingInformation.BoardingType,
+                    StartDate = start,
+                    EndDate = end,
+                    Note = bookingInformation.Note,
+                    Status = BookingStatusEnums.Pending.ToString(),
+                    UserId = currUser.Id,
+                    AccommodationId = bookingInformation.AccommodationId,
+                    PetId = bookingInformation.PetId
+                };
+
+                _bookingInformationService.Add(newBookingInformation);
+
+                List<PetCareService> petCareServices = _petCareService.GetPetCareServicesByIds(selectedServiceId.ToList());
+
+                foreach (var item in petCareServices)
+                {
+                    ServiceBooking serviceBooking = new ServiceBooking
                     {
                         Id = Guid.NewGuid().ToString(),
-                        BoardingType = bookingInformation.BoardingType,
-                        StartDate = start,
-                        EndDate = end,
-                        Note = bookingInformation.Note,
-                        Status = BookingStatusEnums.Pending.ToString(),
-                        UserId = currUser.Id,
-                        AccommodationId = bookingInformation.AccommodationId,
-                        PetId = bookingInformation.PetId
+                        BookingId = newBookingInformation.Id,
+                        ServiceId = item.Id
                     };
 
-                    _bookingInformationService.Add(newBookingInformation);
-
-                    List<PetCareService> petCareServices = _petCareService.GetPetCareServicesByIds(selectedServiceId.ToList());
-
-                    foreach (var item in petCareServices)
-                    {
-                        ServiceBooking serviceBooking = new ServiceBooking
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            BookingId = newBookingInformation.Id,
-                            ServiceId = item.Id
-                        };
-
-                        _serviceBookingService.Add(serviceBooking);
-                    }
-
-                    createPayment(newBookingInformation);
+                    _serviceBookingService.Add(serviceBooking);
                 }
-                return RedirectToPage("/Index");
-            }
-            else if (SelectedPaymentMethod == "TransferCash")
-            {
-                return RedirectToPage("Payment");
-            }
+                if (SelectedPaymentMethod == "Cash")
+                {
+                    createCashPayment(newBookingInformation);
+                    return RedirectToPage("/Index");
+                }
+                else if (SelectedPaymentMethod == "TransferCash")
+                {
+                    var vnPayModel = createTransferCashPayment(newBookingInformation);
 
+                    return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
+
+                }
+            }
+         
             return Page();
         }
 
@@ -145,9 +153,11 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             return RedirectToPage("/User/Booking/Create");
         }
 
-        private async Task <IActionResult> loadData()
+        private async Task <IActionResult> viewData()
         {
-            Booking = SessionHelper.GetObjectSession<BookingCreateReqModel>(HttpContext.Session, "BookingInformation");
+            var booking = SessionHelper.GetObjectSession<BookingCreateReqModel>(HttpContext.Session, "BookingInformation");
+
+            Booking = _mapper.Map<BookingInformationViewResModel>(booking);
 
             var selectedServiceId = SessionHelper.GetObjectSession<List<string>>(HttpContext.Session, "SelectedPetCareServices");
 
@@ -170,15 +180,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             if (Booking != null)
             {
-                if (end.Date.Equals(start.Date))
-                {
-                    days = 1;
-                }
-                else
-                {
-                    TimeSpan totalDay = end.Date.Subtract(start.Date);
-                    days = totalDay.Days;
-                }
+                days = Math.Max(1, (int) end.Subtract(start).TotalDays);
 
                 foreach (var service in petCareServices)
                 {
@@ -186,15 +188,13 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                     totalServicePrice += currentService.Price;
                 }
 
-                var currAccommodation = _accommodationService.GetAccommodationById(Booking.AccommodationId);
+                var currAccommodation = _accommodationService.GetAccommodationById(booking.AccommodationId);
 
                 totalPrice = (currAccommodation.Price + totalServicePrice) * days;
 
-                var accommodation = _accommodationService.GetAccommodationById(Booking.AccommodationId);
-                AccommodationName = $"{accommodation.Name} ({accommodation.Type}) - {accommodation.Price.ToString("#,##0")} VNĐ";
+                AccommodationName = Booking.Accommodation;
 
-                var pet = _petService.GetPetById(Booking.PetId);
-                PetName = $"{pet.PetName} - {pet.Breed} - {pet.Age} {(pet.Age > 1 ? "years old" : "year old")}";
+                PetName = Booking.Pet;
 
                 PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
 
@@ -203,7 +203,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             return Page();
         }
 
-        private void createPayment(BookingInformation bookingInformation)
+        private void createCashPayment(BookingInformation bookingInformation)
         {
             var currBooking = _bookingInformationService.GetBookingInformationById(bookingInformation.Id);
 
@@ -215,16 +215,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             if (currBooking != null)
             {
-                if (currBooking.EndDate.Date.Equals(currBooking.StartDate.Date))
-                {
-                    days = 1;
-                }
-                else
-                {
-                    TimeSpan totalDay = currBooking.EndDate.Date.Subtract(currBooking.StartDate.Date);
-                    days = totalDay.Days;
-
-                }
+                days = Math.Max(1, (int)currBooking.EndDate.Subtract(currBooking.StartDate).TotalDays);
 
                 foreach (var service in currBooking.ServiceBookings)
                 {
@@ -253,6 +244,60 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
                 HttpContext.Session.Remove("SelectedPetCareServices");
             }
+        }
+
+        private VnPaymentRequestModel createTransferCashPayment(BookingInformation bookingInformation)
+        {
+            var currBooking = _bookingInformationService.GetBookingInformationById(bookingInformation.Id);
+
+            decimal totalPrice = 0;
+
+            decimal totalServicePrice = 0;
+
+            int days;
+
+            if (currBooking != null)
+            {
+                days = Math.Max(1, (int)currBooking.EndDate.Subtract(currBooking.StartDate).TotalDays);
+
+                foreach (var service in currBooking.ServiceBookings)
+                {
+                    var currentService = _petCareService.GetPetCareServiceById(service.ServiceId);
+                    totalServicePrice += currentService.Price;
+                }
+
+                var accommodation = _accommodationService.GetAccommodationById(currBooking.AccommodationId);
+
+                totalPrice = (accommodation.Price + totalServicePrice) * days;
+
+                PaymentRecord paymentRecord = new PaymentRecord
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Price = totalPrice.ToString(),
+                    Date = DateTime.Now,
+                    Method = "TransferCash",
+                    Status = PaymentStatusEnums.Unpaid.ToString(),
+                    UserId = currBooking.UserId,
+                    BookingId = currBooking.Id
+                };
+
+                _paymentRecordService.Add(paymentRecord);
+
+                VnPaymentRequestModel vnpay = new VnPaymentRequestModel
+                {
+                    OrderId = paymentRecord.BookingId,
+                    PaymentId = paymentRecord.Id,
+                    Amount = double.Parse(paymentRecord.Price),
+                    CreatedDate = paymentRecord.Date
+                };
+
+                HttpContext.Session.Remove("BookingInformation");
+
+                HttpContext.Session.Remove("SelectedPetCareServices");
+
+                return vnpay;
+            }
+            return null;
         }
     }
 }
