@@ -55,7 +55,9 @@ namespace Services.Services.PaymentRecordService
         public void CancelBookingPaymentRecords(string bookingId)
         {
             var list = _paymentRecordRepo.GetPaymentRecordsFromBookingId(bookingId);
-            list.ForEach(p => p.Status = nameof(PaymentStatusEnums.Canceled));
+            list.Where(p => p.Status.Equals(nameof(PaymentStatusEnums.Unpaid)))
+                .ToList()
+                .ForEach(p => p.Status = nameof(PaymentStatusEnums.Canceled));
             _paymentRecordRepo.UpdateRange(list);
         }
     }
