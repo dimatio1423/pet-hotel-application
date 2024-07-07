@@ -83,26 +83,5 @@ namespace Repositories.Repositories.BookingInformationRepo
                 throw new Exception(ex.Message);
             }
         }
-
-        public List<BookingInformation> GetBookingInformationByUserId(string userId)
-        {
-            try
-            {
-                using var _context = new PetHotelApplicationDbContext();
-                return _context.BookingInformations
-                            .Include(b => b.User)
-                            .Include(b => b.Accommodation)
-                            .Include(b => b.Pet)
-                            .Include(b => b.ServiceBookings)
-                                .ThenInclude(sb => sb.Service)
-                            .OrderBy(b => b.Pet.PetName)
-                            .Where(b => b.User.Id.Equals(userId))
-                            .ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
     }
 }

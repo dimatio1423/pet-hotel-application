@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using BusinessObjects.Entities;
-using BusinessObjects.Models.BookingModel.Response;
+﻿using BusinessObjects.Entities;
 using Repositories.Repositories.BookingInformationRepo;
 using System;
 using System.Collections.Generic;
@@ -13,12 +11,10 @@ namespace Services.Services.BookingInformationService
     public class BookingInformatonService : IBookingInformationService
     {
         private readonly IBookingInformationRepository _bookingInformationRepo;
-        private readonly IMapper _mapper;
 
-        public BookingInformatonService(IBookingInformationRepository bookingInformationRepo, IMapper mapper)
+        public BookingInformatonService(IBookingInformationRepository bookingInformationRepo)
         {
             _bookingInformationRepo = bookingInformationRepo;
-            _mapper = mapper;
         }
         public void Add(BookingInformation bookingInformation)
         {
@@ -43,12 +39,6 @@ namespace Services.Services.BookingInformationService
         public void Update(BookingInformation bookingInformation)
         {
             _bookingInformationRepo.Update(bookingInformation);
-        }
-
-        public List<BookingInformationResModel> GetBookingInformationByUserId(string userId)
-        {
-            var list = _bookingInformationRepo.GetBookingInformationByUserId(userId);
-            return _mapper.Map<List<BookingInformationResModel>>(list);
         }
     }
 }

@@ -12,14 +12,9 @@ namespace Services.Services.UserService
     {
         List<User> GetUsers();
         User GetUserByEmail(string email);
-        User GetUserById(string id);
-
         void RegisterUser(RegisterUserReqModel registerUserReq);
         void CreateUserReq(CreateUserReqModel createUserReqModel);
         string HashPassword(string password);
         bool VerifyPassword(string password, string hashedPassword);
-        bool isEmailExist(string email);
-        bool isPhoneNumberExist(string phoneNumber);
-        void UpdateUser(User user);
     }
 }
