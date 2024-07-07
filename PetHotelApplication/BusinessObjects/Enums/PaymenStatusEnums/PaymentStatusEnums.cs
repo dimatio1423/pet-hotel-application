@@ -11,6 +11,6 @@ namespace BusinessObjects.Enums.PaymenStatusEnums
         Paid,
         Unpaid,
         Error,
-        Canceled
+        Cancelled
     }
 }

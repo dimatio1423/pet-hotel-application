@@ -36,7 +36,10 @@ namespace Repositories.Repositories.PaymentRecordRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.PaymentRecords.FirstOrDefault(x => x.Id.Equals(id));
+                return _context.PaymentRecords
+                    .Include(x => x.User)
+                    .Include(x => x.Booking)
+                    .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
             {
@@ -49,7 +52,10 @@ namespace Repositories.Repositories.PaymentRecordRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.PaymentRecords.ToList();
+                return _context.PaymentRecords
+                    .Include(x => x.User)
+                    .Include(x => x.Booking)
+                    .ToList();
             }
             catch (Exception ex)
             {
