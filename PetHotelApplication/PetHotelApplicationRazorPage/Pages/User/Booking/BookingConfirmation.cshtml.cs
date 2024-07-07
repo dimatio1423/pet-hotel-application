@@ -287,7 +287,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 {
                     OrderId = paymentRecord.BookingId,
                     PaymentId = paymentRecord.Id,
-                    Amount = double.Parse(paymentRecord.Price),
+                    Amount = decimal.Parse(paymentRecord.Price),
                     CreatedDate = paymentRecord.Date
                 };
 
