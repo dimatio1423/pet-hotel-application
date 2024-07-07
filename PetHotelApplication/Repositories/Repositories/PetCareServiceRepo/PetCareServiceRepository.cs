@@ -12,14 +12,13 @@ namespace Repositories.Repositories.PetCareServiceRepo
 {
     public class PetCareServiceRepository : IPetCareServiceRepository
     {
-        public string Add(PetCareService petCareService)
+        public void Add(PetCareService petCareService)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
                 _context.PetCareServices.Add(petCareService);
                 _context.SaveChanges();
-                return petCareService.Id.ToString();
             }
             catch (Exception ex)
             {
@@ -34,7 +33,7 @@ namespace Repositories.Repositories.PetCareServiceRepo
                 using var _context = new PetHotelApplicationDbContext();
                 var currPetCareService = _context.PetCareServices.FirstOrDefault(x => x.Id.Equals(petCareService.Id));
 
-                currPetCareService.Status = StatusEnums.Unavailable.ToString();
+                currPetCareService.Status = StatusEnums.Inactive.ToString();
 
                 _context.Update(currPetCareService);
 
@@ -51,18 +50,12 @@ namespace Repositories.Repositories.PetCareServiceRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.PetCareServices.Include(x => x.ServiceImages).FirstOrDefault(x => x.Id.Equals(id));
+                return _context.PetCareServices.FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-        public PetCareService GetPetCareServiceByType(string type)
-        {
-            using var _contex = new PetHotelApplicationDbContext();
-            return _contex.PetCareServices.Where(x => x.Type.ToLower().Equals(type.ToLower())).FirstOrDefault();
         }
 
         public List<PetCareService> GetPetCareServices()
@@ -71,19 +64,6 @@ namespace Repositories.Repositories.PetCareServiceRepo
             {
                 using var _context = new PetHotelApplicationDbContext();
                 return _context.PetCareServices.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public List<PetCareService> GetPetCareServicesByIds(List<string> Ids)
-        {
-            try
-            {
-                using var _context = new PetHotelApplicationDbContext();
-                return _context.PetCareServices.Where(x => Ids.Contains(x.Id)).ToList(); 
             }
             catch (Exception ex)
             {

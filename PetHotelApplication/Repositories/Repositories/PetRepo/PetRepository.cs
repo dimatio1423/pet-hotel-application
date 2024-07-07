@@ -16,8 +16,7 @@ namespace Repositories.Repositories.PetRepo
         {
             try
             {
-                using var _context = new PetHotelApplicationDbContext();                
-
+                using var _context = new PetHotelApplicationDbContext();
                 _context.Pets.Add(pet);
                 _context.SaveChanges();
             }
@@ -59,20 +58,6 @@ namespace Repositories.Repositories.PetRepo
             }
         }
 
-        public Pet? GetPetDetailsById(string id)
-        {
-            try
-            {
-                using var _context = new PetHotelApplicationDbContext();
-                return _context.Pets                            
-                            .FirstOrDefault(x => x.Id.Equals(id));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public List<Pet> GetPets()
         {
             try
@@ -94,26 +79,6 @@ namespace Repositories.Repositories.PetRepo
                 //_context.Categories.Update(category);
                 _context.Entry<Pet>(pet).State = EntityState.Modified;
                 _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public List<Pet> GetActivePets(string userId, string petName)
-        {
-            try
-            {
-                using var _context = new PetHotelApplicationDbContext();
-                return _context.Pets
-                        .Include(p => p.User)
-                        .Where(p => p.UserId.Equals(userId) && 
-                                    p.Status.Equals(nameof(StatusEnums.Active)) && 
-                                    (string.IsNullOrEmpty(petName) || p.PetName.Contains(petName))
-                              )
-                        .OrderBy(p => p.PetName)
-                        .ToList();
             }
             catch (Exception ex)
             {

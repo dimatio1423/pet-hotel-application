@@ -7,7 +7,6 @@ namespace PetHotelApplicationRazorPage.Pages
     {
         public void OnGet()
         {
-             
         }
     }
 }

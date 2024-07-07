@@ -11,10 +11,8 @@ namespace Services.Services.PetCareServices
     {
         List<PetCareService> GetPetCareServices();
         PetCareService GetPetCareServiceById(string id);
-        string Add(PetCareService petCareService);
+        void Add(PetCareService petCareService);
         void Delete(PetCareService petCareService);
         void Update(PetCareService petCareService);
-        PetCareService GetPetCareServiceByType(string type);
-        List<PetCareService> GetPetCareServicesByIds(List<string> Ids);
     }
 }

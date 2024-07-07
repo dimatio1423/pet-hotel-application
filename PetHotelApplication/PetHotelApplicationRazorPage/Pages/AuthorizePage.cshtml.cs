@@ -20,49 +20,14 @@ namespace PetHotelApplicationRazorPage.Pages
 
             if (currentAccount == null)
             {
-                if (path.Value.ToLower().Contains("/staff") || path.Value.ToLower().Contains("/admin") || path.Value.ToLower().Contains("/manager"))
+                if (path.Value.Contains("/Staff") || path.Value.Contains("/Admin") || path.Value.Contains("/Manager"))
                 {
-                    context.Result = Redirect("/User/Login");
-                }
-
-                if (path.Value.ToLower().Contains("/user/pets"))
-                {
-                    context.Result = Redirect("/User/Login");
-                }
-
-                if (path.Value.ToLower().Contains("/user/feedbacks/create") 
-                    || path.Value.ToLower().Contains("/user/feedbacks/details") 
-                    || path.Value.ToLower().Contains("/user/feedbacks/delete"))
-                {
-                    context.Result = Redirect("/User/Login");
-                }
-
-                if (path.Value.ToLower().Contains("/user/booking"))
-                {
-                    context.Result = Redirect("/User/Login");
+                    context.Result = Redirect("User/Login");
                 }
 
             }
             else
             {
-
-                if (path.Value.ToLower().Contains("/user/pets"))
-                {
-                    if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Staff");
-                    }
-                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Admin");
-                    }
-                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Manager");
-                    }
-                }
-
-
                 if (path.Value.Equals("/"))
                 {
                     if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
@@ -119,58 +84,17 @@ namespace PetHotelApplicationRazorPage.Pages
                     }
                 }
 
-                if (path.Value.ToLower().Contains("/staff"))
+                if (path.Value.Contains("/Staff") && !currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
                 {
-                    if (!currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString())){
-                        context.Result = Redirect("/Forbidden");
-                    }
+                    context.Result = Redirect("Forbidden");
                 }
-
-                if (path.Value.ToLower().Contains("/admin"))
+                else if (path.Value.Contains("/Admin") && !currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString()))
                 {
-                    if (!currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString())){
-                        context.Result = Redirect("/Forbidden");
-                    }
-                    
+                    context.Result = Redirect("Forbidden");
                 }
-
-                if (path.Value.ToLower().Contains("/manager"))
+                else if (path.Value.Contains("/Manager") && !currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString()))
                 {
-                    if (!currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString())) {
-                        context.Result = Redirect("/Forbidden");
-                    }
-                }
-
-                if (path.Value.ToLower().Contains("/user/feedbacks"))
-                {
-                    if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Staff");
-                    }
-                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Admin");
-                    }
-                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Manager");
-                    }
-                }
-
-                if (path.Value.ToLower().Contains("/user/booking"))
-                {
-                    if (currentAccount.RoleId.Equals(((int)RoleEnums.Staff + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Staff");
-                    }
-                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Admin + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Admin");
-                    }
-                    else if (currentAccount.RoleId.Equals(((int)RoleEnums.Manager + 1).ToString()))
-                    {
-                        context.Result = Redirect("/Manager");
-                    }
+                    context.Result = Redirect("Forbidden");
                 }
             }
 

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using BusinessObjects.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Repositories;
+namespace BusinessObjects.Entities;
 
 public partial class PetHotelApplicationDbContext : DbContext
 {
