@@ -11,8 +11,10 @@ namespace Repositories.Repositories.PetCareServiceRepo
     {
         List<PetCareService> GetPetCareServices();
         PetCareService GetPetCareServiceById(string id);
-        void Add(PetCareService petCareService);
+        string Add(PetCareService petCareService);
         void Delete(PetCareService petCareService);
         void Update(PetCareService petCareService);
+        PetCareService GetPetCareServiceByType(string type);
+        List<PetCareService> GetPetCareServicesByIds(List<string> Ids);
     }
 }

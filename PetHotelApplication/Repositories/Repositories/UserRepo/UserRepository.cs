@@ -1,12 +1,9 @@
 ﻿using BusinessObjects.Entities;
 using BusinessObjects.Enums.StatusEnums;
 using Microsoft.EntityFrameworkCore;
-using Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Repositories.UserRepo
 {
@@ -31,13 +28,17 @@ namespace Repositories.Repositories.UserRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                var currUser = _context.Pets.FirstOrDefault(x => x.Id.Equals(user.Id));
-
-                currUser.Status = StatusEnums.Inactive.ToString();
-
-                _context.Update(currUser);
-
-                _context.SaveChanges();
+                var currUser = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+                if (currUser != null)
+                {
+                    currUser.Status = StatusEnums.Inactive.ToString();
+                    _context.Update(currUser);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("User not found");
+                }
             }
             catch (Exception ex)
             {
@@ -54,7 +55,7 @@ namespace Repositories.Repositories.UserRepo
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception(ex.ToString());
             }
         }
 
@@ -63,7 +64,7 @@ namespace Repositories.Repositories.UserRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Users.ToList();
+                return _context.Users.Where(x => x.RoleId != "1").Include(x => x.Role).ToList();
             }
             catch (Exception ex)
             {
@@ -76,13 +77,51 @@ namespace Repositories.Repositories.UserRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                //_context.Categories.Update(category);
-                _context.Entry<User>(user).State = EntityState.Modified;
+                _context.Entry(user).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public bool isEmailExist(string email)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.Any(x => x.Email.Equals(email));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        public bool isPhoneNumberExist(string phoneNumber)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.Any(x => x.PhoneNumber.Equals(phoneNumber));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        public User GetUserById(string id)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.FirstOrDefault(x => x.Id.Equals(id.ToString()));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
             }
         }
     }

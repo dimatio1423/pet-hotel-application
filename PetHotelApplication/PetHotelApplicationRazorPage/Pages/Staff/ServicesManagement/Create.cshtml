@@ -1,0 +1,116 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement.CreateModel
+
+@{
+    Layout = "_LayoutManage";
+    ViewData["Title"] = "Create";
+}
+
+<div class="container-fluid">
+   <div class="container">
+        <div class="card shadow-1g">
+            <div class="card-header">
+                <h2 class="card-title">Add New Service</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Service Type:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" asp-for="PetCareService.Type" required />
+                            <span asp-validation-for="PetCareService.Type" class="text-danger"></span>
+                            @if (TempData["Error"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["Error"] </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Description:</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control fixed-size-textarea" asp-for="PetCareService.Description" rows="5" required></textarea>
+                            <span asp-validation-for="PetCareService.Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Price:</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" asp-for="PetCareService.Price" step="0.01" required />
+                            <span asp-validation-for="PetCareService.Price" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Images:</label>
+                        <div class="col-sm-9">
+                            <input type="file" class="form-control-file" id="imageInput" asp-for="serviceImages" multiple onchange="previewImages()" />
+                            <small class="form-text text-muted mt-1">JPG or PNG no larger than 5 MB</small>
+                            <div id="imagePreviewContainer" class="mt-3">
+                                <div id="imagePreview" class="image-preview d-flex flex-wrap"></div>
+                            </div>
+                            <span asp-validation-for="serviceImages" class="text-danger"></span>
+                        </div>
+                     
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+   </div>
+
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImages() {
+            var preview = document.getElementById('imagePreview');
+            var files = document.getElementById('imageInput').files;
+            preview.innerHTML = '';
+            if (files) {
+                for (var i = 0; i < files.length; i++) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = document.createElement('img');
+                        img.setAttribute('src', e.target.result);
+                        img.setAttribute('class', 'img-thumbnail m-2');
+                        img.setAttribute('style', 'max-height: 100px;');
+                        preview.appendChild(img);
+                    }
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+        }
+    </script>
+    <style>
+        #imagePreviewContainer {
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            .image-preview img {
+                max-height: 100spx;
+                margin: 5px;
+            }
+
+        .fixed-size-textarea {
+            height: 80px; /* Adjust height as needed */
+            resize: none;
+        }
+    </style>
+}
