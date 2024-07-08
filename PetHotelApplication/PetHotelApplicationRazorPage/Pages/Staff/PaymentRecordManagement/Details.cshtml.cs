@@ -13,7 +13,7 @@ using BusinessObjects.Enums.PaymenStatusEnums;
 
 namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : AuthorizePageModel
     {
         private readonly IPaymentRecordService _paymentRecordService;
 

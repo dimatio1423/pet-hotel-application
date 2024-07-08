@@ -114,6 +114,13 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return Page();
             }
 
+            if (Booking.EndDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                viewData(currUser);
+                TempData["ErrorDate"] = "End date can not be in the past, please select again";
+                return Page();
+            }
+
             DateTime start = DateTime.Now;
             DateTime end = DateTime.Now;
 

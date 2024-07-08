@@ -9,7 +9,7 @@ using System.Net.WebSockets;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Profiles
 {
-    public class EditModel : PageModel
+    public class EditModel : AuthorizePageModel
     {
         private readonly IUserService _userService;
         private readonly CloudinaryService _cloudinaryService;
