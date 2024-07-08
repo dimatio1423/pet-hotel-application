@@ -47,6 +47,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
         [BindProperty]
         public BookingCreateReqModel Booking { get; set; } = default!;
+        public PetCareService SelectedService { get; set; } = default!;
         public IList<PetCareViewListResModel> PetCareServices { get; set; } = new List<PetCareViewListResModel>();
         public IList<AccommodationViewListResModel> Accommodations { get; set; } = new List<AccommodationViewListResModel>();
         public IList<PetViewListResModel> Pets { get; set; } = new List<PetViewListResModel>();
@@ -54,11 +55,18 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         [BindProperty]
         [Required(ErrorMessage = "Please select at least one service.")]
         public IList<string> BookingServices { get; set; } = new List<string>();
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGet(string? serviceId)
         {
             var currBooking = SessionHelper.GetObjectSession<BookingInformation>(HttpContext.Session, "BookingInformation");
 
             var selectedServicesId = SessionHelper.GetObjectSession<List<string>>(HttpContext.Session, "SelectedPetCareServices");
+
+            var petCareService = _petCareService.GetPetCareServiceById(serviceId);
+
+            if (petCareService != null)
+            {
+                SelectedService = petCareService;
+            }
 
             var currUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
             if (currUser != null)
@@ -260,7 +268,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() });
             ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name");
-            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name");
+            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {DateTime.Now.Year - p.Dob.Value.Year} {(DateTime.Now.Year - p.Dob.Value.Year > 1 ? "years old" : "year old")}" }), "PetId", "Name");
         }
 
         private void viewDataBooking(BusinessObjects.Entities.User currentUser, BookingCreateReqModel booking)
@@ -276,7 +284,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() }, booking.BoardingType);
             ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name", booking.AccommodationId);
-            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name", booking.PetId);
+            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {DateTime.Now.Year - p.Dob.Value.Year} {(DateTime.Now.Year - p.Dob.Value.Year > 1 ? "years old" : "year old")}" }), "PetId", "Name", booking.PetId);
         }
     }
 }

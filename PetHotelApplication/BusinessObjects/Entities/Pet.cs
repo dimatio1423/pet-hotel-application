@@ -15,7 +15,7 @@ public partial class Pet
 
     public string Breed { get; set; }
 
-    public int Age { get; set; }
+    public DateOnly? Dob { get; set; }
 
     public string Status { get; set; }
 
