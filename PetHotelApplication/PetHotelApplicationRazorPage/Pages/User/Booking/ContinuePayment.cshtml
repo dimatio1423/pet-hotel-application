@@ -1,0 +1,91 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.ContinuePaymentModel
+@{
+    var booking = Model.BookingInfo;
+    <style>
+        .badge-primary {
+            background-color: #007bff;
+        }
+    </style>
+}
+
+<div class="container-fluid mt-5">
+    <div class="container p-4 bg-light rounded">
+        <h2 class="text-center mb-4">Confirm Your Booking</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="mb-3">Booking Details</h3>
+                <dl class="row">
+
+                    <dt class="col-sm-4">Boarding Type:</dt>
+                    <dd class="col-sm-8">@booking.BoardingType</dd>
+
+                    <dt class="col-sm-4">Start Date:</dt>
+                    <dd class="col-sm-8">@booking.StartDate.ToString("d")</dd>
+
+                    <dt class="col-sm-4">End Date:</dt>
+                    <dd class="col-sm-8">@booking.EndDate.ToString("d")</dd>
+
+                    <dt class="col-sm-4">Note:</dt>
+                    <dd class="col-sm-8">@booking.Note</dd>
+
+                    <dt class="col-sm-4">Accommodation:</dt>
+                    <dd class="col-sm-8">@booking.Accommodation</dd>
+
+                    <dt class="col-sm-4">Pet:</dt>
+                    <dd class="col-sm-8">@booking.Pet</dd>
+
+                    <h3 class="mt-3 mb-3">Total price: </h3>
+                    <dd class="col-sm-8">@booking.TotalPrice.ToString("#,##0") VNĐ</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3">Selected Services</h3>
+                <ul class="list-group">
+                    @foreach (var service in booking.PetCareServices)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @service.Type
+                            <span class="badge badge-primary badge-pill">@service.Price.ToString("#,##0") VNĐ</span>
+                        </li>
+                    }
+                </ul>
+
+                <h3 class="text-right mt-3 mb-3">Select Payment Method</h3>
+                <form method="post">
+                    <input type="hidden" asp-for="BookingId"/>
+                    <div class="form-group">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" asp-for="SelectedPaymentMethod" value="Cash" id="paymentCash" />
+                            <label class="form-check-label" for="paymentCash">Cash</label>
+
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" asp-for="SelectedPaymentMethod" value="TransferCash" id="paymentTransferCash" />
+                            <label class="form-check-label" for="paymentTransferCash">Transfer cash</label>
+                        </div>
+                        <span asp-validation-for="SelectedPaymentMethod" class="text-danger"></span>
+                    </div>
+                    <div class="text-left">
+                        <button type="submit" class="btn btn-primary mb-1">Confirm booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <form method="post" asp-page-handler="CancelBooking" onsubmit="return confirmCancelBooking()">
+            <input type="hidden" asp-for="BookingId"/>
+            <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function confirmCancelBooking() {
+        if (confirm("Are you sure you want to cancel the booking?")) {
+            return true; // Allow form submission
+        }
+        return false; // Cancel form submission
+    }
+</script>

@@ -11,6 +11,7 @@ using Repositories;
 using BusinessObjects.Models.PetCareModel.Response;
 using AutoMapper;
 using Services.Services.FeedbackService;
+using BusinessObjects.Enums.StatusEnums;
 
 namespace PetHotelApplicationRazorPage.Pages.PetCareServices.ServiceManage
 {
@@ -30,12 +31,14 @@ namespace PetHotelApplicationRazorPage.Pages.PetCareServices.ServiceManage
         [BindProperty(SupportsGet = true)]
         public string SearchServices { get; set; }
 
-        public IList<PetCareResModel> PetCareService { get; set; } = new List<PetCareResModel>();
+        public PaginatedList<PetCareResModel> PetCareService { get; set; } = default!;
         public IList<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
-        public async Task OnGetAsync()
+        private const int pageSize = 4;
+
+        public async Task OnGetAsync(int? pageIndex)
         {
-            var list = _petCareService.GetPetCareServices();
+            var list = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString()));
 
             var feedbacks = _feedbackService.GetFeedbacks();
 
@@ -44,7 +47,9 @@ namespace PetHotelApplicationRazorPage.Pages.PetCareServices.ServiceManage
                 list = list.Where(l => l.Type.ToLower().Contains(SearchServices.ToLower())).ToList();
             }
 
-            PetCareService = _mapper.Map<List<PetCareResModel>>(list);
+            var petCares = _mapper.Map<List<PetCareResModel>>(list);
+
+            PetCareService = PaginatedList<PetCareResModel>.Create(petCares, pageIndex ?? 1, pageSize);
 
             Feedbacks = feedbacks;
         }

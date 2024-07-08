@@ -103,7 +103,7 @@
                                 @for (var i = minPage; i <= maxPage; i++)
                                 {
                                     <li class="page-item @(Model.Accommodation.PageIndex == i ? "active" : "")">
-                                        <a class="page-link" asp-page="/Manager/Accommodation/Index"
+                                        <a class="page-link" asp-page="./Index"
                                            asp-route-pageIndex="@i">@i</a>
                                     </li>
                                 }

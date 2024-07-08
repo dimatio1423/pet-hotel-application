@@ -16,5 +16,6 @@ namespace Services.Services.PaymentRecordService
         void Delete(PaymentRecord paymentRecord);
         void Update(PaymentRecord paymentRecord);
         List<PaymentRecordResModel> GetPaymentRecordsFromBookingId(string bookingId);
+        void CancelBookingPaymentRecords(string bookingId);
     }
 }

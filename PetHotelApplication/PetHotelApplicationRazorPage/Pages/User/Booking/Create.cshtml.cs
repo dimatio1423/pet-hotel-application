@@ -56,25 +56,33 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         public IList<string> BookingServices { get; set; } = new List<string>();
         public async Task<IActionResult> OnGet()
         {
+            var currBooking = SessionHelper.GetObjectSession<BookingInformation>(HttpContext.Session, "BookingInformation");
+
+            var selectedServicesId = SessionHelper.GetObjectSession<List<string>>(HttpContext.Session, "SelectedPetCareServices");
+
             var currUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
             if (currUser != null)
             {
                 currentUser = currUser;
+                if (currBooking != null)
+                {
+                    Booking = new BookingCreateReqModel
+                    {
+                        BoardingType = currBooking.BoardingType,
+                        StartDate = DateOnly.FromDateTime(currBooking.StartDate),
+                        EndDate = DateOnly.FromDateTime(currBooking.EndDate),
+                        Note = currBooking.Note,
+                        AccommodationId = currBooking.AccommodationId,
+                        PetId = currBooking.PetId
+                    };
+
+                    viewDataBooking(currentUser, Booking);
+
+                    BookingServices = selectedServicesId;
+                    return Page();
+                }
+                viewData(currUser);
             }
-
-            var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
-            PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
-
-            var accommodations = _accommodationService.GetAccommodations();
-            Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
-
-            var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
-            Pets = _mapper.Map<List<PetViewListResModel>>(pets);
-
-            ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() });
-            ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name");
-            ViewData["Pets"] = new SelectList(Pets.Select(p => new {p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}"}), "PetId", "Name");
-
             return Page();
         }
 
@@ -86,90 +94,182 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 currentUser = currUser;
             }
 
+            if (String.IsNullOrEmpty(Booking.PetId))
+            {
+                viewData(currUser);
+                TempData["ErrorPet"] = "Please add new Pet before booking";
+                return Page();
+            }
+
             if (!ModelState.IsValid)
             {
-                var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
-                PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
-
-                var accommodations = _accommodationService.GetAccommodations();
-                Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
-
-                var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
-                Pets = _mapper.Map<List<PetViewListResModel>>(pets);
-
-                ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() });
-                ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name");
-                ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name");
-
+                viewData(currUser);
                 return Page();
             }
 
-            if (Booking.StartDate > Booking.EndDate)
+            if (Booking.StartDate < DateOnly.FromDateTime(DateTime.Now))
             {
-                var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
-                PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
-
-                var accommodations = _accommodationService.GetAccommodations();
-                Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
-
-                var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
-                Pets = _mapper.Map<List<PetViewListResModel>>(pets);
-
-                ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() });
-                ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name");
-                ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name");
-                TempData["ErrorDate"] = "Please select start date before end date";
+                viewData(currUser);
+                TempData["ErrorDate"] = "Start date can not be in the past, please select again";
                 return Page();
             }
 
-            if (BookingServices.Count <= 0)
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            switch (Booking.BoardingType)
             {
-                var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
-                PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
+                case "Day care":
+                    if (Booking.StartDate > Booking.EndDate || !Booking.StartDate.Equals(Booking.EndDate))
+                    {
+                        viewData(currUser);
+                        TempData["ErrorDate"] = "For day care, start date must be the same as end date";
+                        return Page();
+                    }
 
-                var accommodations = _accommodationService.GetAccommodations();
-                Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
+                    if (Booking.StartDate.Equals(DateOnly.FromDateTime(DateTime.Now)))
+                    {
+                        if (Booking.StartDate.ToDateTime(TimeOnly.FromDateTime(DateTime.Now)) > DateTime.Today.AddHours(12))
+                        {
+                            viewData(currUser);
+                            TempData["ErrorDate"] = "For day care, start date booking time must be before 12PM";
+                            return Page();
+                        }
 
-                var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
-                Pets = _mapper.Map<List<PetViewListResModel>>(pets);
+                        start = DateTime.Now;
+                    }else
+                    {
+                        start = Booking.StartDate.ToDateTime(new TimeOnly(8, 0));
+                    }
 
-                ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() });
-                ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name");
-                ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name");
-                TempData["ErrorServices"] = "Please select at least one services";
-                return Page();
+                    end = Booking.EndDate.ToDateTime(new TimeOnly(21, 0));
+
+                    if (BookingServices.Count <= 0)
+                    {
+                        viewData(currUser);
+                        TempData["ErrorServices"] = "Please select at least one services";
+                        return Page();
+                    }
+                    break;
+
+                case "Overnight":
+                    if (Booking.StartDate >= Booking.EndDate)
+                    {
+                        viewData(currUser);
+                        TempData["ErrorDate"] = "For overnight, start date must be before end date";
+                        return Page();
+                    }
+
+                    if (Booking.StartDate.Equals(DateOnly.FromDateTime(DateTime.Now)))
+                    {
+                        if (Booking.StartDate.ToDateTime(TimeOnly.FromDateTime(DateTime.Now)) > DateTime.Today.AddHours(21))
+                        {
+                            viewData(currUser);
+                            TempData["ErrorDate"] = "For overnight, start date booking time must be before 21PM";
+                            return Page();
+                        }
+                        start = DateTime.Now;
+                    }else
+                    {
+                        start = Booking.StartDate.ToDateTime(new TimeOnly(8, 0));
+                    }
+
+                    end = Booking.EndDate.ToDateTime(new TimeOnly(21, 0));
+
+                    if (BookingServices.Count <= 0)
+                    {
+                        viewData(currUser);
+                        TempData["ErrorServices"] = "Please select at least one services";
+                        return Page();
+                    }
+                    break;
             }
 
-            BookingInformation bookingInformation = new BookingInformation
+            var existingBookings = _bookingInformationService.GetBookingInformations()
+                 .Where(x => x.PetId == Booking.PetId && x.Status.Equals(BookingStatusEnums.Pending.ToString()) &&
+                 ((start <= x.StartDate && end >= x.StartDate) ||
+                 (start <= x.EndDate && end >= x.EndDate) ||
+                 (start >= x.StartDate && end <= x.EndDate)))
+                 .ToList();
+
+            List<Accommodation> bookedAccommdation = new List<Accommodation>();
+
+            var accommodationBookings = _bookingInformationService.GetBookingInformations()
+                 .Where(x => x.Status.Equals(BookingStatusEnums.Pending.ToString()) &&
+                 ((start <= x.StartDate && end >= x.StartDate) ||
+                 (start <= x.EndDate && end >= x.EndDate) ||
+                 (start >= x.StartDate && end <= x.EndDate)))
+                 .ToList();
+
+            foreach (var item in accommodationBookings)
             {
-                Id = Guid.NewGuid().ToString(),
-                BoardingType = Booking.BoardingType,
-                StartDate = Booking.StartDate,
-                EndDate = Booking.EndDate,
-                Note = Booking.Note,
-                Status = BookingStatusEnums.Pending.ToString(),
-                UserId = currentUser.Id,
-                AccommodationId = Booking.AccommodationId,
-                PetId = Booking.PetId
-            };
+                var accom = _accommodationService.GetAccommodationById(item.AccommodationId);
 
-            _bookingInformationService.Add(bookingInformation);
-
-            List<PetCareService> petCares = _petCareService.GetPetCareServicesByIds(BookingServices.ToList());
-
-            foreach (var item in petCares)
-            {
-                ServiceBooking serviceBooking = new ServiceBooking
+                if (accom != null)
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    BookingId = bookingInformation.Id,
-                    ServiceId = item.Id
-                };
-
-                _serviceBookingService.Add(serviceBooking);
+                    if (!bookedAccommdation.Contains(accom))
+                    {
+                        bookedAccommdation.Add(accom);
+                    }
+                }
             }
 
-            return RedirectToPage("/User/Payment/PaymentMethod");
+            Accommodation accommodation = _accommodationService.GetAccommodationById(Booking.AccommodationId);
+
+            if (bookedAccommdation.Select(x => x.Id).ToList().Contains(Booking.AccommodationId))
+            {
+                viewData(currUser);
+                TempData["ErrorAccommodation"] = $"Accommodation {accommodation.Name} is already booked within selected start date and end date";
+                return Page();
+            }
+
+            if (existingBookings.Count > 0)
+            {
+                viewData(currUser);
+                TempData["ErrorPetBooking"] = "Current pet is already have bookings";
+                return Page();
+            }
+
+
+            SessionHelper.SetObjectSession(HttpContext.Session, "start", start);
+            SessionHelper.SetObjectSession(HttpContext.Session, "end", end);
+
+            SessionHelper.SetObjectSession(HttpContext.Session, "BookingInformation", Booking);
+            SessionHelper.SetObjectSession(HttpContext.Session, "SelectedPetCareServices", BookingServices);
+
+            return RedirectToPage("/User/Booking/BookingConfirmation");
+        }
+
+        private void viewData(BusinessObjects.Entities.User currentUser)
+        {
+            var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
+            PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
+
+            var accommodations = _accommodationService.GetAccommodations();
+            Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
+
+            var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
+            Pets = _mapper.Map<List<PetViewListResModel>>(pets);
+
+            ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() });
+            ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name");
+            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name");
+        }
+
+        private void viewDataBooking(BusinessObjects.Entities.User currentUser, BookingCreateReqModel booking)
+        {
+            var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
+            PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
+
+            var accommodations = _accommodationService.GetAccommodations();
+            Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
+
+            var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
+            Pets = _mapper.Map<List<PetViewListResModel>>(pets);
+
+            ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() }, booking.BoardingType);
+            ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name", booking.AccommodationId);
+            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name", booking.PetId);
         }
     }
 }

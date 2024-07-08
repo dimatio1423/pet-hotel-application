@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.Entities;
+using BusinessObjects.Enums.PaymenStatusEnums;
 using BusinessObjects.Models.PaymentRecordModel.Response;
 using Repositories.Repositories.PaymentRecordRepo;
 using System;
@@ -49,6 +50,15 @@ namespace Services.Services.PaymentRecordService
         {
             var list = _paymentRecordRepo.GetPaymentRecordsFromBookingId(bookingId);
             return _mapper.Map<List<PaymentRecordResModel>>(list);
+        }
+
+        public void CancelBookingPaymentRecords(string bookingId)
+        {
+            var list = _paymentRecordRepo.GetPaymentRecordsFromBookingId(bookingId);
+            list.Where(p => p.Status.Equals(nameof(PaymentStatusEnums.Unpaid)))
+                .ToList()
+                .ForEach(p => p.Status = nameof(PaymentStatusEnums.Cancelled));
+            _paymentRecordRepo.UpdateRange(list);
         }
     }
 }
