@@ -40,7 +40,8 @@ namespace PetHotelApplicationRazorPage.Pages
             var currUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
             if (currUser != null)
             {
-                currentUser = currUser;
+                var user = _userService.GetUserById(currUser.Id);
+                currentUser = user;
             }
 
             var list = _petCareService.GetPetCareServices();
