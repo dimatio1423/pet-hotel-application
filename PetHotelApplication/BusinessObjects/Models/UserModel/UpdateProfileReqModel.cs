@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Models.UserModel
 {
-    public class RegisterUserReqModel
+    public class UpdateProfileReqModel
     {
+        public string UserId { get; set; }
+
         [Required(ErrorMessage = "Full name is required")]
+        [RegularExpression(@"^[a-zA-ZÀ-ỹ\s]+$", ErrorMessage = "Full name cannot contain numbers or special characters")]
         [Display(Name = "Full name")]
         public string? FullName { get; set; }
 
@@ -22,18 +25,11 @@ namespace BusinessObjects.Models.UserModel
         [Required(ErrorMessage = "Address is required")]
         [StringLength(255, ErrorMessage = "Address cannot be longer than 255 characters")]
         public string? Address { get; set; }
-
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
+        //[Required(ErrorMessage = "Password is required")]
         [StringLength(100, ErrorMessage = "Password cannot be longer than 100 characters")]
         public string? Password { get; set; }
-
-        [Required(ErrorMessage = "Confirm password is required")]
-        [Compare("Password", ErrorMessage = "Password and confirm password do not match")]
-        [Display(Name = "Confirm password")]
-        public string? ConfirmPassword { get; set; }
+        public string? Avatar { get; set; }
     }
 }

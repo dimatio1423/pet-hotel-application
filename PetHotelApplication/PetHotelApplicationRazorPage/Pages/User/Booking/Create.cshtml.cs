@@ -114,6 +114,13 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return Page();
             }
 
+            if (Booking.EndDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                viewData(currUser);
+                TempData["ErrorDate"] = "End date can not be in the past, please select again";
+                return Page();
+            }
+
             DateTime start = DateTime.Now;
             DateTime end = DateTime.Now;
 
@@ -245,7 +252,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
             PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
 
-            var accommodations = _accommodationService.GetAccommodations();
+            var accommodations = _accommodationService.GetAccommodations().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
             Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
 
             var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
@@ -261,7 +268,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
             PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
 
-            var accommodations = _accommodationService.GetAccommodations();
+            var accommodations = _accommodationService.GetAccommodations().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
             Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
 
             var pets = _petService.GetListOfPets().Where(x => x.UserId.Equals(currentUser.Id)).ToList();
