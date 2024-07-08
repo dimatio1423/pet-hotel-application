@@ -14,6 +14,7 @@ using Repositories.Repositories.UserRepo;
 using Services.MapperProfiles;
 using Services.Services.AccommodationService;
 using Services.Services.BookingInformationService;
+using Services.Services.DashboardService;
 using Services.Services.FeedbackService;
 using Services.Services.PaymentRecordService;
 using Services.Services.PetCareServices;
@@ -62,6 +63,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IServiceImageService, ServiceImageService>();
 builder.Services.AddScoped<CloudinaryService>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
