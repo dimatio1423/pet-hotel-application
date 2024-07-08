@@ -21,7 +21,7 @@ namespace BusinessObjects.Models.BookingInformationModel.Request
         public DateOnly EndDate { get; set; }
 
         //[StringLength(500, ErrorMessage = "Note cannot be longer than 500 characters")]
-        public string Note { get; set; }
+        public string? Note { get; set; } = "";
 
         [Required(ErrorMessage = "Please select an accommodation")]
         public string AccommodationId { get; set; }
