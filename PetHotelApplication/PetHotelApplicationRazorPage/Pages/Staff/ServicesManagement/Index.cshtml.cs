@@ -9,6 +9,7 @@ using BusinessObjects.Entities;
 using Repositories;
 using Services.Services.PetCareServices;
 using BusinessObjects.Enums.StatusEnums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
 {
@@ -26,16 +27,29 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
         [BindProperty(SupportsGet = true)]
         public string SearchServices { get; set; }
 
+        public SelectList Status { get; set; }
+
+        public string StatusFilter { get; set; }
+
         public PaginatedList<PetCareService> PetCareService { get;set; } = default!;
 
-        public async Task OnGetAsync(int? pageIndex)
+        public async Task OnGetAsync(int? pageIndex, string status)
         {
             var services = _petCareService.GetPetCareServices();
+
+            StatusFilter = status;
+
+            if (!string.IsNullOrEmpty(StatusFilter))
+            {
+                services = services.Where(x => x.Status.Equals(StatusFilter)).ToList();
+            }
 
             if (!string.IsNullOrEmpty(SearchServices))
             {
                 services = services.Where(x => x.Type.ToLower().Contains(SearchServices.ToLower())).ToList();
             }
+
+            Status = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString()});
 
             PetCareService = PaginatedList<PetCareService>.Create(services, pageIndex ?? 1, pageSize);
         }
