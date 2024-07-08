@@ -21,6 +21,28 @@
                 <h2 class="mb-0">Accommodations</h2>
                 <a class="btn btn-success" asp-page="Create">Create New Accommodation</a>
             </div>
+            <div class="mb-3">
+                <form method="get">
+                    <div class="row">
+                        <div class="col-md-8 mb-2">
+                            <input type="text" class="form-control" placeholder="Search" name="SearchString" value="@Model.SearchString">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <select class="form-select form-select-sm" name="SortOrder">
+                                <option value="" selected="@Model.IsSelected("")">Sort By</option>
+                                <option value="Name" selected="@Model.IsSelected("Name")">Name</option>
+                                <option value="Type" selected="@Model.IsSelected("Type")">Type</option>
+                                <option value="Capacity" selected="@Model.IsSelected("Capacity")">Capacity</option>
+                                <option value="Status" selected="@Model.IsSelected("Status")">Status</option>
+                                <option value="Price" selected="@Model.IsSelected("Price")">Price</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 text-end">
+                            <button class="btn btn-primary btn-sm" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <div class="card shadow-lg">
                 <div class="card-body">
                     <table class="table table-hover table-bordered">
@@ -95,7 +117,9 @@
                                 <li class="page-item @prevDisabled">
                                     <a class="page-link rounded-0" aria-label="Previous"
                                        asp-page="./Index"
-                                       asp-route-pageIndex="@(Model.Accommodation.PageIndex - 1)">
+                                       asp-route-pageIndex="@(Model.Accommodation.PageIndex - 1)"
+                                       asp-route-SearchString="@Model.SearchString"
+                                       asp-route-SortOrder="@Model.SortOrder">
                                         <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                                     </a>
                                 </li>
@@ -104,14 +128,18 @@
                                 {
                                     <li class="page-item @(Model.Accommodation.PageIndex == i ? "active" : "")">
                                         <a class="page-link" asp-page="./Index"
-                                           asp-route-pageIndex="@i">@i</a>
+                                           asp-route-pageIndex="@i"
+                                           asp-route-SearchString="@Model.SearchString"
+                                           asp-route-SortOrder="@Model.SortOrder">@i</a>
                                     </li>
                                 }
 
                                 <li class="page-item @nextDisabled">
                                     <a class="page-link rounded-0" aria-label="Next"
                                        asp-page="./Index"
-                                       asp-route-pageIndex="@(Model.Accommodation.PageIndex + 1)">
+                                       asp-route-pageIndex="@(Model.Accommodation.PageIndex + 1)"
+                                       asp-route-SearchString="@Model.SearchString"
+                                       asp-route-SortOrder="@Model.SortOrder">
                                         <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                 </li>
