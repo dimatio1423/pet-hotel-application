@@ -1,0 +1,127 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.Staff.BookingManagement.IndexModel
+
+@{
+    Layout = "_LayoutManage";
+    ViewData["Title"] = "Index";
+
+    var prevDisabled = !Model.BookingInformation.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.BookingInformation.HasNextPage ? "disabled" : "";
+
+    var minPage = Math.Max(1, Model.BookingInformation.PageIndex - 2);
+    var maxPage = Math.Min(minPage + 4, Model.BookingInformation.TotalPages);
+
+    var currentPageIndex = Model.BookingInformation.PageIndex;
+}
+<style>
+    .action-buttons .btn {
+        margin-right: 5px;
+    }
+
+        .action-buttons .btn:last-child {
+            margin-right: 0;
+        }
+
+    .pagination .page-item.disabled .page-link {
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .card {
+        margin-top: 20px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .status-text {
+        font-weight: bold;
+    }
+</style>
+<div class="container-fluid">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Booking Informations</h2>
+        </div>
+
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].BoardingType)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].StartDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].EndDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].Note)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].Status)</th>
+                            <th>Details</th>
+                            <th>Confirmation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.BookingInformation)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.BoardingType)</td>
+                                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Note)</td>
+                                <td class="status-text">@Html.DisplayFor(modelItem => item.Status)</td>
+                                <td>
+                                    <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                                </td>
+                                <td class="action-buttons">
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <form method="post" asp-page-handler="Success" asp-route-id="@item.Id" style="display:inline;" asp-route-pageIndex="@currentPageIndex">
+                                            <button type="submit" class="btn btn-success btn-sm">Success</button>
+                                        </form>
+                                        <form method="post" asp-page-handler="Cancel" asp-route-id="@item.Id" style="display:inline;" asp-route-pageIndex="@currentPageIndex">
+                                            <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span>The booking is ended.</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-lg m-0">
+                            <li class="page-item @prevDisabled">
+                                <a class="page-link rounded-0" aria-label="Previous"
+                                   asp-page="./Index"
+                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex - 1)">
+                                    <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+                                </a>
+                            </li>
+
+                            @for (var i = minPage; i <= maxPage; i++)
+                            {
+                                <li class="page-item @(Model.BookingInformation.PageIndex == i ? "active" : "")">
+                                    <a class="page-link" asp-page="./Index"
+                                       asp-route-pageIndex="@i">@i</a>
+                                </li>
+                            }
+
+                            <li class="page-item @nextDisabled">
+                                <a class="page-link rounded-0" aria-label="Next"
+                                   asp-page="./Index"
+                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex + 1)">
+                                    <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

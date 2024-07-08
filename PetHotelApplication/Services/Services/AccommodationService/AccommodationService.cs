@@ -36,6 +36,11 @@ namespace Services.Services.AccommodationService
             return _accommodationRepository.GetAccommodations();
         }
 
+        public List<Accommodation> GetAccommodationsWithSearchSort(string searchString, string sortOrder)
+        {
+            return _accommodationRepository.GetAccommodationsWithSearchSort(searchString, sortOrder);
+        }
+
         public void Update(Accommodation accommodation)
         {
              _accommodationRepository.Update(accommodation);

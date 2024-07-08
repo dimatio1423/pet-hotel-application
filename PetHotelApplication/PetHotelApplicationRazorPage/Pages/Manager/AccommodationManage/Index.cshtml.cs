@@ -25,10 +25,24 @@ namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
 
         public PaginatedList<Accommodation> Accommodation { get; set; } = default!;
 
-        public async Task OnGetAsync(int? pageIndex)
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; } = string.Empty;
+
+        [BindProperty(SupportsGet = true)]
+        public string SortOrder { get; set; } = string.Empty;
+
+        public async Task OnGetAsync(int? pageIndex, string? searchString, string? sortOrder)
         {
-            var accommodations = _accommodationService.GetAccommodations();
+            SearchString = searchString ?? SearchString;
+            SortOrder = sortOrder ?? SortOrder;
+
+            var accommodations = _accommodationService.GetAccommodationsWithSearchSort(SearchString, SortOrder);
             Accommodation = PaginatedList<Accommodation>.Create(accommodations, pageIndex ?? 1, pageSize);
+        }
+
+        public bool IsSelected(string value)
+        {
+            return SortOrder == value;
         }
 
         public async Task<IActionResult> OnPostDelete(string id, int pageIndex)
