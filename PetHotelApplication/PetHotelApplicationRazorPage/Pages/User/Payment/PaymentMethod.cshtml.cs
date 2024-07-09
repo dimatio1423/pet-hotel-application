@@ -139,7 +139,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Payment
                 PaymentRecord paymentRecord = new PaymentRecord
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Price = totalPrice.ToString(),
+                    Price = totalPrice,
                     Date = DateTime.Now,
                     Method = "Cash",
                     Status = PaymentStatusEnums.Unpaid.ToString(),

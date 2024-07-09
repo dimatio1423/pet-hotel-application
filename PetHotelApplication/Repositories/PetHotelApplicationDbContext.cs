@@ -100,9 +100,7 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("PetID");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(20);
+            entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.UserId)
                 .IsRequired()
                 .HasMaxLength(100)
@@ -167,10 +165,7 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Price)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasMaxLength(20)

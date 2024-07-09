@@ -7,6 +7,13 @@
         .badge-primary {
             background-color: #007bff;
         }
+
+        .payment-info {
+            display: none;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            color: red;
+        }
     </style>
 }
 
@@ -70,6 +77,11 @@
                                 <span>@TempData["ErrorPaymentMethod"] </span>
                             </div>
                         }
+
+                        <div id="paymentInfo" class="payment-info">
+                            Please complete your payment within 48 hours.
+                        </div>
+
                     </div>
                     <div class="text-left">
                         <button type="submit" class="btn btn-primary mb-1">Confirm booking</button>
@@ -86,3 +98,25 @@
     </div>
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var paymentCash = document.getElementById('paymentCash');
+            var paymentTransferCash = document.getElementById('paymentTransferCash');
+            var paymentInfo = document.getElementById('paymentInfo');
+
+            paymentCash.addEventListener('change', function () {
+                if (paymentCash.checked) {
+                    paymentInfo.style.display = 'block';
+                }
+            });
+
+            paymentTransferCash.addEventListener('change', function () {
+                if (paymentTransferCash.checked) {
+                    paymentInfo.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}
