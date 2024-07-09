@@ -55,13 +55,28 @@
 
                     <div class="form-group mt-2">
                         <label asp-for="Booking.StartDate">Start Date:</label>
-                        <input asp-for="Booking.StartDate" class="form-control" type="date" id="startDate" value="@today"/>
+                        @if(Model.Booking != null)
+                        {
+                            <input asp-for="Booking.StartDate" class="form-control" type="date" id="startDate" />
+
+                        } else
+                        {
+                            <input asp-for="Booking.StartDate" class="form-control" type="date" id="startDate" value="@today" />
+
+                        }
                         <span asp-validation-for="Booking.StartDate" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mt-2">
                         <label asp-for="Booking.EndDate">End Date:</label>
-                        <input asp-for="Booking.EndDate" class="form-control" type="date" id="endDate" value="@today"/>
+                        @if(Model.Booking != null)
+                        {
+                            <input asp-for="Booking.EndDate" class="form-control" type="date" id="endDate" />
+
+                        }else
+                        {
+                            <input asp-for="Booking.EndDate" class="form-control" type="date" id="endDate" value="@today" />
+                        }
                         <span asp-validation-for="Booking.EndDate" class="text-danger"></span>
                     </div>
 
