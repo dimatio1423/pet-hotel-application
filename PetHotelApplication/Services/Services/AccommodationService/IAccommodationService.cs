@@ -10,7 +10,7 @@ namespace Services.Services.AccommodationService
     public interface IAccommodationService
     {
         List<Accommodation> GetAccommodations();
-        List<Accommodation> GetAccommodationsWithSearchSort(string searchString, string sortOrder);
+        List<Accommodation> GetAccommodationsWithSearchSort(string searchValue, string sortOrder);
         Accommodation GetAccommodationById(string id);
         void Add(Accommodation accommodation);
         void Delete(Accommodation accommodation);

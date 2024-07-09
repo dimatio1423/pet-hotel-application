@@ -92,9 +92,9 @@ namespace Services.Services.UserService
             return _userRepository.GetUserByEmail(email);
         }
 
-        public List<User> GetUsers()
+        public List<User> GetUsers(string searchValue, string sortOrder)
         {
-            return _userRepository.GetUsers();
+            return _userRepository.GetUsers(searchValue, sortOrder);
         }
 
         public bool isEmailExist(string email)

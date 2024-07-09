@@ -59,12 +59,43 @@ namespace Repositories.Repositories.UserRepo
             }
         }
 
-        public List<User> GetUsers()
+        public List<User> GetUsers(string SearchValue, string sortOrder)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Users.Where(x => x.RoleId != "1").Include(x => x.Role).ToList();
+                var users = _context.Users.Include(x => x.Role)
+                                          .Where(x => x.Role.RoleName != "Admin")
+                                          .AsQueryable();
+
+                if (!string.IsNullOrEmpty(SearchValue))
+                {
+                    users = users.Where(x => x.FullName.Contains(SearchValue) ||
+                                             x.PhoneNumber.Contains(SearchValue) ||
+                                             x.Email.Contains(SearchValue) ||
+                                             x.Address.Contains(SearchValue) ||
+                                             x.Status.Contains(SearchValue) ||
+                                             x.Role.RoleName.Contains(SearchValue));
+                }
+
+                users = sortOrder switch
+                {
+                    "name_asc" => users.OrderBy(x => x.FullName),
+                    "name_desc" => users.OrderByDescending(x => x.FullName),
+                    "phone_asc" => users.OrderBy(x => x.PhoneNumber),
+                    "phone_desc" => users.OrderByDescending(x => x.PhoneNumber),
+                    "email_asc" => users.OrderBy(x => x.Email),
+                    "email_desc" => users.OrderByDescending(x => x.Email),
+                    "address_asc" => users.OrderBy(x => x.Address),
+                    "address_desc" => users.OrderByDescending(x => x.Address),
+                    "status_asc" => users.OrderBy(x => x.Status),
+                    "status_desc" => users.OrderByDescending(x => x.Status),
+                    "role_asc" => users.OrderBy(x => x.Role.RoleName),
+                    "role_desc" => users.OrderByDescending(x => x.Role.RoleName),
+                    _ => users.OrderBy(x => x.FullName),
+                };
+
+                return users.ToList();
             }
             catch (Exception ex)
             {

@@ -24,7 +24,7 @@ namespace PetHotelApplicationRazorPage.Pages.User
         public async Task<IActionResult> OnPost()
         {
             var currUser = _userService.GetUserByEmail(register.Email);
-            var currUserPhoneNumber = _userService.GetUsers().FirstOrDefault(x => x.PhoneNumber.Equals(register.PhoneNumber));
+            var currUserPhoneNumber = _userService.GetUsers("", null).FirstOrDefault(x => x.PhoneNumber.Equals(register.PhoneNumber));
 
             if (!ModelState.IsValid)
             {
