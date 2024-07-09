@@ -1,31 +1,31 @@
 ﻿@page
 @model PetHotelApplicationRazorPage.Pages.User.Booking.CreateModel
 @{
-    <style>
-        .image-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+            <style>
+                .image-container {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                }
 
-            .image-container img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
+                    .image-container img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
 
-        .services-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
+                .services-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
 
-        .service-column {
-            flex: 1;
-            min-width: 50%;
-            box-sizing: border-box;
-            padding: 10px;
-        }
-    </style>
+                .service-column {
+                    flex: 1;
+                    min-width: 50%;
+                    box-sizing: border-box;
+                    padding: 10px;
+                }
+            </style>
 
     var today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
     var preselectedServiceId = Model.SelectedService != null ? Model.SelectedService.Id : null;
@@ -99,21 +99,23 @@
                         <span asp-validation-for="Booking.AccommodationId" class="text-danger"></span>
                     </div>
 
-                    @if (Model.Pets.Count > 0)
-                    {
-                        <div class="form-group mt-2">
-                            <label asp-for="Booking.PetId">Pet:</label>
-                            <select asp-for="Booking.PetId" class="form-control" asp-items="ViewBag.Pets"></select>
-                            <span asp-validation-for="Booking.PetId" class="text-danger"></span>
-                        </div>
-                    }
-                    else
+                    <div id="pet-section">
+                        @if (Model.Pets.Count > 0)
+                        {
+                            <div class="form-group mt-2">
+                                <label asp-for="Booking.PetId">Pet:</label>
+                                <select asp-for="Booking.PetId" class="form-control" asp-items="ViewBag.Pets"></select>
+                                <span asp-validation-for="Booking.PetId" class="text-danger"></span>
+                            </div>
+                        }
+                    </div>
+                    @* else
                     {
                         <div class="form-group mt-2">
                             <label>Pet:</label>
-                            <a asp-page="/User/Pets/Create" class="btn btn-primary m-2">Add Pet</a>
+                            <p>No available pets found for the selected date range. Please <a asp-page="/User/Pets/Create" class="btn btn-primary m-2">Add Pet</a> or select a different date range.</p>
                         </div>
-                    }
+                    } *@
 
                     @if (TempData["ErrorPet"] != null)
                     {
@@ -240,6 +242,53 @@
 
             startDateInput.addEventListener('change', updateAccommodations);
             endDateInput.addEventListener('change', updateAccommodations);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.querySelector('input[name="Booking.StartDate"]');
+            const endDateInput = document.querySelector('input[name="Booking.EndDate"]');
+            const petSelect = document.querySelector('select[name="Booking.PetId"]');
+            const petSection = document.getElementById('pet-section');
+            updatePet();
+            function updatePet() {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+
+                if (startDate && endDate) {
+                    console.log(startDate);
+                    console.log(endDate);
+                    fetch(`./Create?handler=ValidPets&start=${startDate}&end=${endDate}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Network response was not ok: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            petSection.innerHTML = '';
+                            if (data.error) {
+                                console.error(data.error);
+                            } else if (data.length === 0) {
+                                petSection.innerHTML = '<div class="form-group mt-2"><label>Pet:</label><p>No available pets found for the selected date range. Please <a href="/User/Pets/Create" class="btn btn-primary m-2">Add Pet</a> or select a different date range.</p></div>';
+                            } else {
+                                petSelect.innerHTML = '';
+                                data.forEach(pet => {
+                                    const option = document.createElement('option');
+                                    option.value = pet.petId;
+                                    option.textContent = `${pet.name} (${pet.breed})`;
+                                    petSelect.appendChild(option);
+                                });
+                                petSection.appendChild(petSelect.parentElement);
+                            }
+                        })
+                        .catch(error => console.error('Error fetching pet:', error));
+                }
+            }
+
+            startDateInput.addEventListener('change', updatePet);
+            endDateInput.addEventListener('change', updatePet);
         });
     </script>
 }

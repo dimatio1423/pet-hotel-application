@@ -313,5 +313,37 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             return new JsonResult(result);
         }
 
+        public JsonResult OnGetValidPets(DateOnly start, DateOnly end)
+        {
+            var currUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
+
+            var petList = _petService.GetListOfPets().Where(x => x.UserId.Equals(currUser.Id)).ToList();
+
+            var busyPets = new List<string>();
+            if (start != end)
+            {
+                busyPets = _bookingInformationService.GetBookingInformations()
+                    .Where(b => ((end >= DateOnly.FromDateTime(b.StartDate) && end <= DateOnly.FromDateTime(b.EndDate)) ||
+                                (start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate)) ||
+                                (start <= DateOnly.FromDateTime(b.StartDate) && end >= DateOnly.FromDateTime(b.EndDate))) 
+                                && b.Status.Equals(BookingStatusEnums.Pending.ToString())
+                                && petList.Select(x => x.Id).ToList().Contains(b.PetId)
+                                ).Select(b => b.PetId).ToList();
+            }
+            else
+            {
+                busyPets = _bookingInformationService.GetBookingInformations()
+                    .Where(b => start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate)
+                    && b.Status.Equals(BookingStatusEnums.Pending.ToString()) 
+                    && petList.Select(x => x.Id).ToList().Contains(b.PetId) ).Select(b => b.PetId).ToList();
+            }
+
+            var validPets = petList
+                .Where(a => !busyPets.Contains(a.Id)).ToList();
+            var result = _mapper.Map<List<PetViewListResModel>>(validPets);
+            Pets = result;
+            return new JsonResult(result);
+        }
+
     }
 }

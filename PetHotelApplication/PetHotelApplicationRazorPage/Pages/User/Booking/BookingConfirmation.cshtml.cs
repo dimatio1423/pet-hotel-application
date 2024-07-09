@@ -105,7 +105,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                     StartDate = start,
                     EndDate = end,
                     Note = bookingInformation.Note != null ? bookingInformation.Note : "",
-                    Status = "",
+                    Status = BookingStatusEnums.Pending.ToString(),
                     UserId = currUser.Id,
                     AccommodationId = bookingInformation.AccommodationId,
                     PetId = bookingInformation.PetId

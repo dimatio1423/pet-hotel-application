@@ -10,22 +10,30 @@ using Repositories;
 using Services.Services.PaymentRecordService;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObjects.Enums.PaymenStatusEnums;
+using Services.Services.BookingInformationService;
+using BusinessObjects.Enums.StatusEnums;
+using BusinessObjects.Enums.BookingStatusEnums;
 
 namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
 {
     public class DetailsModel : AuthorizePageModel
     {
         private readonly IPaymentRecordService _paymentRecordService;
+        private readonly IBookingInformationService _bookingInformationService;
 
-        public DetailsModel(IPaymentRecordService paymentRecordService)
+        public DetailsModel(IPaymentRecordService paymentRecordService,
+            IBookingInformationService bookingInformationService)
         {
             _paymentRecordService = paymentRecordService;
+            _bookingInformationService = bookingInformationService;
         }
 
         [BindProperty]
         public PaymentRecord PaymentRecord { get; set; } = default!;
 
         public SelectList PaymentStatus { get; set; }
+
+        public SelectList PaymentMethod { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -44,6 +52,7 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
                 PaymentRecord = paymentrecord;
                 PaymentStatus = new SelectList(new List<string> { PaymentStatusEnums.Paid.ToString(),
                     PaymentStatusEnums.Unpaid.ToString(), PaymentStatusEnums.Cancelled.ToString()}, PaymentRecord.Status.ToString());
+                PaymentMethod = new SelectList(new List<string> { "Cash", "TransferCash" });
             }
             return Page();
         }
@@ -66,7 +75,36 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
                 {
                     updatingPayment.Status = PaymentRecord.Status;
 
+                    updatingPayment.Method = PaymentRecord.Method;
+
                     _paymentRecordService.Update(updatingPayment);
+
+                    var bookingList = _bookingInformationService.GetBookingInformations();
+
+                    switch(updatingPayment.Status)
+                    {
+                        case nameof(PaymentStatusEnums.Paid):
+                            var currBooking = bookingList.FirstOrDefault(x => x.Id.Equals(updatingPayment.BookingId));
+
+                            if (currBooking != null)
+                            {
+                                currBooking.Status = "Confirmed";
+
+                                _bookingInformationService.Update(currBooking);
+                            }
+                            break;
+
+                        case nameof(PaymentStatusEnums.Cancelled):
+                             currBooking = bookingList.FirstOrDefault(x => x.Id.Equals(updatingPayment.BookingId));
+
+                            if (currBooking != null)
+                            {
+                                currBooking.Status = BookingStatusEnums.Cancelled.ToString();
+
+                                _bookingInformationService.Update(currBooking);
+                            }
+                            break;
+                    }
                 }
 
 
