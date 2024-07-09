@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Entities;
+﻿using BusinessObjects.CustomValidators;
+using BusinessObjects.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,8 +24,11 @@ namespace BusinessObjects.Models.PetModel.Response
         [Required(ErrorMessage = "Pet breed is required")]
         public string Breed { get; set; }
 
-        [Required(ErrorMessage = "Pet age is required")]
-        [Range(1, 50, ErrorMessage = "Pet age must be in range {1} and {2}")]
-        public int Age { get; set; }
+        [Required(ErrorMessage = "Pet date of birth is required")]
+        [Display(Name = "Date of birth")]
+        [DateLessThanCurrentDate(ErrorMessage = "{1} must be in the past")]
+        public DateOnly Dob { get; set; }
+
+        public string Status { get; set; }
     }    
 }

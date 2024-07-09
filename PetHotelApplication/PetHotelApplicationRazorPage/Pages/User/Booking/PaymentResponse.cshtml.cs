@@ -14,7 +14,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         private readonly IPaymentRecordService _paymentRecordService;
         private readonly IBookingInformationService _bookingInformationService;
 
-        public PaymentResponseModel(IVnPayService vnPayService, 
+        public PaymentResponseModel(IVnPayService vnPayService,
             IPaymentRecordService paymentRecordService,
             IBookingInformationService bookingInformationService)
         {
@@ -29,25 +29,38 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             var paymentRecord = _paymentRecordService.GetPaymentRecordById(response.PaymentId);
             var booking = _bookingInformationService.GetBookingInformationById(response.OrderId);
 
-            if (response == null || paymentRecord == null || booking == null)
+            if (response == null)
             {
-                return NotFound();
+                TempData["Error"] = "Error making payment";
+                return Page();
+            }
+
+            if (paymentRecord == null)
+            {
+                TempData["Error"] = "Payment is not found";
+                return Page();
+            }
+
+            if (booking == null)
+            {
+                TempData["Error"] = "Booking is not found";
+                return Page();
             }
 
             if (response.VnPayResponseCode.Equals("00"))
             {
                 paymentRecord.Status = nameof(PaymentStatusEnums.Paid);
-                booking.Status = nameof(BookingStatusEnums.Completed);
+                booking.Status = nameof(BookingStatusEnums.Confirmed);
             }
             else
             {
-                paymentRecord.Status = nameof(PaymentStatusEnums.Error);
+                paymentRecord.Status = nameof(PaymentStatusEnums.Unpaid);
             }
 
             _paymentRecordService.Update(paymentRecord);
             _bookingInformationService.Update(booking);
 
-            return RedirectToPage("./PaymentRecords", new 
+            return RedirectToPage("./PaymentRecords", new
             {
                 bookingId = booking.Id
             });

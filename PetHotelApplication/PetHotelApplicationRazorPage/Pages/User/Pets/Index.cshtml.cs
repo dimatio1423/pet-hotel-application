@@ -41,7 +41,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
             CurrentFilter = SearchValue;
 
             var currentUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
-            var list = _petService.GetActivePets(currentUser.Id, SearchValue);
+            var list = _petService.GetUserPets(currentUser.Id, searchString);
 
             Pet = PaginatedList<PetResModel>.Create(list, pageIndex ?? 1, pageSize);
         }
