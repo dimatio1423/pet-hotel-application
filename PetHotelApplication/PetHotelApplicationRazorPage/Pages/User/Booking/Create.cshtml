@@ -159,15 +159,46 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            var boardingTypeSelect = document.getElementById('boardingType');
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+
+            function toggleEndDate() {
+                if (boardingTypeSelect.value === 'Day care') {
+                    endDateInput.readOnly = true;
+                    endDateInput.value = startDateInput.value; // Set end date to start date value
+                } else {
+                    endDateInput.readOnly = false;
+                }
+            }
+
+            // Initial call to set the correct state on page load
+            toggleEndDate();
+
+            // Add event listeners
+            boardingTypeSelect.addEventListener('change', toggleEndDate);
+            startDateInput.addEventListener('change', function () {
+                if (boardingTypeSelect.value === 'Day care') {
+                    endDateInput.value = startDateInput.value; // Sync end date with start date
+                    console.log("yes");
+
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
             const startDateInput = document.querySelector('input[name="Booking.StartDate"]');
             const endDateInput = document.querySelector('input[name="Booking.EndDate"]');
             const accommodationSelect = document.querySelector('select[name="Booking.AccommodationId"]');
-
+            updateAccommodations();
             function updateAccommodations() {
                 const startDate = startDateInput.value;
                 const endDate = endDateInput.value;
 
-                if ((startDate && endDate) || startDate) {
+                if (startDate && endDate) {
+                    console.log(startDate);
+                    console.log(endDate);
                     fetch(`./Create?handler=ValidAccommodations&start=${startDate}&end=${endDate}`)
                         .then(response => {
                             if (!response.ok) {
@@ -194,33 +225,6 @@
 
             startDateInput.addEventListener('change', updateAccommodations);
             endDateInput.addEventListener('change', updateAccommodations);
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var boardingTypeSelect = document.getElementById('boardingType');
-            var startDateInput = document.getElementById('startDate');
-            var endDateInput = document.getElementById('endDate');
-
-            function toggleEndDate() {
-                if (boardingTypeSelect.value === 'Day care') {
-                    endDateInput.readOnly = true;
-                    endDateInput.value = startDateInput.value; // Set end date to start date value
-                } else {
-                    endDateInput.readOnly = false;
-                }
-            }
-
-            // Initial call to set the correct state on page load
-            toggleEndDate();
-
-            // Add event listeners
-            boardingTypeSelect.addEventListener('change', toggleEndDate);
-            startDateInput.addEventListener('change', function () {
-                if (boardingTypeSelect.value === 'Day care') {
-                    endDateInput.value = startDateInput.value; // Sync end date with start date
-                }
-            });
         });
     </script>
 }

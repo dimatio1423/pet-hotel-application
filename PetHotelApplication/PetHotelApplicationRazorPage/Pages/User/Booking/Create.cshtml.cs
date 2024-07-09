@@ -289,21 +289,21 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {DateTime.Now.Year - p.Dob.Value.Year} {(DateTime.Now.Year - p.Dob.Value.Year > 1 ? "years old" : "year old")}" }), "PetId", "Name", booking.PetId);
         }
 
-        public JsonResult OnGetValidAccommodations(DateTime start, DateTime? end)
+        public JsonResult OnGetValidAccommodations(DateOnly start, DateOnly end)
         {
             var busyAccommodationIds = new List<string>();
-            if (end != null)
+            if (start != end)
             {
                 busyAccommodationIds = _bookingInformationService.GetBookingInformations()
-                    .Where(b => (end >= b.StartDate && end <= b.EndDate) ||
-                                (start <= b.EndDate && start >= b.StartDate) ||
-                                (start <= b.StartDate && end >= b.EndDate)
+                    .Where(b => (end >= DateOnly.FromDateTime(b.StartDate) && end <= DateOnly.FromDateTime(b.EndDate)) ||
+                                (start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate)) ||
+                                (start <= DateOnly.FromDateTime(b.StartDate) && end >= DateOnly.FromDateTime(b.EndDate))
                                 ).Select(b => b.AccommodationId).ToList();
             }
             else
             {
                 busyAccommodationIds = _bookingInformationService.GetBookingInformations()
-                    .Where(b => (start <= b.EndDate && start >= b.StartDate)).Select(b => b.AccommodationId).ToList();
+                    .Where(b => start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate)).Select(b => b.AccommodationId).ToList();
             }
 
             var validAccommodations = _accommodationService.GetAccommodations()

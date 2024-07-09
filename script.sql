@@ -125,7 +125,7 @@ INSERT INTO "User" (ID, Avatar, FullName, PhoneNumber, Email, Password, Address,
 ('4', 'link','Emily Davis', '4321098765', 'emilydavis@example.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', '321 Cedar Street', 'Active', '4');
 
 -- Sample data for Pet table
-INSERT INTO Pet (ID, Avatar, PetName, Species, Breed, Age, Status, UserID) VALUES 
+INSERT INTO Pet (ID, Avatar, PetName, Species, Breed, DOB, Status, UserID) VALUES 
 ('1', 'link','Buddy', 'Dog', 'Labrador', '2023-10-12', 'Active', '2'),
 ('2', 'link','Whiskers', 'Cat', 'Siamese', '2023-11-12', 'Active', '2');
 
