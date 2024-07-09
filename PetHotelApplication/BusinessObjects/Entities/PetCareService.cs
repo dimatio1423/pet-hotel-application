@@ -5,13 +5,13 @@ namespace BusinessObjects.Entities;
 
 public partial class PetCareService
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
 
-    public string Type { get; set; }
+    public string Type { get; set; } = null!;
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
-    public string Status { get; set; }
+    public string Status { get; set; } = null!;
 
     public decimal Price { get; set; }
 

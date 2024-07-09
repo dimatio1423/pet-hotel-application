@@ -5,9 +5,9 @@ namespace BusinessObjects.Entities;
 
 public partial class Role
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
 
-    public string RoleName { get; set; }
+    public string RoleName { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

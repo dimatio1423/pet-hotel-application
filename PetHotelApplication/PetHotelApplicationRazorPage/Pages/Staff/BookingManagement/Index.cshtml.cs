@@ -26,23 +26,8 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.BookingManagement
         public async Task OnGetAsync(int? pageIndex)
         {
             var responseList = _bookingInformationService.GetBookingInformations();
-            BookingInformation = PaginatedList<BookingInformation>.Create(responseList, pageIndex ?? 1, 2);
+            BookingInformation = PaginatedList<BookingInformation>.Create(responseList, pageIndex ?? 1, 5);
         }
 
-        public async Task<IActionResult> OnPostSuccess(string id, int pageIndex)
-        {
-            var chosenBooking = _bookingInformationService.GetBookingInformationById(id);
-            chosenBooking.Status = BookingStatusEnums.Completed.ToString();
-            _bookingInformationService.Update(chosenBooking);
-            return RedirectToPage(new { pageIndex });
-        }
-        
-        public async Task<IActionResult> OnPostCancel(string id, int pageIndex)
-        {
-            var chosenBooking = _bookingInformationService.GetBookingInformationById(id);
-            chosenBooking.Status = BookingStatusEnums.Cancelled.ToString();
-            _bookingInformationService.Update(chosenBooking);
-            return RedirectToPage(new { pageIndex });
-        }
     }
 }
