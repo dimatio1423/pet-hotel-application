@@ -91,7 +91,8 @@
                             <select asp-for="Booking.PetId" class="form-control" asp-items="ViewBag.Pets"></select>
                             <span asp-validation-for="Booking.PetId" class="text-danger"></span>
                         </div>
-                    }else
+                    }
+                    else
                     {
                         <div class="form-group mt-2">
                             <label>Pet:</label>
@@ -179,8 +180,51 @@
             startDateInput.addEventListener('change', function () {
                 if (boardingTypeSelect.value === 'Day care') {
                     endDateInput.value = startDateInput.value; // Sync end date with start date
+                    console.log("yes");
+
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.querySelector('input[name="Booking.StartDate"]');
+            const endDateInput = document.querySelector('input[name="Booking.EndDate"]');
+            const accommodationSelect = document.querySelector('select[name="Booking.AccommodationId"]');
+            updateAccommodations();
+            function updateAccommodations() {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+
+                if (startDate && endDate) {
+                    console.log(startDate);
+                    console.log(endDate);
+                    fetch(`./Create?handler=ValidAccommodations&start=${startDate}&end=${endDate}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Network response was not ok: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            accommodationSelect.innerHTML = '';
+                            if (data.error) {
+                                console.error(data.error);
+                            } else {
+                                data.forEach(accommodation => {
+                                    const option = document.createElement('option');
+                                    option.value = accommodation.accommodationId;
+                                    option.textContent = `${accommodation.name} (${accommodation.type}) - ${accommodation.price} VNĐ`;
+                                    accommodationSelect.appendChild(option);
+                                });
+                            }
+                        })
+                        .catch(error => console.error('Error fetching accommodations:', error));
+                }
+            }
+
+            startDateInput.addEventListener('change', updateAccommodations);
+            endDateInput.addEventListener('change', updateAccommodations);
         });
     </script>
 }
