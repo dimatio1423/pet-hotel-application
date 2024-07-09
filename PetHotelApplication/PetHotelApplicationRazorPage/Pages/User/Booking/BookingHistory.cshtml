@@ -30,7 +30,7 @@
                     <input type="date" id="endDate" name="EndDate" class="form-control w-75" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")">
                 </div>
                 <div class="col-md-2">
-                    <label for="status" class="mb-1 fw-bold">Status:</label>                    
+                    <label for="status" class="mb-1 fw-bold">Status:</label>
                     <select asp-for="StatusFilter" asp-items="@Model.BookingStatus" id="status" name="Status" class="form-control w-75 bg-white">
                         <option value="">All</option>
                     </select>
@@ -142,7 +142,10 @@
                         <a class="page-link rounded-0" aria-label="Previous"
                            asp-page="./BookingHistory"
                            asp-route-pageIndex="@(Model.BookingInfos.PageIndex - 1)"
-                           asp-route-currentFilter="@Model.CurrentFilter">
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter">
                             <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                         </a>
                     </li>
@@ -153,7 +156,10 @@
                             <a class="page-link"
                                asp-page="./BookingHistory"
                                asp-route-pageIndex="@i"
-                               asp-route-currentFilter="@Model.CurrentFilter">@i</a>
+                               asp-route-currentFilter="@Model.CurrentFilter"
+                               asp-route-startDate="@Model.StartDate"
+                               asp-route-endDate="@Model.EndDate"
+                               asp-route-status="@Model.StatusFilter">@i</a>
                         </li>
                     }
 
@@ -161,7 +167,10 @@
                         <a class="page-link rounded-0" aria-label="Next"
                            asp-page="./BookingHistory"
                            asp-route-pageIndex="@(Model.BookingInfos.PageIndex + 1)"
-                           asp-route-currentFilter="@Model.CurrentFilter">
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter">
                             <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
                         </a>
                     </li>
