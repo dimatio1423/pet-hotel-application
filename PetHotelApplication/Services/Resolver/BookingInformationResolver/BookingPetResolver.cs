@@ -22,7 +22,14 @@ namespace Services.Resolver.BookingInformationResolver
         {
             var pet = _petService.GetPetById(source.PetId);
 
-            return $"{pet.PetName} - {pet.Breed} - {pet.Age} {(pet.Age > 1 ? "years old" : "year old")}";
+            if (pet.Dob.HasValue)
+            {
+                var petAge = DateTime.Now.Year - pet.Dob.Value.Year;
+
+                return $"{pet.PetName} - {pet.Breed} - {petAge} {(petAge > 1 ? "years old" : "year old")}";
+            }
+
+            return $"{pet.PetName} - {pet.Breed} - Unknown age";
         } 
     }
 }

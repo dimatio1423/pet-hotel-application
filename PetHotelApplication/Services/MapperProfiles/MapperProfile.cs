@@ -35,7 +35,7 @@ namespace Services.MapperProfiles
             CreateMap<BookingInformation, BookingContinuePaymentResModel>()
                 .ForMember(dest => dest.PetCareServices, opt => opt.MapFrom(src => src.ServiceBookings.Select(sb => sb.Service)))
                 .ForMember(dest => dest.Pet, opt => opt.MapFrom(src =>
-                    $"{src.Pet.PetName} - {src.Pet.Breed} - {src.Pet.Age} {(src.Pet.Age > 1 ? "years old" : "year old")}"))
+                    $"{src.Pet.PetName} - {src.Pet.Breed} - {DateTime.Now.Year - src.Pet.Dob.Value.Year} {(DateTime.Now.Year - src.Pet.Dob.Value.Year > 1 ? "years old" : "year old")}"))
                 .ForMember(dest => dest.Accommodation, opt => opt.MapFrom(src =>
                     $"{src.Accommodation.Name} ({src.Accommodation.Type}) - {src.Accommodation.Price.ToString("#,##0")} VNĐ"))
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src =>                

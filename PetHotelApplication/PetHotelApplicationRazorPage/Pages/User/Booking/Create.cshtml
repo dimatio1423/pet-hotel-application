@@ -26,6 +26,9 @@
             padding: 10px;
         }
     </style>
+
+    var today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+    var preselectedServiceId = Model.SelectedService != null ? Model.SelectedService.Id : null;
 }
 
 <div class="container-fluid mt-5">
@@ -46,19 +49,19 @@
 
                     <div class="form-group mt-2">
                         <label asp-for="Booking.BoardingType">Boarding Type:</label>
-                        <select asp-for="Booking.BoardingType" class="form-control" asp-items="ViewBag.BoardingTypes"></select>
+                        <select asp-for="Booking.BoardingType" class="form-control" asp-items="ViewBag.BoardingTypes" id="boardingType"></select>
                         <span asp-validation-for="Booking.BoardingType" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mt-2">
                         <label asp-for="Booking.StartDate">Start Date:</label>
-                        <input asp-for="Booking.StartDate" class="form-control" type="date" />
+                        <input asp-for="Booking.StartDate" class="form-control" type="date" id="startDate" value="@today"/>
                         <span asp-validation-for="Booking.StartDate" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mt-2">
                         <label asp-for="Booking.EndDate">End Date:</label>
-                        <input asp-for="Booking.EndDate" class="form-control" type="date" />
+                        <input asp-for="Booking.EndDate" class="form-control" type="date" id="endDate" value="@today"/>
                         <span asp-validation-for="Booking.EndDate" class="text-danger"></span>
                     </div>
 
@@ -112,7 +115,7 @@
                                 <div class="service-column">
                                     <div class="form-check">
                                         @{
-                                            bool isChecked = Model.BookingServices.Contains(Model.PetCareServices[i].Id);
+                                            bool isChecked = Model.BookingServices.Contains(Model.PetCareServices[i].Id) || Model.PetCareServices[i].Id == preselectedServiceId;
                                         }
                                         <input class="form-check-input" type="checkbox" value="@Model.PetCareServices[i].Id" name="BookingServices" @(isChecked ? "checked" : "") />
                                         <label class="form-check-label">@Model.PetCareServices[i].Type - @Model.PetCareServices[i].Price.ToString("#,##0") VNĐ</label>
@@ -191,6 +194,33 @@
 
             startDateInput.addEventListener('change', updateAccommodations);
             endDateInput.addEventListener('change', updateAccommodations);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var boardingTypeSelect = document.getElementById('boardingType');
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+
+            function toggleEndDate() {
+                if (boardingTypeSelect.value === 'Day care') {
+                    endDateInput.readOnly = true;
+                    endDateInput.value = startDateInput.value; // Set end date to start date value
+                } else {
+                    endDateInput.readOnly = false;
+                }
+            }
+
+            // Initial call to set the correct state on page load
+            toggleEndDate();
+
+            // Add event listeners
+            boardingTypeSelect.addEventListener('change', toggleEndDate);
+            startDateInput.addEventListener('change', function () {
+                if (boardingTypeSelect.value === 'Day care') {
+                    endDateInput.value = startDateInput.value; // Sync end date with start date
+                }
+            });
         });
     </script>
 }

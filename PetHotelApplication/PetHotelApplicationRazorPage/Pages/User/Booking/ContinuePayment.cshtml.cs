@@ -79,7 +79,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             PaymentRecord paymentRecord = new PaymentRecord
             {
                 Id = Guid.NewGuid().ToString(),
-                Price = BookingInfo.TotalPrice.ToString(),
+                Price = BookingInfo.TotalPrice,
                 Date = DateTime.Now,
                 Method = SelectedPaymentMethod,
                 Status = PaymentStatusEnums.Unpaid.ToString(),
@@ -99,7 +99,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             {
                 OrderId = paymentRecord.BookingId,
                 PaymentId = paymentRecord.Id,
-                Amount = decimal.Parse(paymentRecord.Price),
+                Amount = (paymentRecord.Price),
                 CreatedDate = paymentRecord.Date
             };
 

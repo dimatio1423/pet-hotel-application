@@ -9,6 +9,7 @@ namespace BusinessObjects.Enums.BookingStatusEnums
     public enum BookingStatusEnums
     {
         Pending,
+        Processing,
         Cancelled,
         Completed
     }

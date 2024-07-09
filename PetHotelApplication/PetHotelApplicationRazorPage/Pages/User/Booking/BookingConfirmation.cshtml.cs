@@ -105,7 +105,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                     StartDate = start,
                     EndDate = end,
                     Note = bookingInformation.Note != null ? bookingInformation.Note : "",
-                    Status = BookingStatusEnums.Pending.ToString(),
+                    Status = "",
                     UserId = currUser.Id,
                     AccommodationId = bookingInformation.AccommodationId,
                     PetId = bookingInformation.PetId
@@ -230,7 +230,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 PaymentRecord paymentRecord = new PaymentRecord
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Price = totalPrice.ToString(),
+                    Price = totalPrice,
                     Date = DateTime.Now,
                     Method = "Cash",
                     Status = PaymentStatusEnums.Unpaid.ToString(),
@@ -273,7 +273,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 PaymentRecord paymentRecord = new PaymentRecord
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Price = totalPrice.ToString(),
+                    Price = totalPrice,
                     Date = DateTime.Now,
                     Method = "TransferCash",
                     Status = PaymentStatusEnums.Unpaid.ToString(),
@@ -287,7 +287,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 {
                     OrderId = paymentRecord.BookingId,
                     PaymentId = paymentRecord.Id,
-                    Amount = decimal.Parse(paymentRecord.Price),
+                    Amount = (paymentRecord.Price),
                     CreatedDate = paymentRecord.Date
                 };
 
