@@ -28,7 +28,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         private readonly IServiceBookingService _serviceBookingService;
         private readonly IMapper _mapper;
 
-        public CreateModel(IBookingInformationService bookingInformationService, 
+        public CreateModel(IBookingInformationService bookingInformationService,
             IAccommodationService accommodationService,
             IPetCareService petCareService,
             IPetService petService,
@@ -144,7 +144,8 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                         }
 
                         start = DateTime.Now;
-                    }else
+                    }
+                    else
                     {
                         start = Booking.StartDate.ToDateTime(new TimeOnly(8, 0));
                     }
@@ -176,7 +177,8 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                             return Page();
                         }
                         start = DateTime.Now;
-                    }else
+                    }
+                    else
                     {
                         start = Booking.StartDate.ToDateTime(new TimeOnly(8, 0));
                     }
@@ -278,5 +280,30 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name", booking.AccommodationId);
             ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {p.Age} {(p.Age > 1 ? "years old" : "year old")}" }), "PetId", "Name", booking.PetId);
         }
+
+        public JsonResult OnGetValidAccommodations(DateTime start, DateTime? end)
+        {
+            var busyAccommodationIds = new List<string>();
+            if (end != null)
+            {
+                busyAccommodationIds = _bookingInformationService.GetBookingInformations()
+                    .Where(b => (end >= b.StartDate && end <= b.EndDate) ||
+                                (start <= b.EndDate && start >= b.StartDate) ||
+                                (start <= b.StartDate && end >= b.EndDate)
+                                ).Select(b => b.AccommodationId).ToList();
+            }
+            else
+            {
+                busyAccommodationIds = _bookingInformationService.GetBookingInformations()
+                    .Where(b => (start <= b.EndDate && start >= b.StartDate)).Select(b => b.AccommodationId).ToList();
+            }
+
+            var validAccommodations = _accommodationService.GetAccommodations()
+                .Where(a => !busyAccommodationIds.Contains(a.Id)).ToList();
+            var result = _mapper.Map<List<AccommodationViewListResModel>>(validAccommodations);
+            Accommodations = result;
+            return new JsonResult(result);
+        }
+
     }
 }
