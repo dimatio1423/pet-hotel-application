@@ -29,6 +29,13 @@ namespace PetHotelApplicationRazorPage.Pages.User
         public async Task<IActionResult> OnPost()
         {
             var currEmail = loginModel.Email;
+
+            if (!ModelState.IsValid)
+            {
+                loginModel.Email = currEmail;
+                return Page();
+            }
+
             BusinessObjects.Entities.User currUser = _userService.GetUserByEmail(loginModel.Email);
             if (currUser != null)
             {

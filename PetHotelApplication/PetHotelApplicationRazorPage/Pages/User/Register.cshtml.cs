@@ -26,6 +26,11 @@ namespace PetHotelApplicationRazorPage.Pages.User
             var currUser = _userService.GetUserByEmail(register.Email);
             var currUserPhoneNumber = _userService.GetUsers().FirstOrDefault(x => x.PhoneNumber.Equals(register.PhoneNumber));
 
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             if (currUser != null)
             {
                 TempData["Error"] = "Email is already taken";
