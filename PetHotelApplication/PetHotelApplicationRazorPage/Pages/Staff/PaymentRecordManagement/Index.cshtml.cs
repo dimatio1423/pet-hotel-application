@@ -36,20 +36,20 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
         private const int pageSize = 4;
 
 
-        public async Task OnGetAsync(string currentFilter, string searchString, int? pageIndex,
+        public async Task OnGetAsync(string currentFilter, string SearchValue, int? pageIndex,
             DateTime? startDate, DateTime? endDate, string status, string method)
         {
 
-            if (searchString != null)
+            if (SearchValue != null)
             {
                 pageIndex = 1;
             }
             else
             {
-                searchString = currentFilter;
+                SearchValue = currentFilter;
             }
 
-            CurrentFilter = searchString;
+            CurrentFilter = SearchValue;
 
             StartDate = startDate;
             EndDate = endDate;
@@ -60,9 +60,9 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
 
             var paymentRecords = _paymentRecordService.GetPaymentRecords().OrderByDescending(x => x.Date).ToList();
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(SearchValue))
             {
-                paymentRecords = paymentRecords.Where(e => e.User.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+                paymentRecords = paymentRecords.Where(e => e.User.Email.Contains(SearchValue, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(StatusFilter))

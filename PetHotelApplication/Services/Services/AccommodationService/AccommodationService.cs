@@ -36,9 +36,9 @@ namespace Services.Services.AccommodationService
             return _accommodationRepository.GetAccommodations();
         }
 
-        public List<Accommodation> GetAccommodationsWithSearchSort(string searchString, string sortOrder)
+        public List<Accommodation> GetAccommodationsWithSearchSort(string SearchValue, string sortOrder)
         {
-            return _accommodationRepository.GetAccommodationsWithSearchSort(searchString, sortOrder);
+            return _accommodationRepository.GetAccommodationsWithSearchSort(SearchValue, sortOrder);
         }
 
         public void Update(Accommodation accommodation)

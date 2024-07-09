@@ -10,7 +10,7 @@ namespace Services.Services.UserService
 {
     public interface IUserService
     {
-        List<User> GetUsers();
+        List<User> GetUsers(string searchValue, string sortOrder);
         User GetUserByEmail(string email);
         User GetUserById(string id);
 

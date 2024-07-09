@@ -24,8 +24,5 @@ namespace BusinessObjects.Models.UserModel
         public string? Address { get; set; }
 
         public string? Avatar { get; set; }
-
-        [Required(ErrorMessage = "Role is required")]
-        public string? RoleId { get; set; }
     }
 }
