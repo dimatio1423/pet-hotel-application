@@ -10,6 +10,7 @@ namespace BusinessObjects.Models.UserModel
     public class RegisterUserReqModel
     {
         [Required(ErrorMessage = "Full name is required")]
+        [RegularExpression(@"^[a-zA-ZÀ-ỹ\s]+$", ErrorMessage = "Full name cannot contain numbers or special characters")]
         [Display(Name = "Full name")]
         public string? FullName { get; set; }
 
@@ -28,10 +29,12 @@ namespace BusinessObjects.Models.UserModel
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
         [StringLength(100, ErrorMessage = "Password cannot be longer than 100 characters")]
         public string? Password { get; set; }
 
         [Required(ErrorMessage = "Confirm password is required")]
+        [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Password and confirm password do not match")]
         [Display(Name = "Confirm password")]
         public string? ConfirmPassword { get; set; }
