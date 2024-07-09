@@ -1,6 +1,6 @@
 using BusinessObjects.CustomValidators;
 using BusinessObjects.Entities;
-using BusinessObjects.Models.UserModel;
+using BusinessObjects.Models.UserModel.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;

@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
 using BusinessObjects.Entities;
 using Services.Services.UserService;
-using BusinessObjects.Models.UserModel;
 using BusinessObjects.CustomValidators;
 using Services.Services.RoleService;
+using BusinessObjects.Models.UserModel.Request;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {

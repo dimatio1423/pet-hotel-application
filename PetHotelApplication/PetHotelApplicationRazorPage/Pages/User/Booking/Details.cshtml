@@ -1,0 +1,85 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.DetailsModel
+
+@{
+    ViewData["Title"] = "Booking Details";
+    var booking = Model.BookingDetails;
+}
+
+<style>
+    .badge-primary {
+        background-color: #007bff;
+    }
+
+    .container-bg {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dl-horizontal dt {
+        float: left;
+        width: 160px;
+        overflow: hidden;
+        clear: left;
+        text-align: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dl-horizontal dd {
+        margin-left: 180px;
+    }
+
+    .back-link {
+        margin-top: 20px;
+        display: inline-block;
+    }
+</style>
+
+<div class="container-fluid mt-5">
+    <div class="container container-bg">
+        <h2 class="text-center mb-4">Booking Details Information</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="mb-3">Booking Details</h3>
+                <dl class="dl-horizontal">
+                    <dt>Boarding Type:</dt>
+                    <dd>@booking.BoardingType</dd>
+
+                    <dt>Start Date:</dt>
+                    <dd>@booking.StartDate.ToString("d")</dd>
+
+                    <dt>End Date:</dt>
+                    <dd>@booking.EndDate.ToString("d")</dd>
+
+                    <dt>Note:</dt>
+                    <dd>@booking.Note</dd>
+
+                    <dt>Accommodation Type:</dt>
+                    <dd>@booking.Accommodation.Type</dd>
+
+                    <dt>Pet Name:</dt>
+                    <dd>@booking.Pet.PetName</dd>
+
+                    <dt>Total Price:</dt>
+                    <dd>@booking.TotalPrice.ToString("#,##0") VNĐ</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3">Selected Services</h3>
+                <ul class="list-group">
+                    @foreach (var service in booking.PetCareServices)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @service.Type
+                            <span class="badge badge-primary badge-pill">@service.Price.ToString("#,##0") VNĐ</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <a class="btn btn-secondary back-link" asp-page="./BookingHistory">Back to List</a>
+    </div>
+</div>

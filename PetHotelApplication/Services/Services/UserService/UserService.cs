@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.Entities;
 using BusinessObjects.Enums.RoleEnums;
 using BusinessObjects.Enums.StatusEnums;
-using BusinessObjects.Models.UserModel;
+using BusinessObjects.Models.UserModel.Request;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Repositories.UserRepo;
 using System;

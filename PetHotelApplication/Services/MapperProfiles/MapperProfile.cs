@@ -38,7 +38,7 @@ namespace Services.MapperProfiles
                     $"{src.Pet.PetName} - {src.Pet.Breed} - {DateTime.Now.Year - src.Pet.Dob.Year} {(DateTime.Now.Year - src.Pet.Dob.Year > 1 ? "years old" : "year old")}"))
                 .ForMember(dest => dest.Accommodation, opt => opt.MapFrom(src =>
                     $"{src.Accommodation.Name} ({src.Accommodation.Type}) - {src.Accommodation.Price.ToString("#,##0")} VNĐ"))
-                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src =>                
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src =>
                     Math.Max(1, (int)src.EndDate.Subtract(src.StartDate).TotalDays) * (src.ServiceBookings.Sum(sb => sb.Service.Price) + src.Accommodation.Price)
                 ));
 
@@ -51,26 +51,26 @@ namespace Services.MapperProfiles
             CreateMap<AccommodationCreateReqModel, Accommodation>();
             CreateMap<AccommodationUpdateReqModel, Accommodation>().ReverseMap();
 
-        CreateMap<PetCareService, PetCareViewListResModel>()
+            CreateMap<PetCareService, PetCareViewListResModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
 
-        CreateMap<Accommodation, AccommodationViewListResModel>()
+            CreateMap<Accommodation, AccommodationViewListResModel>()
                 .ForMember(dest => dest.AccommodationId, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
 
-        CreateMap<Pet, PetViewListResModel>()
+            CreateMap<Pet, PetViewListResModel>()
                 .ForMember(dest => dest.PetId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PetName))
                 .ReverseMap();
             CreateMap<BookingCreateReqModel, BookingInformationViewResModel>()
-                    .ForMember(dest => dest.BoardingType, opt => opt.MapFrom(src => src.BoardingType))
-                    .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
-                    .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
-                    .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
-                    .ForMember(dest => dest.Accommodation, opt => opt.MapFrom<BookingAccommodationResolver>())
-                    .ForMember(dest => dest.Pet, opt => opt.MapFrom<BookingPetResolver>());
+                .ForMember(dest => dest.BoardingType, opt => opt.MapFrom(src => src.BoardingType))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
+                .ForMember(dest => dest.Accommodation, opt => opt.MapFrom<BookingAccommodationResolver>())
+                .ForMember(dest => dest.Pet, opt => opt.MapFrom<BookingPetResolver>());
         }
 
-}
+    }
 }
