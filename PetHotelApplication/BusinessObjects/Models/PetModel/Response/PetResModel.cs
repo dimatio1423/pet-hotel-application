@@ -26,7 +26,7 @@ namespace BusinessObjects.Models.PetModel.Response
 
         [Required(ErrorMessage = "Pet date of birth is required")]
         [Display(Name = "Date of birth")]
-        [DateLessThanCurrentDate(ErrorMessage = "{1} must be in the past")]
+        [DateLessThanCurrentDate(ErrorMessage = "Date of birth must be in the past")]
         public DateOnly Dob { get; set; }
 
         public string Status { get; set; }

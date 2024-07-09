@@ -27,18 +27,18 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
 
         private const int pageSize = 4;
 
-        public async Task OnGetAsync(string currentFilter, string SearchValue, int? pageIndex)
+        public async Task OnGetAsync(string currentFilter, string searchString, int? pageIndex)
         {
-            if (SearchValue != null)
+            if (searchString != null)
             {
                 pageIndex = 1;
             }
             else
             {
-                SearchValue = currentFilter;
+                searchString = currentFilter;
             }
 
-            CurrentFilter = SearchValue;
+            CurrentFilter = searchString;
 
             var currentUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
             var list = _petService.GetUserPets(currentUser.Id, searchString);

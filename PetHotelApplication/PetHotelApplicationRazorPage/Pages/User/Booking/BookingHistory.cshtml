@@ -117,7 +117,7 @@
                                 }
                                 <span class="text-@statusColor fw-bold">@booking.Status</span>
 
-                                @if (string.IsNullOrEmpty(booking.Status))
+                                @if (booking.Status.Equals(nameof(BookingStatusEnums.Pending)))
                                 {
                                     <a asp-page="./ContinuePayment" asp-route-id="@booking.Id" class="text-primary ms-3">Continue payment -></a>
                                 }
