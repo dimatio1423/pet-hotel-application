@@ -16,6 +16,7 @@ using Services.Services.PetService;
 using Services.Services.ServicesBookingService;
 using Services.Services.VnPaymentServices;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 using System.Net.WebSockets;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Booking
@@ -30,6 +31,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         private readonly IPaymentRecordService _paymentRecordService;
         private readonly IVnPayService _vnPayService;
         private readonly IMapper _mapper;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public ConfirmationModel(IBookingInformationService bookingInformationService,
             IServiceBookingService serviceBookingService,
@@ -38,7 +40,8 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             IPetCareService petCareService,
             IPaymentRecordService paymentRecordService,
             IVnPayService vnPayService,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpClientFactory httpClientFactory)
         {
             _bookingInformationService = bookingInformationService;
             _serviceBookingService = serviceBookingService;
@@ -48,6 +51,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             _paymentRecordService = paymentRecordService;
             _vnPayService = vnPayService;
             _mapper = mapper;
+            _httpClientFactory = httpClientFactory;
         }
         [BindProperty]
         public decimal TotalPrice { get; set; }
@@ -105,7 +109,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                     StartDate = start,
                     EndDate = end,
                     Note = bookingInformation.Note != null ? bookingInformation.Note : "",
-                    Status = "",
+                    Status = BookingStatusEnums.Pending.ToString(),
                     UserId = currUser.Id,
                     AccommodationId = bookingInformation.AccommodationId,
                     PetId = bookingInformation.PetId
@@ -135,8 +139,21 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 {
                     var vnPayModel = createTransferCashPayment(newBookingInformation);
 
-                    return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
+                    var redirectUrl = _vnPayService.CreatePaymentUrl(HttpContext, vnPayModel);
+                    try
+                    {
+                        var client = _httpClientFactory.CreateClient();
+                        client.Timeout = TimeSpan.FromSeconds(30);
 
+                        var response = client.GetAsync(redirectUrl).Result;
+                        response.EnsureSuccessStatusCode();
+
+                        return Redirect(redirectUrl);
+                    }
+                    catch (Exception ex)
+                    {
+                        return RedirectToPage("./PaymentResponse");
+                    }
                 }
             }
          

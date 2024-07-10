@@ -1,0 +1,93 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.EditModel
+@{
+    ViewData["Title"] = "Edit Booking";
+    var booking = Model.BookingDetails;
+}
+
+<div class="container-fluid mt-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Edit Booking Information</h2>
+        <form method="post" id="editBookingForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="hidden" asp-for="@Model.BookingUpdate.Id" />
+                    <div class="form-group">
+                        <label for="boardingType">Boarding Type:</label>
+                        <input type="text" id="boardingType" class="form-control" asp-for="BookingDetails.BoardingType" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" class="form-control" asp-for="BookingDetails.StartDate" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" class="form-control" asp-for="BookingDetails.EndDate" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="note">Note:</label>
+                        <textarea id="note" class="form-control" asp-for="BookingUpdate.Note"></textarea>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label asp-for="BookingUpdate.AccommodationId">Accommodation:</label>
+                        <select asp-for="BookingUpdate.AccommodationId" class="form-control" asp-items="ViewBag.Accommodations" disabled></select>
+                        <input type="hidden" asp-for="BookingUpdate.AccommodationId" />
+                        <span asp-validation-for="BookingUpdate.AccommodationId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="petName">Pet Name:</label>
+                        <input type="text" id="petName" class="form-control" asp-for="BookingDetails.Pet" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Selected Services:</label>
+                        <div class="form-check">
+                            @foreach (var service in Model.PetCareServices)
+                            {
+                                var isChecked = Model.BookingDetails.PetCareServices.Any(s => s.Type == service.Type);
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="@service.Id" name="BookingServices" @(isChecked ? "checked" : "") />
+                                    <label class="form-check-label">
+                                        @service.Type - @service.Price.ToString("#,##0") VNĐ
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="BookingServices" class="text-danger" id="serviceValidationMessage"></span>
+
+                        @if (TempData["ErrorServices"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <span>@TempData["ErrorServices"] </span>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a class="btn btn-secondary" asp-page="./Details" asp-route-id="@booking.Id">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('editBookingForm').addEventListener('submit', function (event) {
+            var checkboxes = document.querySelectorAll('input[name="BookingServices"]:checked');
+            var validationMessage = document.getElementById('serviceValidationMessage');
+
+            if (checkboxes.length === 0) {
+                event.preventDefault();
+                validationMessage.textContent = 'Please select at least one service.';
+                validationMessage.style.display = 'block';
+            } else {
+                validationMessage.textContent = '';
+                validationMessage.style.display = 'none';
+            }
+        });
+    </script>
+}

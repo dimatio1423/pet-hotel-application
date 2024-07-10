@@ -9,7 +9,7 @@ namespace Repositories.Repositories.UserRepo
 {
     public interface IUserRepository
     {
-        List<User> GetUsers();
+        List<User> GetUsers(string SearchValue, string sortOrder);
         User GetUserByEmail(string email);
         User GetUserById(string id);
         void Add(User user);

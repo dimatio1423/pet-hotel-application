@@ -133,17 +133,6 @@
                                     <input asp-for="User.Address" class="form-control" />
                                     <span asp-validation-for="User.Address" class="text-danger"></span>
                                 </div>
-                                <div class="form-group">
-                                    <label asp-for="User.RoleId" class="control-label">Role</label>
-                                    <select asp-for="User.RoleId" class="form-control">
-                                        <option value="">-- Select Role --</option>
-                                        @foreach (var role in Model.Roles)
-                                        {
-                                            <option value="@role.Id">@role.RoleName</option>
-                                        }
-                                    </select>
-                                    <span asp-validation-for="User.RoleId" class="text-danger"></span>
-                                </div>
                                 <div class="form-group text-center">
                                     <input type="submit" value="Save" class="btn btn-primary" />
                                 </div>

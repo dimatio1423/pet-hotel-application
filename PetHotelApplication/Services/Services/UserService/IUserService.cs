@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Entities;
-using BusinessObjects.Models.UserModel;
+using BusinessObjects.Models.UserModel.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Services.Services.UserService
 {
     public interface IUserService
     {
-        List<User> GetUsers();
+        List<User> GetUsers(string searchValue, string sortOrder);
         User GetUserByEmail(string email);
         User GetUserById(string id);
 

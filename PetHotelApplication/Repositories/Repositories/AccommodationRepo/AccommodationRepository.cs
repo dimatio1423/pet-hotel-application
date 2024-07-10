@@ -58,6 +58,19 @@ namespace Repositories.Repositories.AccommodationRepo
             }
         }
 
+        public Accommodation GetAccommodationByType(string type)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Accommodations.FirstOrDefault(x => x.Type.Equals(type));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<Accommodation> GetAccommodations()
         {
             try
@@ -71,17 +84,17 @@ namespace Repositories.Repositories.AccommodationRepo
             }
         }
         
-        public List<Accommodation> GetAccommodationsWithSearchSort(string searchString, string sortOrder)
+        public List<Accommodation> GetAccommodationsWithSearchSort(string SearchValue, string sortOrder)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
                 var accommodations = _context.Accommodations.AsQueryable();
 
-                if (!string.IsNullOrEmpty(searchString))
+                if (!string.IsNullOrEmpty(SearchValue))
                 {
-                    accommodations = accommodations.Where(a => a.Name.Contains(searchString) ||
-                                                               a.Type.Contains(searchString));
+                    accommodations = accommodations.Where(a => a.Name.Contains(SearchValue) ||
+                                                               a.Type.Contains(SearchValue));
                 }
 
                 accommodations = sortOrder switch

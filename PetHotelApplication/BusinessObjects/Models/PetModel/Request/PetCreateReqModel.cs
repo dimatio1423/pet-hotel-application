@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObjects.CustomValidators;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
@@ -22,8 +23,8 @@ namespace BusinessObjects.Models.PetModel.Request
         [Required(ErrorMessage = "Pet breed is required")]
         public string Breed { get; set; }
 
-        [Required(ErrorMessage = "Pet age is required")]
-        [Range(1, 50, ErrorMessage = "Pet age must be in range {1} and {2}")]
-        public int Age { get; set; }
+        [Required(ErrorMessage = "Pet date of birth is required")]
+        [DateLessThanCurrentDate(ErrorMessage = "Date of birth must be in the past")]
+        public DateOnly Dob { get; set; }
     }
 }

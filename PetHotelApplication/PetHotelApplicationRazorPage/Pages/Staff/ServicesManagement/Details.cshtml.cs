@@ -13,6 +13,7 @@ using BusinessObjects.Enums.StatusEnums;
 using BusinessObjects.CustomValidators;
 using System.ComponentModel.DataAnnotations;
 using Services.Services.ServiceImageService;
+using Services.Services.CloudinaryService;
 
 namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
 {
@@ -20,9 +21,9 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
     {
         private readonly IPetCareService _petCareService;
         private readonly IServiceImageService _serviceImageService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public DetailsModel(IPetCareService petCareService, IServiceImageService serviceImageService, CloudinaryService cloudinaryService)
+        public DetailsModel(IPetCareService petCareService, IServiceImageService serviceImageService, ICloudinaryService cloudinaryService)
         {
             _petCareService = petCareService;
             _serviceImageService = serviceImageService;
