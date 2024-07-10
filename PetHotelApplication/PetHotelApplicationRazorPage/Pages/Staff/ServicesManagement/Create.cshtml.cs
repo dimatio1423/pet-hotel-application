@@ -15,6 +15,7 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using BusinessObjects.CustomValidators;
 using CloudinaryDotNet;
 using BusinessObjects.Enums.StatusEnums;
+using Services.Services.CloudinaryService;
 
 namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
 {
@@ -22,11 +23,11 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
     {
         private readonly IPetCareService _petCareService;
         private readonly IServiceImageService _serviceImageService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
         public CreateModel(IPetCareService petCareService, 
             IServiceImageService serviceImageService,
-            CloudinaryService cloudinaryService )
+            ICloudinaryService cloudinaryService )
         {
             _petCareService = petCareService;
             _serviceImageService = serviceImageService;

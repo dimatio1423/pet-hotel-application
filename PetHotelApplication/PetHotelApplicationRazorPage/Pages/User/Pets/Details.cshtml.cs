@@ -16,15 +16,16 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Utils;
 using BusinessObjects.Enums.StatusEnums;
+using Services.Services.CloudinaryService;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
     public class DetailsModel : AuthorizePageModel
     {
         private readonly IPetService _petService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public DetailsModel(IPetService petService, CloudinaryService cloudinaryService)
+        public DetailsModel(IPetService petService, ICloudinaryService cloudinaryService)
         {
             _petService = petService;
             _cloudinaryService = cloudinaryService;

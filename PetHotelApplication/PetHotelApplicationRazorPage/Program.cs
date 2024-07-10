@@ -14,6 +14,7 @@ using Repositories.Repositories.UserRepo;
 using Services.MapperProfiles;
 using Services.Services.AccommodationService;
 using Services.Services.BookingInformationService;
+using Services.Services.CloudinaryService;
 using Services.Services.DashboardService;
 using Services.Services.FeedbackService;
 using Services.Services.PaymentRecordService;
@@ -62,7 +63,7 @@ builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IServiceBookingService, ServiceBookingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IServiceImageService, ServiceImageService>();
-builder.Services.AddScoped<CloudinaryService>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
