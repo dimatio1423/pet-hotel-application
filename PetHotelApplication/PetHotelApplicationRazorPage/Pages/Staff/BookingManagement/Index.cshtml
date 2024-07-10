@@ -3,7 +3,6 @@
 
 @{
     Layout = "_LayoutManage";
-    ViewData["Title"] = "Index";
 
     var prevDisabled = !Model.BookingInformation.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.BookingInformation.HasNextPage ? "disabled" : "";
@@ -45,6 +44,55 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="mb-0">Booking Informations</h2>
         </div>
+        <form asp-page="./Index" method="get" class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <div class="row gx-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="mb-1 fw-bold">Start Date:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="startDateFrom" class="mb-1">From:</label>
+                                <input type="date" id="startDateFrom" name="StartDateFrom" class="form-control" value="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="startDateTo" class="mb-1">To:</label>
+                                <input type="date" id="startDateTo" name="StartDateTo" class="form-control" value="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="mb-1 fw-bold">End Date:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="endDateFrom" class="mb-1">From:</label>
+                                <input type="date" id="endDateFrom" name="EndDateFrom" class="form-control" value="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="endDateTo" class="mb-1">To:</label>
+                                <input type="date" id="endDateTo" name="EndDateTo" class="form-control" value="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-3 mb-3">
+                    <div class="col-md-3">
+                        <label for="status" class="mb-1 fw-bold">Status:</label>
+                        <select asp-for="StatusFilter" asp-items="@Model.BookingStatus" id="status" name="Status" class="form-control bg-white">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search by user email" name="SearchString" value="@Model.CurrentFilter">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                    <button class="btn btn-warning" type="button"><a asp-page="./Index" class="text-white">Clear filter</a></button>
+                </div>
+            </div>
+        </form>
+
 
         <div class="card shadow-lg">
             <div class="card-body">
@@ -54,8 +102,9 @@
                             <th>@Html.DisplayNameFor(model => model.BookingInformation[0].BoardingType)</th>
                             <th>@Html.DisplayNameFor(model => model.BookingInformation[0].StartDate)</th>
                             <th>@Html.DisplayNameFor(model => model.BookingInformation[0].EndDate)</th>
-                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].Note)</th>
                             <th>@Html.DisplayNameFor(model => model.BookingInformation[0].Status)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].Email)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].PetName)</th>
                             <th>Details</th>
                         </tr>
                     </thead>
@@ -66,8 +115,9 @@
                                 <td>@Html.DisplayFor(modelItem => item.BoardingType)</td>
                                 <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
                                 <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Note)</td>
                                 <td class="status-text">@Html.DisplayFor(modelItem => item.Status)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                <td>@Html.DisplayFor(modelItem => item.PetName)</td>
                                 <td>
                                     <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.Id">Details</a>
                                 </td>

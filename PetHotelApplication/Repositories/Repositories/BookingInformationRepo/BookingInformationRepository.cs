@@ -48,7 +48,7 @@ namespace Repositories.Repositories.BookingInformationRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.BookingInformations.ToList();
+                return _context.BookingInformations.Include(b => b.User).Include(b => b.Pet).Include(b => b.Accommodation).ToList();
             }
             catch (Exception ex)
             {

@@ -270,7 +270,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() });
             ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name");
-            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {DateTime.Now.Year - p.Dob.Value.Year} {(DateTime.Now.Year - p.Dob.Value.Year > 1 ? "years old" : "year old")}" }), "PetId", "Name");
+            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {DateTime.Now.Year - p.Dob.Year} {(DateTime.Now.Year - p.Dob.Year > 1 ? "years old" : "year old")}" }), "PetId", "Name");
         }
 
         private void viewDataBooking(BusinessObjects.Entities.User currentUser, BookingCreateReqModel booking)
@@ -286,7 +286,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() }, booking.BoardingType);
             ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name", booking.AccommodationId);
-            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {DateTime.Now.Year - p.Dob.Value.Year} {(DateTime.Now.Year - p.Dob.Value.Year > 1 ? "years old" : "year old")}" }), "PetId", "Name", booking.PetId);
+            ViewData["Pets"] = new SelectList(Pets.Select(p => new { p.PetId, Name = $"{p.Name} - {p.Breed} - {DateTime.Now.Year - p.Dob.Year} {(DateTime.Now.Year - p.Dob.Year > 1 ? "years old" : "year old")}" }), "PetId", "Name", booking.PetId);
         }
 
         public JsonResult OnGetValidAccommodations(DateOnly start, DateOnly end)
