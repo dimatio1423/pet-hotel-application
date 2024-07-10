@@ -14,6 +14,7 @@ namespace BusinessObjects.Models.BookingHistoryModel.Response
         public PetResModel Pet { get; set; }
         public decimal TotalPrice { get; set; }
         public List<PetCareServiceResModel> PetCareServices { get; set; }
+        public string Status { get; set; }
     }
 
     public class AccommodationResModel

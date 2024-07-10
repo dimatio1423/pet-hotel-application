@@ -46,9 +46,10 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 },
                 Pet = new PetResModel
                 {
-                    PetName = currentBooking.Pet.PetName
+                    PetName = currentBooking.Pet.PetName,
                 },
-                PetCareServices = new List<PetCareServiceResModel>()
+                PetCareServices = new List<PetCareServiceResModel>(),
+                Status = currentBooking.Status
             };
 
             foreach (var serviceBooking in currentBooking.ServiceBookings)

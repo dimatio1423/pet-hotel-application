@@ -31,6 +31,11 @@ namespace Services.Services.AccommodationService
             return _accommodationRepository.GetAccommodationById(id);
         }
 
+        public Accommodation GetAccommodationByType(string type)
+        {
+            return _accommodationRepository.GetAccommodationByType(type);
+        }
+
         public List<Accommodation> GetAccommodations()
         {
             return _accommodationRepository.GetAccommodations();

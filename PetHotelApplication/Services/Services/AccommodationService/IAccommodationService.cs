@@ -12,6 +12,7 @@ namespace Services.Services.AccommodationService
         List<Accommodation> GetAccommodations();
         List<Accommodation> GetAccommodationsWithSearchSort(string searchValue, string sortOrder);
         Accommodation GetAccommodationById(string id);
+        Accommodation GetAccommodationByType(string type);
         void Add(Accommodation accommodation);
         void Delete(Accommodation accommodation);
         void Update(Accommodation accommodation);

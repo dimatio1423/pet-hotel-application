@@ -32,8 +32,17 @@
         margin-left: 180px;
     }
 
-    .back-link {
+    .btn-container {
+        display: flex;
+        justify-content: space-between;
         margin-top: 20px;
+    }
+
+        .btn-container .btn {
+            margin: 0 10px;
+        }
+
+    .back-link {
         display: inline-block;
     }
 </style>
@@ -80,6 +89,12 @@
                 </ul>
             </div>
         </div>
-        <a class="btn btn-secondary back-link" asp-page="./BookingHistory">Back to List</a>
+        <div class="btn-container">
+            @if (booking.Status == "Pending")
+            {
+                <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@booking.Id">Edit</a>
+            }
+            <a class="btn btn-secondary back-link" asp-page="./BookingHistory">Back to List</a>
+        </div>
     </div>
 </div>

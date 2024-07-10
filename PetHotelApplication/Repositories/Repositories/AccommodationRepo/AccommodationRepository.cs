@@ -58,6 +58,19 @@ namespace Repositories.Repositories.AccommodationRepo
             }
         }
 
+        public Accommodation GetAccommodationByType(string type)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Accommodations.FirstOrDefault(x => x.Type.Equals(type));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<Accommodation> GetAccommodations()
         {
             try
