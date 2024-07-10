@@ -31,6 +31,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
         {
             if (searchString != null)
             {
+                searchString = searchString.Trim();
                 pageIndex = 1;
             }
             else

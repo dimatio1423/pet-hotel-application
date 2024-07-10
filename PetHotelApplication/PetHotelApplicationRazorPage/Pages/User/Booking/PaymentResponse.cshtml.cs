@@ -25,25 +25,25 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
         public IActionResult OnGet()
         {
+            if (Request.Query.Count == 0)
+            {
+                TempData["Error"] = "Error making payment, please try again later!";
+                return Page();
+            }
+            
             var response = _vnPayService.PaymentResponse(Request.Query);
             var paymentRecord = _paymentRecordService.GetPaymentRecordById(response.PaymentId);
             var booking = _bookingInformationService.GetBookingInformationById(response.OrderId);
 
-            if (response == null)
-            {
-                TempData["Error"] = "Error making payment";
-                return Page();
-            }
-
             if (paymentRecord == null)
             {
-                TempData["Error"] = "Payment is not found";
+                TempData["Error"] = "Payment Id is not found";
                 return Page();
             }
 
             if (booking == null)
             {
-                TempData["Error"] = "Booking is not found";
+                TempData["Error"] = "Booking of the payment is not found";
                 return Page();
             }
 

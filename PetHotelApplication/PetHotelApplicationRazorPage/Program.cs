@@ -39,6 +39,7 @@ builder.Services.AddSession(option =>
 //builder.Services.AddControllersWithViews();
 //--------------------------------------------------------------------------------------------------------------
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IAccommodationRepository, AccommodationRepository>();
 builder.Services.AddScoped<IBookingInformationRepository, BookingInformationRepository>();

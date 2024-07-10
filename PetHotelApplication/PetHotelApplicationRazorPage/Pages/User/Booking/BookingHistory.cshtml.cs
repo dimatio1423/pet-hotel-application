@@ -44,6 +44,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         {
             if (SearchValue != null)
             {
+                SearchValue = SearchValue.Trim();
                 pageIndex = 1;
             }
             else
