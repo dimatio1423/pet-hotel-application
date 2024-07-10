@@ -1,6 +1,8 @@
 ﻿@page
 @model PetHotelApplicationRazorPage.Pages.User.Pets.IndexModel
 
+@using BusinessObjects.Enums.StatusEnums;
+
 @{
     ViewData["Title"] = "Your Pets";
 
@@ -58,7 +60,17 @@
                                         </small>
                                     </div>
                                     <h5 class="text-capitalize mb-3">@item.PetName</h5>
-                                    <p>Age: @item.Age</p>
+                                    <p>Date of birth: @item.Dob</p>
+
+                                    @{
+                                        string statusColor;
+                                        switch (item.Status)
+                                        {
+                                            case nameof(StatusEnums.Active): statusColor = "success"; break;
+                                            default: statusColor = "danger"; break;
+                                        }
+                                    }
+                                    <p>Status: <span class="text-@statusColor fw-bold">@item.Status</span></p>
                                     <a class="text-primary text-uppercase" asp-page="./Details" asp-route-id="@item.Id">View Details<i class="bi bi-chevron-right"></i></a>
                                 </div>
                             </div>
@@ -111,7 +123,7 @@
             <!-- Search Form Start -->
             <div class="mb-5">
                 <form class="input-group" method="get" asp-page="./Index">
-                    <input type="text" class="form-control p-3" placeholder="Enter Pet Name" name="SearchValue" value="@Model.CurrentFilter">
+                    <input type="text" class="form-control p-3" placeholder="Enter Pet Name" name="SearchString" value="@Model.CurrentFilter">
                     <button class="btn btn-primary px-4" type="submit"><i class="bi bi-search"></i></button>
                 </form>
             </div>

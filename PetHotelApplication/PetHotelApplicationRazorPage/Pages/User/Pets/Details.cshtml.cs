@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Utils;
+using BusinessObjects.Enums.StatusEnums;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Pets
 {
@@ -38,10 +39,11 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
         public IFormFile? Image { get; set; }
 
         public SelectList PetSpecies { get; set; } = default!;
+        public SelectList Status { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            PetSpecies = new SelectList(_petService.GetPetSpecies(), "Name", "Name");
+            LoadSelectList();
 
             if (id == null)
             {
@@ -62,7 +64,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
 
         public async Task<IActionResult> OnPostAsync()
         {
-            PetSpecies = new SelectList(_petService.GetPetSpecies(), "Name", "Name");
+            LoadSelectList();
 
             if (!ModelState.IsValid)
             {
@@ -91,6 +93,16 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
             }
 
             return RedirectToPage("./Index");
+        }
+
+        private void LoadSelectList()
+        {
+            PetSpecies = new SelectList(_petService.GetPetSpecies(), "Name", "Name");
+            Status = new SelectList(new List<string>
+            {
+                StatusEnums.Active.ToString(),
+                StatusEnums.Inactive.ToString(),
+            });            
         }
     }
 }

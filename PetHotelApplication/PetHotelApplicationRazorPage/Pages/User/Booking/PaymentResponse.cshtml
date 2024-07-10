@@ -2,3 +2,8 @@
 @model PetHotelApplicationRazorPage.Pages.User.Booking.PaymentResponseModel
 @{
 }
+
+@if (TempData["Error"] != null)
+{
+    <h4 class="text-danger">@TempData["Error"]</h4>
+}

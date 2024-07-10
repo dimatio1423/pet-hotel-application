@@ -11,6 +11,7 @@ namespace BusinessObjects.Enums.BookingStatusEnums
         Pending,
         Processing,
         Cancelled,
-        Completed
+        Completed,
+        Confirmed
     }
 }
