@@ -8,7 +8,7 @@
 <div class="container-fluid mt-5">
     <div class="container">
         <h2 class="text-center mb-4">Edit Booking Information</h2>
-        <form method="post">
+        <form method="post" id="editBookingForm">
             <div class="row">
                 <div class="col-md-6">
                     <input type="hidden" asp-for="@Model.BookingUpdate.Id" />
@@ -18,11 +18,11 @@
                     </div>
                     <div class="form-group">
                         <label for="startDate">Start Date:</label>
-                        <input type="date" id="startDate" class="form-control" asp-for="BookingDetails.StartDate" id="startDate" readonly />
+                        <input type="date" id="startDate" class="form-control" asp-for="BookingDetails.StartDate" readonly />
                     </div>
                     <div class="form-group">
                         <label for="endDate">End Date:</label>
-                        <input type="date" id="endDate" class="form-control" asp-for="BookingDetails.EndDate" id="endDate" readonly />
+                        <input type="date" id="endDate" class="form-control" asp-for="BookingDetails.EndDate" readonly />
                     </div>
                     <div class="form-group">
                         <label for="note">Note:</label>
@@ -54,7 +54,7 @@
                                 </div>
                             }
                         </div>
-                        <span asp-validation-for="BookingServices" class="text-danger"></span>
+                        <span asp-validation-for="BookingServices" class="text-danger" id="serviceValidationMessage"></span>
                     </div>
 
                 </div>
@@ -67,4 +67,19 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('editBookingForm').addEventListener('submit', function (event) {
+            var checkboxes = document.querySelectorAll('input[name="BookingServices"]:checked');
+            var validationMessage = document.getElementById('serviceValidationMessage');
+
+            if (checkboxes.length === 0) {
+                event.preventDefault();
+                validationMessage.textContent = 'Please select at least one service.';
+                validationMessage.style.display = 'block';
+            } else {
+                validationMessage.textContent = '';
+                validationMessage.style.display = 'none';
+            }
+        });
+    </script>
 }
