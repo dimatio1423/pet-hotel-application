@@ -10,7 +10,7 @@ using AutoMapper;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Booking
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : AuthorizePageModel
     {
         private readonly IBookingInformationService _bookingInformationService;
         private readonly IMapper _mapper;

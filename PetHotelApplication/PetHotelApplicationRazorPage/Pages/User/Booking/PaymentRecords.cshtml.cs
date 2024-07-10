@@ -12,7 +12,7 @@ using BusinessObjects.Models.PaymentRecordModel.Response;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Booking
 {
-    public class PaymentRecordsModel : PageModel
+    public class PaymentRecordsModel : AuthorizePageModel
     {
         private readonly IPaymentRecordService _paymentRecordService;
 

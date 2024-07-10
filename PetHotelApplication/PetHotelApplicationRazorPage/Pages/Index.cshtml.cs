@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessObjects.Entities;
 using BusinessObjects.Enums.RoleEnums;
+using BusinessObjects.Enums.StatusEnums;
 using BusinessObjects.Models.PetCareModel.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -44,7 +45,7 @@ namespace PetHotelApplicationRazorPage.Pages
                 currentUser = user;
             }
 
-            var list = _petCareService.GetPetCareServices();
+            var list = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
             PetCareServices = _mapper.Map<List<PetCareResModel>>(list);
 
             feedbacks = _feedbackService.GetFeedbacks();
