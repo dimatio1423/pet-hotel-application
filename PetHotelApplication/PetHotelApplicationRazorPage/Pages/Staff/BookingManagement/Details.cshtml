@@ -3,6 +3,7 @@
 
 @{
     var booking = Model.BookingInfo;
+    Layout = "_LayoutManage";
 }
 
 <style>
@@ -54,7 +55,16 @@
                     <dd>@booking.EndDate.ToString("d")</dd>
 
                     <dt>Note:</dt>
-                    <dd>@booking.Note</dd>
+                    <dd>
+                        @if (booking.Note != "")
+                        {
+                            @booking.Note
+                        }
+                        else
+                        {
+                            <text>No special notes</text>
+                        }
+                    </dd>
 
                     <dt>Accommodation:</dt>
                     <dd>@booking.Accommodation</dd>
