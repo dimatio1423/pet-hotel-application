@@ -10,7 +10,6 @@ namespace BusinessObjects.Models.BookingHistoryModel.Request
     {
         public string Id { get; set; }
         public string Note { get; set; }
-        public string AccommodationType { get; set; }
-        public List<string> ServiceTypes { get; set; }
+        public string AccommodationId { get; set; }
     }
 }

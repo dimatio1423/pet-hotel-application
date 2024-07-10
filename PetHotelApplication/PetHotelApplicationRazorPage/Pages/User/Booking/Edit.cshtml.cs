@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +11,16 @@ using Services.Services.PetCareServices;
 using Services.Services.PetService;
 using BusinessObjects.Entities;
 using BusinessObjects.Models.BookingHistoryModel.Request;
+using BusinessObjects.Models.BookingInformationModel.Response;
+using AutoMapper;
+using BusinessObjects.Enums.StatusEnums;
+using BusinessObjects.Models.Accommodation.Response;
+using BusinessObjects.Models.PetCareModel.Response;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using BusinessObjects.Enums.BoardingTypeEnums;
+using BusinessObjects.Enums.BookingStatusEnums;
+using Services.Services.ServicesBookingService;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Booking
 {
@@ -20,26 +30,34 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         private readonly IAccommodationService _accommodationService;
         private readonly IPetCareService _petCareService;
         private readonly IPetService _petService;
+        private readonly IServiceBookingService _serviceBookingService;
+        private readonly IMapper _mapper;
 
         public EditModel(IBookingInformationService bookingInformationService,
             IAccommodationService accommodationService,
             IPetCareService petCareService,
-            IPetService petService)
+            IServiceBookingService serviceBookingService,
+            IPetService petService, IMapper mapper)
         {
             _bookingInformationService = bookingInformationService;
             _accommodationService = accommodationService;
             _petCareService = petCareService;
             _petService = petService;
+            _serviceBookingService = serviceBookingService;
+            _mapper = mapper;
         }
 
         [BindProperty]
         public UpdateBookingReqModel BookingUpdate { get; set; }
+
         [BindProperty]
-        public List<AccommodationResModel> AvailableAccommodations { get; set; }
+        public BookingContinuePaymentResModel BookingDetails { get; set; }
+        public IList<PetCareViewListResModel> PetCareServices { get; set; } = new List<PetCareViewListResModel>();
+        public IList<AccommodationViewListResModel> Accommodations { get; set; } = new List<AccommodationViewListResModel>();
+
         [BindProperty]
-        public List<PetCareServiceResModel> AvailableServices { get; set; }
-        [BindProperty]
-        public BookingDetailsResModel BookingDetails { get; set; }
+        [Required(ErrorMessage = "Please select at least one service.")]
+        public IList<string> BookingServices { get; set; } = new List<string>();
 
         public IActionResult OnGet(string id)
         {
@@ -55,53 +73,26 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return NotFound();
             }
 
-            BookingDetails = new BookingDetailsResModel
-            {
-                Id = currentBooking.Id,
-                BoardingType = currentBooking.BoardingType,
-                StartDate = currentBooking.StartDate,
-                EndDate = currentBooking.EndDate,
-                Note = currentBooking.Note,
-                Accommodation = new AccommodationResModel
-                {
-                    Type = currentBooking.Accommodation.Type
-                },
-                Pet = new PetResModel
-                {
-                    PetName = currentBooking.Pet.PetName
-                },
-                PetCareServices = currentBooking.ServiceBookings.Select(sb => new PetCareServiceResModel
-                {
-                    Type = sb.Service.Type,
-                    Price = sb.Service.Price
-                }).ToList()
-            };
+            BookingDetails = _mapper.Map<BookingContinuePaymentResModel>(currentBooking);
 
             BookingUpdate = new UpdateBookingReqModel
             {
                 Id = BookingDetails.Id,
                 Note = BookingDetails.Note,
-                AccommodationType = BookingDetails.Accommodation.Type,
-                ServiceTypes = BookingDetails.PetCareServices.Select(s => s.Type).ToList()
+                AccommodationId = currentBooking.AccommodationId,
             };
 
-            AvailableAccommodations = _accommodationService.GetAccommodations()
-                .Select(a => new AccommodationResModel { Type = a.Type })
-                .ToList();
-
-            AvailableServices = _petCareService.GetPetCareServices()
-                .Select(s => new PetCareServiceResModel { Type = s.Type, Price = s.Price })
-                .ToList();
+            viewDataBooking(currentBooking);
 
             return Page();
         }
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}
 
             var existingBooking = _bookingInformationService.GetBookingInformationById(BookingUpdate.Id);
             if (existingBooking == null)
@@ -109,23 +100,34 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return NotFound();
             }
 
+            if (BookingServices.Count == 0)
+            {
+                TempData["ErroService"] = "Please select at least one service for booking";
+                viewDataBooking(existingBooking);
+                return Page();
+            }
+
             existingBooking.Note = BookingUpdate.Note;
 
-            var accommodation = _accommodationService.GetAccommodationByType(BookingUpdate.AccommodationType);
+            var accommodation = _accommodationService.GetAccommodationById(BookingUpdate.AccommodationId);
             if (accommodation != null)
             {
                 existingBooking.AccommodationId = accommodation.Id;
             }
 
-            existingBooking.ServiceBookings.Clear();
-
-            foreach (var serviceType in BookingUpdate.ServiceTypes)
+            foreach(var item in existingBooking.ServiceBookings)
             {
-                var petCareService = _petCareService.GetPetCareServiceByType(serviceType);
+                _serviceBookingService.Delete(item);
+            }
+
+            foreach (var service in BookingServices)
+            {
+                var petCareService = _petCareService.GetPetCareServiceById(service);
                 if (petCareService != null)
                 {
-                    existingBooking.ServiceBookings.Add(new ServiceBooking
+                    _serviceBookingService.Add(new ServiceBooking
                     {
+                        Id = Guid.NewGuid().ToString(),
                         ServiceId = petCareService.Id,
                         BookingId = existingBooking.Id
                     });
@@ -135,6 +137,18 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             _bookingInformationService.Update(existingBooking);
 
             return RedirectToPage("./Details", new { id = BookingUpdate.Id });
+        }
+
+        private void viewDataBooking(BookingInformation booking)
+        {
+            var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
+            PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
+
+            var accommodations = _accommodationService.GetAccommodations().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
+            Accommodations = _mapper.Map<List<AccommodationViewListResModel>>(accommodations);
+
+            ViewData["BoardingTypes"] = new SelectList(new List<string> { BoardingTypeEnums.DayCare.ToString(), BoardingTypeEnums.Overnight.ToString() }, booking.BoardingType);
+            ViewData["Accommodations"] = new SelectList(Accommodations.Select(a => new { a.AccommodationId, Name = $"{a.Name} ({a.Type}) - {a.Price.ToString("#,##0")} VNĐ" }), "AccommodationId", "Name", booking.AccommodationId);
         }
     }
 }

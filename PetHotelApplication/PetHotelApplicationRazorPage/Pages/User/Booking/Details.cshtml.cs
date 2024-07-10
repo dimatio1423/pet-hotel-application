@@ -5,19 +5,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BusinessObjects.Models.BookingHistoryModel.Response;
 using Services.Services.BookingInformationService;
+using BusinessObjects.Models.BookingInformationModel.Response;
+using AutoMapper;
 
 namespace PetHotelApplicationRazorPage.Pages.User.Booking
 {
     public class DetailsModel : PageModel
     {
         private readonly IBookingInformationService _bookingInformationService;
+        private readonly IMapper _mapper;
 
-        public DetailsModel(IBookingInformationService bookingInformationService)
+        public DetailsModel(IBookingInformationService bookingInformationService, IMapper mapper)
         {
             _bookingInformationService = bookingInformationService;
+            _mapper = mapper;
         }
 
-        public BookingDetailsResModel BookingDetails { get; set; }
+        public BookingContinuePaymentResModel BookingDetails { get; set; }
 
         public IActionResult OnGet(string id)
         {
@@ -33,38 +37,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return NotFound();
             }
 
-            BookingDetails = new BookingDetailsResModel
-            {
-                Id = currentBooking.Id,
-                BoardingType = currentBooking.BoardingType,
-                StartDate = currentBooking.StartDate,
-                EndDate = currentBooking.EndDate,
-                Note = currentBooking.Note,
-                Accommodation = new AccommodationResModel
-                {
-                    Type = currentBooking.Accommodation.Type
-                },
-                Pet = new PetResModel
-                {
-                    PetName = currentBooking.Pet.PetName,
-                },
-                PetCareServices = new List<PetCareServiceResModel>(),
-                Status = currentBooking.Status
-            };
-
-            foreach (var serviceBooking in currentBooking.ServiceBookings)
-            {
-                BookingDetails.PetCareServices.Add(new PetCareServiceResModel
-                {
-                    Type = serviceBooking.Service.Type,
-                    Price = serviceBooking.Service.Price
-                });
-            }
-
-            var totalDays = Math.Max(1, (int)(currentBooking.EndDate - currentBooking.StartDate).TotalDays);
-            var totalServicePrice = currentBooking.ServiceBookings.Sum(sb => sb.Service.Price);
-            var accommodationPrice = currentBooking.Accommodation.Price;
-            BookingDetails.TotalPrice = totalDays * (totalServicePrice + accommodationPrice);
+            BookingDetails = _mapper.Map<BookingContinuePaymentResModel>(currentBooking);
 
             return Page();
         }

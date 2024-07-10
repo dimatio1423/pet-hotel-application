@@ -64,13 +64,16 @@
                     <dd>@booking.EndDate.ToString("d")</dd>
 
                     <dt>Note:</dt>
-                    <dd>@booking.Note</dd>
+                    @{
+                        var note = String.IsNullOrEmpty(booking.Note) ? "No special notes" : booking.Note;
+                    }
+                    <dd>@note</dd>
 
-                    <dt>Accommodation Type:</dt>
-                    <dd>@booking.Accommodation.Type</dd>
+                    <dt>Accommodation:</dt>
+                    <dd>@booking.Accommodation</dd>
 
                     <dt>Pet Name:</dt>
-                    <dd>@booking.Pet.PetName</dd>
+                    <dd>@booking.Pet</dd>
 
                     <dt>Total Price:</dt>
                     <dd>@booking.TotalPrice.ToString("#,##0") VNĐ</dd>
