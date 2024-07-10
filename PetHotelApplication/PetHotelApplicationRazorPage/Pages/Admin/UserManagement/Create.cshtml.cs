@@ -10,6 +10,7 @@ using Services.Services.UserService;
 using BusinessObjects.CustomValidators;
 using Services.Services.RoleService;
 using Services.Services.CloudinaryService;
+using BusinessObjects.Models.UserModel.Request;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
