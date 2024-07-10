@@ -9,7 +9,7 @@ using BusinessObjects.Entities;
 using Services.Services.UserService;
 using BusinessObjects.CustomValidators;
 using Services.Services.RoleService;
-using BusinessObjects.Models.UserModel.Request;
+using Services.Services.CloudinaryService;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
@@ -17,9 +17,9 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public CreateModel(IUserService userService, IRoleService roleService, CloudinaryService cloudinaryService)
+        public CreateModel(IUserService userService, IRoleService roleService, ICloudinaryService cloudinaryService)
         {
             _userService = userService;
             _roleService = roleService;

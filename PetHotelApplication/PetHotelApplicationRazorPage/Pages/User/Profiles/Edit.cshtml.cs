@@ -4,6 +4,7 @@ using BusinessObjects.Models.UserModel.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Services.Services.CloudinaryService;
 using Services.Services.UserService;
 using System.Net.WebSockets;
 
@@ -12,7 +13,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Profiles
     public class EditModel : AuthorizePageModel
     {
         private readonly IUserService _userService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
         [BindProperty]
         public UpdateProfileReqModel Profile { get; set; } = default!;
@@ -22,7 +23,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Profiles
         [AllowedExtensions(new string[] { ".jpg", ".png" })]
         public IFormFile? Image { get; set; }
 
-        public EditModel(IUserService userService, CloudinaryService cloudinaryService)
+        public EditModel(IUserService userService, ICloudinaryService cloudinaryService)
         {
             _userService = userService;
             _cloudinaryService = cloudinaryService;

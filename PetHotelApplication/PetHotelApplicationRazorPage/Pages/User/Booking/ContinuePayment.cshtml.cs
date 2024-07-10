@@ -19,22 +19,26 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
         private readonly IPaymentRecordService _paymentRecordService;
         private readonly IMapper _mapper;
         private readonly IVnPayService _vnPayService;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public ContinuePaymentModel(IBookingInformationService bookingInformationService, 
-                                    IPaymentRecordService paymentRecordService, 
+        public ContinuePaymentModel(IBookingInformationService bookingInformationService,
+                                    IPaymentRecordService paymentRecordService,
                                     IMapper mapper,
-                                    IVnPayService vnPayService)
+                                    IVnPayService vnPayService
+,
+                                    IHttpClientFactory httpClientFactory)
         {
             _bookingInformationService = bookingInformationService;
             _paymentRecordService = paymentRecordService;
             _mapper = mapper;
             _vnPayService = vnPayService;
+            _httpClientFactory = httpClientFactory;
         }
 
         public BookingContinuePaymentResModel BookingInfo { get; set; }
 
         [BindProperty]
-        public string BookingId {  get; set; }
+        public string BookingId { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Please select a payment method.")]
@@ -65,7 +69,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             var currentBooking = _bookingInformationService.GetBookingInformationById(BookingId);
             BookingInfo = _mapper.Map<BookingContinuePaymentResModel>(currentBooking);
@@ -103,7 +107,21 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 CreatedDate = paymentRecord.Date
             };
 
-            return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnpay));
+            var redirectUrl = _vnPayService.CreatePaymentUrl(HttpContext, vnpay);
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                client.Timeout = TimeSpan.FromSeconds(30);
+
+                var response = client.GetAsync(redirectUrl).Result;
+                response.EnsureSuccessStatusCode();
+                
+                return Redirect(redirectUrl);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToPage("./PaymentResponse");
+            }
         }
 
         public IActionResult OnPostCancelBooking()

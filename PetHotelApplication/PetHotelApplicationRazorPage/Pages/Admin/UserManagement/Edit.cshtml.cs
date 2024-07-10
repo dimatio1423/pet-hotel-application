@@ -8,16 +8,16 @@ using Services.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using BusinessObjects.CustomValidators;
-using BusinessObjects.Models.UserModel.Request;
+using Services.Services.CloudinaryService;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
     public class EditModel : AuthorizePageModel
     {
         private readonly IUserService _userService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public EditModel(IUserService userService, CloudinaryService cloudinaryService)
+        public EditModel(IUserService userService, ICloudinaryService cloudinaryService)
         {
             _userService = userService;
             _cloudinaryService = cloudinaryService;

@@ -112,6 +112,7 @@
                                     {
                                         case nameof(BookingStatusEnums.Pending): statusColor = "warning"; break;
                                         case nameof(BookingStatusEnums.Cancelled): statusColor = "danger"; break;
+                                        case nameof(BookingStatusEnums.Processing): statusColor = "info"; break;
                                         default: statusColor = "success"; break;
                                     }
                                 }
@@ -143,7 +144,10 @@
                         <a class="page-link rounded-0" aria-label="Previous"
                            asp-page="./BookingHistory"
                            asp-route-pageIndex="@(Model.BookingInfos.PageIndex - 1)"
-                           asp-route-currentFilter="@Model.CurrentFilter">
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter">
                             <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                         </a>
                     </li>
@@ -154,7 +158,10 @@
                             <a class="page-link"
                                asp-page="./BookingHistory"
                                asp-route-pageIndex="@i"
-                               asp-route-currentFilter="@Model.CurrentFilter">@i</a>
+                               asp-route-currentFilter="@Model.CurrentFilter"
+                               asp-route-startDate="@Model.StartDate"
+                               asp-route-endDate="@Model.EndDate"
+                               asp-route-status="@Model.StatusFilter">@i</a>
                         </li>
                     }
 
@@ -162,7 +169,10 @@
                         <a class="page-link rounded-0" aria-label="Next"
                            asp-page="./BookingHistory"
                            asp-route-pageIndex="@(Model.BookingInfos.PageIndex + 1)"
-                           asp-route-currentFilter="@Model.CurrentFilter">
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter">
                             <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
                         </a>
                     </li>

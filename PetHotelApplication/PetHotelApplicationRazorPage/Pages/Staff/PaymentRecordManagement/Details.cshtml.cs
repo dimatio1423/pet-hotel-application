@@ -88,7 +88,7 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
 
                             if (currBooking != null)
                             {
-                                currBooking.Status = "Confirmed";
+                                currBooking.Status = BookingStatusEnums.Confirmed.ToString();
 
                                 _bookingInformationService.Update(currBooking);
                             }
