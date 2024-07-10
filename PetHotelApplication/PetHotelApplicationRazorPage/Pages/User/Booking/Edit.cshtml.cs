@@ -73,15 +73,6 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return NotFound();
             }
 
-            BookingDetails = _mapper.Map<BookingContinuePaymentResModel>(currentBooking);
-
-            BookingUpdate = new UpdateBookingReqModel
-            {
-                Id = BookingDetails.Id,
-                Note = BookingDetails.Note,
-                AccommodationId = currentBooking.AccommodationId,
-            };
-
             viewDataBooking(currentBooking);
 
             return Page();
@@ -100,9 +91,9 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return NotFound();
             }
 
-            if (BookingServices.Count == 0)
+            if (BookingServices.Count <= 0)
             {
-                TempData["ErroService"] = "Please select at least one service for booking";
+                TempData["ErrorServices"] = "Please select at least one service for booking";
                 viewDataBooking(existingBooking);
                 return Page();
             }
@@ -141,6 +132,15 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
         private void viewDataBooking(BookingInformation booking)
         {
+            BookingDetails = _mapper.Map<BookingContinuePaymentResModel>(booking);
+
+            BookingUpdate = new UpdateBookingReqModel
+            {
+                Id = BookingDetails.Id,
+                Note = BookingDetails.Note,
+                AccommodationId = booking.AccommodationId,
+            };
+
             var petCareServices = _petCareService.GetPetCareServices().Where(x => x.Status.Equals(StatusEnums.Available.ToString())).ToList();
             PetCareServices = _mapper.Map<List<PetCareViewListResModel>>(petCareServices);
 

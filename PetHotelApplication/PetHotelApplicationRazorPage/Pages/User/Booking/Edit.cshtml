@@ -31,6 +31,7 @@
                     <div class="form-group mt-2">
                         <label asp-for="BookingUpdate.AccommodationId">Accommodation:</label>
                         <select asp-for="BookingUpdate.AccommodationId" class="form-control" asp-items="ViewBag.Accommodations" disabled></select>
+                        <input type="hidden" asp-for="BookingUpdate.AccommodationId" />
                         <span asp-validation-for="BookingUpdate.AccommodationId" class="text-danger"></span>
                     </div>
                 </div>
@@ -55,6 +56,13 @@
                             }
                         </div>
                         <span asp-validation-for="BookingServices" class="text-danger" id="serviceValidationMessage"></span>
+
+                        @if (TempData["ErrorServices"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <span>@TempData["ErrorServices"] </span>
+                            </div>
+                        }
                     </div>
 
                 </div>
