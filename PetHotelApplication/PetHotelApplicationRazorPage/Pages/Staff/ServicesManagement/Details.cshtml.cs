@@ -14,6 +14,8 @@ using BusinessObjects.CustomValidators;
 using System.ComponentModel.DataAnnotations;
 using Services.Services.ServiceImageService;
 using Services.Services.CloudinaryService;
+using BusinessObjects.Enums.BoardingTypeEnums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
 {
@@ -64,6 +66,7 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
                     Status = petcareservice.Status
                 };
 
+                ViewData["ServiceStatus"] = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString() }, petcareservice.Status);
                 ServiceImages = petcareservice.ServiceImages.ToList();
             }
             return Page();
@@ -85,6 +88,7 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
                 if (!Enum.IsDefined(typeof(StatusEnums), PetCareService.Status))
                 {
                     TempData["ErrorStatus"] = "Invalid status type";
+                    ViewData["ServiceStatus"] = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString() }, updateService.Status);
                     ServiceImages = updateService.ServiceImages.ToList();
                     return Page();
                 }
@@ -92,6 +96,7 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
                 if (!PetCareService.Status.Equals(StatusEnums.Available.ToString()) && !PetCareService.Status.Equals(StatusEnums.Unavailable.ToString()))
                 {
                     TempData["ErrorStatus"] = "Service status only accept Available status and Unavailable status";
+                    ViewData["ServiceStatus"] = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString() }, updateService.Status);
                     ServiceImages = updateService.ServiceImages.ToList();
                     return Page();
                 }
@@ -103,6 +108,7 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
                     if (currPetCareService != null)
                     {
                         TempData["ErrorType"] = "Pet care service type is already existed";
+                        ViewData["ServiceStatus"] = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString() }, updateService.Status);
                         ServiceImages = updateService.ServiceImages.ToList();
                         return Page();
                     }

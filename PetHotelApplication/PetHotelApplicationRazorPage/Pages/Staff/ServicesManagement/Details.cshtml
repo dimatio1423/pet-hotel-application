@@ -42,7 +42,10 @@
                             @Html.DisplayNameFor(model => model.PetCareService.Status)
                         </dt>
                         <dd class="col-sm-10">
-                            <input type="text" class="form-control" asp-for="PetCareService.Status" />
+                            @* <input type="text" class="form-control" asp-for="PetCareService.Status" />
+                            <span asp-validation-for="PetCareService.Status" class="text-danger"></span> *@
+
+                            <select asp-for="PetCareService.Status" class="form-control" asp-items="ViewBag.ServiceStatus" id="status"></select>
                             <span asp-validation-for="PetCareService.Status" class="text-danger"></span>
 
                             @if (TempData["ErrorStatus"] != null)
