@@ -30,7 +30,7 @@
                     <input type="date" id="endDate" name="EndDate" class="form-control w-75" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")">
                 </div>
                 <div class="col-md-2">
-                    <label for="status" class="mb-1 fw-bold">Status:</label>                    
+                    <label for="status" class="mb-1 fw-bold">Status:</label>
                     <select asp-for="StatusFilter" asp-items="@Model.BookingStatus" id="status" name="Status" class="form-control w-75 bg-white">
                         <option value="">All</option>
                     </select>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search by pet name" name="SearchString" value="@Model.CurrentFilter">
+                <input type="text" class="form-control" placeholder="Search by pet name" name="SearchValue" value="@Model.CurrentFilter">
                 <button class="btn btn-primary" type="submit">Search</button>
                 <button class="btn btn-warning" type="button"><a asp-page="./BookingHistory" class="text-white">Clear filter</a></button>
             </div>
@@ -112,6 +112,7 @@
                                     {
                                         case nameof(BookingStatusEnums.Pending): statusColor = "warning"; break;
                                         case nameof(BookingStatusEnums.Cancelled): statusColor = "danger"; break;
+                                        case nameof(BookingStatusEnums.Processing): statusColor = "info"; break;
                                         default: statusColor = "success"; break;
                                     }
                                 }
@@ -124,6 +125,7 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button class="btn btn-primary" type="submit"><a asp-page="./PaymentRecords" asp-route-bookingId="@booking.Id" class="text-white">Payment records</a></button>
+                                <button class="btn btn-info ms-2" type="submit"><a asp-page="./Details" asp-route-id="@booking.Id" class="text-white">Details</a></button>
                             </div>
                         </div>
                     </div>
@@ -142,7 +144,10 @@
                         <a class="page-link rounded-0" aria-label="Previous"
                            asp-page="./BookingHistory"
                            asp-route-pageIndex="@(Model.BookingInfos.PageIndex - 1)"
-                           asp-route-currentFilter="@Model.CurrentFilter">
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter">
                             <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                         </a>
                     </li>
@@ -153,7 +158,10 @@
                             <a class="page-link"
                                asp-page="./BookingHistory"
                                asp-route-pageIndex="@i"
-                               asp-route-currentFilter="@Model.CurrentFilter">@i</a>
+                               asp-route-currentFilter="@Model.CurrentFilter"
+                               asp-route-startDate="@Model.StartDate"
+                               asp-route-endDate="@Model.EndDate"
+                               asp-route-status="@Model.StatusFilter">@i</a>
                         </li>
                     }
 
@@ -161,7 +169,10 @@
                         <a class="page-link rounded-0" aria-label="Next"
                            asp-page="./BookingHistory"
                            asp-route-pageIndex="@(Model.BookingInfos.PageIndex + 1)"
-                           asp-route-currentFilter="@Model.CurrentFilter">
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter">
                             <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
                         </a>
                     </li>

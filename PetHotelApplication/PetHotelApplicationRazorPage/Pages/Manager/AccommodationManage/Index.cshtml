@@ -25,7 +25,7 @@
                 <form method="get">
                     <div class="row">
                         <div class="col-md-8 mb-2">
-                            <input type="text" class="form-control" placeholder="Search" name="SearchString" value="@Model.SearchString">
+                            <input type="text" class="form-control" placeholder="Search" name="SearchValue" value="@Model.SearchValue">
                         </div>
                         <div class="col-md-4 mb-2">
                             <select class="form-select form-select-sm" name="SortOrder">
@@ -118,7 +118,7 @@
                                     <a class="page-link rounded-0" aria-label="Previous"
                                        asp-page="./Index"
                                        asp-route-pageIndex="@(Model.Accommodation.PageIndex - 1)"
-                                       asp-route-SearchString="@Model.SearchString"
+                                       asp-route-SearchValue="@Model.SearchValue"
                                        asp-route-SortOrder="@Model.SortOrder">
                                         <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                                     </a>
@@ -129,7 +129,7 @@
                                     <li class="page-item @(Model.Accommodation.PageIndex == i ? "active" : "")">
                                         <a class="page-link" asp-page="./Index"
                                            asp-route-pageIndex="@i"
-                                           asp-route-SearchString="@Model.SearchString"
+                                           asp-route-SearchValue="@Model.SearchValue"
                                            asp-route-SortOrder="@Model.SortOrder">@i</a>
                                     </li>
                                 }
@@ -138,7 +138,7 @@
                                     <a class="page-link rounded-0" aria-label="Next"
                                        asp-page="./Index"
                                        asp-route-pageIndex="@(Model.Accommodation.PageIndex + 1)"
-                                       asp-route-SearchString="@Model.SearchString"
+                                       asp-route-SearchValue="@Model.SearchValue"
                                        asp-route-SortOrder="@Model.SortOrder">
                                         <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
                                     </a>

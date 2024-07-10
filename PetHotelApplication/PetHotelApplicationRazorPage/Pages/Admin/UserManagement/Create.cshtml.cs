@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
 using BusinessObjects.Entities;
 using Services.Services.UserService;
-using BusinessObjects.Models.UserModel;
 using BusinessObjects.CustomValidators;
 using Services.Services.RoleService;
+using Services.Services.CloudinaryService;
+using BusinessObjects.Models.UserModel.Request;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
@@ -17,9 +18,9 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public CreateModel(IUserService userService, IRoleService roleService, CloudinaryService cloudinaryService)
+        public CreateModel(IUserService userService, IRoleService roleService, ICloudinaryService cloudinaryService)
         {
             _userService = userService;
             _roleService = roleService;

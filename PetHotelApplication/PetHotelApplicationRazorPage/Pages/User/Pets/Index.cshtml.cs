@@ -31,6 +31,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
         {
             if (searchString != null)
             {
+                searchString = searchString.Trim();
                 pageIndex = 1;
             }
             else
@@ -41,7 +42,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Pets
             CurrentFilter = searchString;
 
             var currentUser = HttpContext.Session.GetObjectSession<BusinessObjects.Entities.User>("Account");
-            var list = _petService.GetActivePets(currentUser.Id, searchString);
+            var list = _petService.GetUserPets(currentUser.Id, searchString);
 
             Pet = PaginatedList<PetResModel>.Create(list, pageIndex ?? 1, pageSize);
         }

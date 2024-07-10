@@ -5,24 +5,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BusinessObjects.Entities;
 using Services.Services.UserService;
-using Services.Services.RoleService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using BusinessObjects.Models.UserModel;
 using BusinessObjects.CustomValidators;
+using Services.Services.CloudinaryService;
+using BusinessObjects.Models.UserModel.Request;
 
 namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
 {
     public class EditModel : AuthorizePageModel
     {
         private readonly IUserService _userService;
-        private readonly IRoleService _roleService;
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public EditModel(IUserService userService, IRoleService roleService, CloudinaryService cloudinaryService)
+        public EditModel(IUserService userService, ICloudinaryService cloudinaryService)
         {
             _userService = userService;
-            _roleService = roleService;
             _cloudinaryService = cloudinaryService;
         }
 
@@ -36,8 +34,6 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
         [MaxFileSize(5 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".png" })]
         public IFormFile? Image { get; set; }
-
-        public List<Role> Roles { get; set; }
 
         public IActionResult OnGet(string id)
         {
@@ -59,15 +55,7 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
                 PhoneNumber = userEntity.PhoneNumber,
                 Address = userEntity.Address,
                 Avatar = userEntity.Avatar,
-                RoleId = userEntity.RoleId
             };
-
-            Roles = _roleService.GetRoles();
-            if (Roles == null || !Roles.Any())
-            {
-                ModelState.AddModelError("", "No roles available.");
-                return Page();
-            }
 
             return Page();
         }
@@ -76,7 +64,6 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
         {
             if (!ModelState.IsValid)
             {
-                Roles = _roleService.GetRoles();
                 return Page();
             }
 
@@ -96,18 +83,16 @@ namespace PetHotelApplicationRazorPage.Pages.Admin.UserManagement
                 User.Avatar = userEntity.Avatar;
             }
 
+            if (_userService.isPhoneNumberExist(User.PhoneNumber) && userEntity.PhoneNumber != User.PhoneNumber)
+            {
+                ModelState.AddModelError("User.PhoneNumber", "Phone number already exists.");
+                return Page();
+            }
+
             userEntity.FullName = User.FullName;
             userEntity.PhoneNumber = User.PhoneNumber;
             userEntity.Address = User.Address;
             userEntity.Avatar = User.Avatar;
-            userEntity.RoleId = User.RoleId;
-
-            if (_userService.isPhoneNumberExist(User.PhoneNumber) && userEntity.PhoneNumber != User.PhoneNumber)
-            {
-                ModelState.AddModelError("User.PhoneNumber", "Phone number already exists.");
-                Roles = _roleService.GetRoles();
-                return Page();
-            }
 
             try
             {

@@ -31,7 +31,7 @@ namespace Services.Services.DashboardService
 
         public int GetTotalUsers()
         {
-            return _userRepository.GetUsers().Count();
+            return _userRepository.GetUsers("", null).Count();
         }
 
         public int GetTotalBookings()

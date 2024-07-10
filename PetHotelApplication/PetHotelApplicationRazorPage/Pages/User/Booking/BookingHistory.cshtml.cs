@@ -39,19 +39,20 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
         private const int pageSize = 4;
 
-        public async Task OnGetAsync(string currentFilter, string searchString, int? pageIndex,
+        public async Task OnGetAsync(string currentFilter, string SearchValue, int? pageIndex,
             DateTime? startDate, DateTime? endDate, string status)
         {
-            if (searchString != null)
+            if (SearchValue != null)
             {
+                SearchValue = SearchValue.Trim();
                 pageIndex = 1;
             }
             else
             {
-                searchString = currentFilter;
+                SearchValue = currentFilter;
             }
 
-            CurrentFilter = searchString;
+            CurrentFilter = SearchValue;
 
             StartDate = startDate;
             EndDate = endDate;
@@ -62,9 +63,9 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             var list = _bookingInformationService.GetBookingInformationByUserId(currentUser.Id)
                                                 .AsEnumerable();
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(SearchValue))
             {
-                list = list.Where(e => e.Pet.PetName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+                list = list.Where(e => e.Pet.PetName.Contains(SearchValue, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!string.IsNullOrEmpty(StatusFilter))

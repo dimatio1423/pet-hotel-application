@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.Entities;
 using BusinessObjects.Enums.RoleEnums;
 using BusinessObjects.Enums.StatusEnums;
-using BusinessObjects.Models.UserModel;
+using BusinessObjects.Models.UserModel.Request;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Repositories.UserRepo;
 using System;
@@ -92,9 +92,9 @@ namespace Services.Services.UserService
             return _userRepository.GetUserByEmail(email);
         }
 
-        public List<User> GetUsers()
+        public List<User> GetUsers(string searchValue, string sortOrder)
         {
-            return _userRepository.GetUsers();
+            return _userRepository.GetUsers(searchValue, sortOrder);
         }
 
         public bool isEmailExist(string email)

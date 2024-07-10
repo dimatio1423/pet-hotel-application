@@ -1,13 +1,15 @@
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Services.Services.CloudinaryService;
 
 namespace PetHotelApplicationRazorPage.Pages
 {
     public class UploadModel : PageModel
     {
-        private readonly CloudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public UploadModel(CloudinaryService cloudinaryService)
+        public UploadModel(ICloudinaryService cloudinaryService)
         {
             _cloudinaryService = cloudinaryService;
         }

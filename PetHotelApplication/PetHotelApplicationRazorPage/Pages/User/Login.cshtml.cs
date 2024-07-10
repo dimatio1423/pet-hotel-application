@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BusinessObjects.Models.UserModel;
 using Services.Services.UserService;
 using BusinessObjects.Enums.RoleEnums;
 using BusinessObjects.Enums.StatusEnums;
+using BusinessObjects.Models.UserModel.Request;
 
 namespace PetHotelApplicationRazorPage.Pages.User
 {

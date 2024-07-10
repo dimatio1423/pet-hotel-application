@@ -163,9 +163,9 @@ INSERT INTO ServiceBooking (ID, ServiceID, BookingID) VALUES
 
 -- Sample data for PaymentRecord table
 INSERT INTO PaymentRecord (ID, Price, Date, Method, Status, UserID, BookingID) VALUES 
-('1', 2000, '2024-06-01 11:00:00', 'Credit Card', 'Paid', '2', '1'),
-('2', 5000, '2024-06-02 09:00:00', 'Cash', 'Paid', '2', '2'),
-('3', 5000, '2024-06-03 09:00:00', 'Credit Card', 'Paid', '2', '3');
+('1', 2000, '2024-06-01 11:00:00', 'TransferCash', 'Paid', '2', '1'),
+('2', 5000, '2024-06-02 09:00:00', 'Cash', 'Unpaid', '2', '2'),
+('3', 5000, '2024-06-03 09:00:00', 'TransferCash', 'Paid', '2', '3');
 
 -- Sample data for Feedbacks table
 INSERT INTO Feedbacks (ID, Comment, Rating, Date, UserID) VALUES 
