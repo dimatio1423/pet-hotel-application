@@ -109,6 +109,13 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                 return Page();
             }
 
+            if (String.IsNullOrEmpty(Booking.AccommodationId))
+            {
+                viewData(currUser);
+                TempData["ErrorAccommodation"] = "Please select accommodation for booking";
+                return Page();
+            }
+
             if (!ModelState.IsValid)
             {
                 viewData(currUser);
@@ -310,7 +317,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             }
 
             var validAccommodations = _accommodationService.GetAccommodations()
-                .Where(a => !busyAccommodationIds.Contains(a.Id)).ToList();
+                .Where(a => !busyAccommodationIds.Contains(a.Id) && a.Status.Equals(StatusEnums.Available.ToString())).ToList();
             var result = _mapper.Map<List<AccommodationViewListResModel>>(validAccommodations);
             Accommodations = result;
             return new JsonResult(result);
