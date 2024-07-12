@@ -90,6 +90,8 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
                             {
                                 currBooking.Status = BookingStatusEnums.Confirmed.ToString();
 
+                                currBooking.ModifiedDate = DateTime.Now;
+
                                 _bookingInformationService.Update(currBooking);
                             }
                             break;
@@ -100,6 +102,8 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
                             if (currBooking != null)
                             {
                                 currBooking.Status = BookingStatusEnums.Cancelled.ToString();
+
+                                currBooking.ModifiedDate = DateTime.Now;
 
                                 _bookingInformationService.Update(currBooking);
                             }
