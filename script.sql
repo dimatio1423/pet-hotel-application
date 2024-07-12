@@ -57,6 +57,8 @@ Status NVARCHAR(20),
 UserID VARCHAR(100) NOT NULL,
 AccommodationID VARCHAR(100) NOT NULL,
 PetID VARCHAR(100) NOT NULL,
+CreatedDate DATETIME,
+ModifiedDate DATETIME,
 FOREIGN KEY (UserID) REFERENCES "User"(ID),
 FOREIGN KEY (PetID) REFERENCES Pet (ID),
 FOREIGN KEY (AccommodationID) REFERENCES Accommodation(ID)
@@ -146,10 +148,10 @@ INSERT [dbo].[Accommodation] ([ID], [Name], [Type], [Capacity], [Status], [Descr
 INSERT [dbo].[Accommodation] ([ID], [Name], [Type], [Capacity], [Status], [Description], [Price]) VALUES (N'a0323c06-41ad-49eb-ad47-f1d94d5b4fed', N'Kennel D', N'Kennel', 1, N'Available', N'New Kennel', CAST(100000.00 AS Decimal(10, 2)))
 INSERT [dbo].[Accommodation] ([ID], [Name], [Type], [Capacity], [Status], [Description], [Price]) VALUES (N'b80caa1d-36b0-45c7-8f6e-d53209482aa3', N'New Accommodation', N'Kennel', 1, N'Available', N'New Kennel', CAST(200000.00 AS Decimal(10, 2)))
 GO
-INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID]) VALUES (N'363aba66-f845-4085-ba23-40fa0902556e', N'Overnight', CAST(N'2024-07-12T08:00:00.000' AS DateTime), CAST(N'2024-07-17T21:00:00.000' AS DateTime), N'no', N'Cancelled', N'722b8423-ec7c-4aa4-b338-b09dc2e45ff7', N'1', N'6fa84891-0491-4728-92da-1e7f628ff10c')
-INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID]) VALUES (N'40fea55f-5b54-4db1-8b85-2c076093d4b4', N'Overnight', CAST(N'2024-07-11T08:00:00.000' AS DateTime), CAST(N'2024-07-13T21:00:00.000' AS DateTime), N'no', N'Confirmed', N'722b8423-ec7c-4aa4-b338-b09dc2e45ff7', N'2', N'824f014e-f08e-4d13-97e6-6b22688c0b0e')
-INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID]) VALUES (N'52cc0a01-9562-40d2-90ad-413696c4f932', N'Day care', CAST(N'2024-07-11T08:00:00.000' AS DateTime), CAST(N'2024-07-11T21:00:00.000' AS DateTime), N'nice', N'Pending', N'722b8423-ec7c-4aa4-b338-b09dc2e45ff7', N'1', N'6fa84891-0491-4728-92da-1e7f628ff10c')
-INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID]) VALUES (N'6c9cd8a8-ed21-40ad-bcfc-0d43c6020622', N'Day care', CAST(N'2024-07-13T08:00:00.000' AS DateTime), CAST(N'2024-07-13T21:00:00.000' AS DateTime), N'nice', N'Pending', N'2', N'a0323c06-41ad-49eb-ad47-f1d94d5b4fed', N'1')
+INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID], [CreatedDate]) VALUES (N'363aba66-f845-4085-ba23-40fa0902556e', N'Overnight', CAST(N'2024-07-12T08:00:00.000' AS DateTime), CAST(N'2024-07-17T21:00:00.000' AS DateTime), N'no', N'Cancelled', N'722b8423-ec7c-4aa4-b338-b09dc2e45ff7', N'1', N'6fa84891-0491-4728-92da-1e7f628ff10c', CAST(N'2024-07-10T21:10:11.153' AS DateTime))
+INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID], [CreatedDate]) VALUES (N'40fea55f-5b54-4db1-8b85-2c076093d4b4', N'Overnight', CAST(N'2024-07-11T08:00:00.000' AS DateTime), CAST(N'2024-07-13T21:00:00.000' AS DateTime), N'no', N'Confirmed', N'722b8423-ec7c-4aa4-b338-b09dc2e45ff7', N'2', N'824f014e-f08e-4d13-97e6-6b22688c0b0e', CAST(N'2024-07-10T21:10:11.153' AS DateTime))
+INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID], [CreatedDate]) VALUES (N'52cc0a01-9562-40d2-90ad-413696c4f932', N'Day care', CAST(N'2024-07-11T08:00:00.000' AS DateTime), CAST(N'2024-07-11T21:00:00.000' AS DateTime), N'nice', N'Pending', N'722b8423-ec7c-4aa4-b338-b09dc2e45ff7', N'1', N'6fa84891-0491-4728-92da-1e7f628ff10c', CAST(N'2024-07-10T21:10:11.153' AS DateTime))
+INSERT [dbo].[BookingInformation] ([ID], [BoardingType], [StartDate], [EndDate], [Note], [Status], [UserID], [AccommodationID], [PetID], [CreatedDate]) VALUES (N'6c9cd8a8-ed21-40ad-bcfc-0d43c6020622', N'Day care', CAST(N'2024-07-13T08:00:00.000' AS DateTime), CAST(N'2024-07-13T21:00:00.000' AS DateTime), N'nice', N'Pending', N'2', N'a0323c06-41ad-49eb-ad47-f1d94d5b4fed', N'1', CAST(N'2024-07-10T21:10:11.153' AS DateTime))
 GO
 INSERT [dbo].[PetCareService] ([ID], [Type], [Description], [Status], [Price]) VALUES (N'1', N'Feeding', N'Regular feeding according to schedule', N'Available', CAST(100000.00 AS Decimal(10, 2)))
 INSERT [dbo].[PetCareService] ([ID], [Type], [Description], [Status], [Price]) VALUES (N'2', N'Grooming', N'Full grooming service', N'Available', CAST(100000.00 AS Decimal(10, 2)))

@@ -112,7 +112,8 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                     Status = BookingStatusEnums.Pending.ToString(),
                     UserId = currUser.Id,
                     AccommodationId = bookingInformation.AccommodationId,
-                    PetId = bookingInformation.PetId
+                    PetId = bookingInformation.PetId,
+                    CreatedDate = DateTime.Now
                 };
 
                 _bookingInformationService.Add(newBookingInformation);

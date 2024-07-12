@@ -34,6 +34,8 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.BookingManagement
         public DateTime? EndDateTo { get; set; }
         public async Task OnGetAsync(int? pageIndex, string currentFilter, string searchString, DateTime? startDateFrom, DateTime? startDateTo, DateTime? endDateFrom, DateTime? endDateTo, string status)
         {
+            //_bookingInformationService.autoUpdatingBookingInformationStatus();
+
             var responseList = _bookingInformationService.GetBookingInformations().OrderByDescending(b => b.StartDate).ToList();
             if (searchString != null)
             {

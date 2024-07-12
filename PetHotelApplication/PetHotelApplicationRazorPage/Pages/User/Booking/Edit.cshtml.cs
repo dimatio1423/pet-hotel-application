@@ -99,6 +99,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             }
 
             existingBooking.Note = BookingUpdate.Note;
+            existingBooking.ModifiedDate = DateTime.Now;
 
             var accommodation = _accommodationService.GetAccommodationById(BookingUpdate.AccommodationId);
             if (accommodation != null)
