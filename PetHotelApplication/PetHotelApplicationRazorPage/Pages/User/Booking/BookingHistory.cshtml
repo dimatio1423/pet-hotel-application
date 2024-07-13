@@ -22,11 +22,11 @@
         <div class="card-body">
             <div class="row gx-3 mb-3">
                 <div class="col-md-3">
-                    <label for="startDate" class="mb-1 fw-bold">Start Date:</label>
+                    <label for="startDate" class="mb-1 fw-bold">Booking Start Date:</label>
                     <input type="date" id="startDate" name="StartDate" class="form-control w-75" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("yyyy-MM-dd") : "")">
                 </div>
                 <div class="col-md-3">
-                    <label for="endDate" class="mb-1 fw-bold">End Date:</label>
+                    <label for="endDate" class="mb-1 fw-bold">Booking End Date:</label>
                     <input type="date" id="endDate" name="EndDate" class="form-control w-75" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")">
                 </div>
                 <div class="col-md-2">
@@ -78,6 +78,16 @@
                             </div>
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
+                                    <label asp-for="@booking.CreatedDate" class="mb-1 fw-bold">Created date:</label>
+                                    <span class="text-muted">@booking.CreatedDate</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="@booking.ModifiedDate" class="mb-1 fw-bold">Modified date:</label>
+                                    <span class="text-muted">@booking.ModifiedDate</span>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
                                     <label asp-for="@booking.StartDate" class="mb-1 fw-bold">Start date:</label>
                                     <span class="text-muted">@booking.StartDate</span>
                                 </div>
@@ -103,7 +113,7 @@
                             <div class="mb-3">
                                 <label asp-for="@booking.Note" class="mb-1 fw-bold">Note:</label>
                                 <span class="text-muted">@booking.Note</span>
-                            </div>
+                            </div>                            
                             <div class="mb-3">
                                 <label asp-for="@booking.Status" class="mb-1 fw-bold">Status:</label>
                                 @{

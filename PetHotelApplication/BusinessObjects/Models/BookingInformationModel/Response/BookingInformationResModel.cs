@@ -26,6 +26,10 @@ namespace BusinessObjects.Models.BookingInformationModel.Response
         public string PetCareServices { get; set; }
 
         public PetResModel Pet {  get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
     }
 
     public class AccommodationResModel
