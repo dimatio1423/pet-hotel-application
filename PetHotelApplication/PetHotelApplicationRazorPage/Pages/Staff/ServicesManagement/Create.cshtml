@@ -53,7 +53,17 @@
                                 <div id="imagePreview" class="image-preview d-flex flex-wrap"></div>
                             </div>
                             <span asp-validation-for="serviceImages" class="text-danger"></span>
+
+                            @if (TempData["ErrorServiceImage"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorServiceImage"] </span>
+                                </div>
+                            }
+
                         </div>
+
+                       
                      
                     </div>
 

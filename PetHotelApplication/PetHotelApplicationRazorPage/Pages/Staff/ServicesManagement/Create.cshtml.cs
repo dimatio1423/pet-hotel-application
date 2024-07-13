@@ -65,6 +65,13 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
                 return Page();
             }
 
+            if (serviceImages.Count > 10)
+            {
+                TempData["ErrorServiceImage"] = "Maximum ten images for services";
+
+                return Page();
+            }
+
             PetCareService newPetCareService = new PetCareService
             {
                 Id = Guid.NewGuid().ToString(),

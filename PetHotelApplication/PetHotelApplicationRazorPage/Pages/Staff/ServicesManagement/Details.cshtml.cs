@@ -119,6 +119,14 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
                 updateService.Price = PetCareService.Price;
                 updateService.Status = PetCareService.Status.ToString();
 
+                if (NewServiceImages != null && NewServiceImages.Count > 10)
+                {
+                    TempData["ErrorServiceImage"] = "Maximum ten images for service";
+                    ViewData["ServiceStatus"] = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString() }, updateService.Status);
+                    ServiceImages = updateService.ServiceImages.ToList();
+                    return Page();
+                }
+
                 if (NewServiceImages != null)
                 {
                    if (NewServiceImages.Count() > 0)
