@@ -116,5 +116,22 @@ namespace Repositories.Repositories.BookingInformationRepo
                 throw new Exception(ex.Message);
             }
         }
+        
+        public void UpdateRange(List<BookingInformation> list)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                foreach (var bookingInformation in list) 
+                {
+                    _context.Entry(bookingInformation).State = EntityState.Modified;
+                }
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
