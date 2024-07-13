@@ -59,7 +59,7 @@ namespace Services.Services.BookingInformationService
             return _mapper.Map<List<BookingInformationResModel>>(list);
         }
 
-        public string autoUpdatingBookingInformationStatus()
+        public string AutoUpdatingBookingInformationStatus()
         {
             var now = DateTime.Now;
 
@@ -69,6 +69,9 @@ namespace Services.Services.BookingInformationService
                             x.Status == BookingStatusEnums.Processing.ToString())
                 .ToList();
 
+            var bookingsToUpdate = new List<BookingInformation>();
+            var paymentsToUpdate = new List<PaymentRecord>();
+
             foreach (var booking in allBookings)
             {
                 if (booking.Status == BookingStatusEnums.Pending.ToString())
@@ -76,13 +79,12 @@ namespace Services.Services.BookingInformationService
                     if (!booking.PaymentRecords.Any(x => x.Status == PaymentStatusEnums.Paid.ToString()) && booking.StartDate.Day < now.Day)
                     {
                         booking.Status = BookingStatusEnums.Cancelled.ToString();
-                        booking.ModifiedDate = DateTime.Now;
-                        _bookingInformationRepo.Update(booking);
+                        bookingsToUpdate.Add(booking);
 
                         foreach(var paymentBooking in booking.PaymentRecords)
                         {
                             paymentBooking.Status = PaymentStatusEnums.Cancelled.ToString();
-                            _paymentRecordRepository.Update(paymentBooking);
+                            paymentsToUpdate.Add(paymentBooking);
                         }
                     }
                 }
@@ -91,8 +93,7 @@ namespace Services.Services.BookingInformationService
                     if (booking.StartDate.Day <= now.Day && booking.EndDate.Day >= now.Day)
                     {
                         booking.Status = BookingStatusEnums.Processing.ToString();
-                        booking.ModifiedDate = DateTime.Now;
-                        _bookingInformationRepo.Update(booking);
+                        bookingsToUpdate.Add(booking);                        
                     }
                 }
                 else if (booking.Status == BookingStatusEnums.Processing.ToString())
@@ -100,10 +101,17 @@ namespace Services.Services.BookingInformationService
                     if (booking.EndDate.Day < now.Day)
                     {
                         booking.Status = BookingStatusEnums.Completed.ToString();
-                        booking.ModifiedDate = DateTime.Now;
-                        _bookingInformationRepo.Update(booking);
+                        bookingsToUpdate.Add(booking);
                     }
                 }
+            }
+
+            if (bookingsToUpdate.Count > 0) {
+                _bookingInformationRepo.UpdateRange(bookingsToUpdate);
+            }
+
+            if (paymentsToUpdate.Count > 0) {
+                _paymentRecordRepository.UpdateRange(paymentsToUpdate);
             }
 
             return "Update successfully";

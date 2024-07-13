@@ -25,12 +25,12 @@ namespace Services.Services.BackgroundServices
                 {
                     var bookingService = scope.ServiceProvider.GetRequiredService<IBookingInformationService>();
 
-                    var message = bookingService.autoUpdatingBookingInformationStatus();
+                    var message = bookingService.AutoUpdatingBookingInformationStatus();
 
                     Console.WriteLine($"Message {message}");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }
     }

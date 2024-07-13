@@ -16,6 +16,6 @@ namespace Services.Services.BookingInformationService
         void Delete(BookingInformation bookingInformation);
         void Update(BookingInformation bookingInformation);
         List<BookingInformationResModel> GetBookingInformationByUserId(string userId);
-        string autoUpdatingBookingInformationStatus();
+        string AutoUpdatingBookingInformationStatus();
     }
 }
