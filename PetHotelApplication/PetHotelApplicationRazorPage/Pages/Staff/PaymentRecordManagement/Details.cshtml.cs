@@ -96,18 +96,18 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement
                             }
                             break;
 
-                        case nameof(PaymentStatusEnums.Cancelled):
-                             currBooking = bookingList.FirstOrDefault(x => x.Id.Equals(updatingPayment.BookingId));
+                        //case nameof(PaymentStatusEnums.Cancelled):
+                        //     currBooking = bookingList.FirstOrDefault(x => x.Id.Equals(updatingPayment.BookingId));
 
-                            if (currBooking != null)
-                            {
-                                currBooking.Status = BookingStatusEnums.Cancelled.ToString();
+                        //    if (currBooking != null)
+                        //    {
+                        //        currBooking.Status = BookingStatusEnums.Cancelled.ToString();
 
-                                currBooking.ModifiedDate = DateTime.Now;
+                        //        currBooking.ModifiedDate = DateTime.Now;
 
-                                _bookingInformationService.Update(currBooking);
-                            }
-                            break;
+                        //        _bookingInformationService.Update(currBooking);
+                        //    }
+                        //    break;
                     }
                 }
 

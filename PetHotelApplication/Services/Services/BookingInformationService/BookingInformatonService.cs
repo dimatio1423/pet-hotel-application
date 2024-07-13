@@ -76,7 +76,19 @@ namespace Services.Services.BookingInformationService
             {
                 if (booking.Status == BookingStatusEnums.Pending.ToString())
                 {
-                    if (!booking.PaymentRecords.Any(x => x.Status == PaymentStatusEnums.Paid.ToString()) && booking.StartDate.Day < now.Day)
+                        var newDate = booking.CreatedDate.Value.AddHours(48).Date;
+                    if (!booking.PaymentRecords.Any(x => x.Status.Equals(PaymentStatusEnums.Paid.ToString())) && newDate < now.Date)
+                    {
+                        booking.Status = BookingStatusEnums.Cancelled.ToString();
+                        bookingsToUpdate.Add(booking);
+                        foreach (var paymentBooking in booking.PaymentRecords)
+                        {
+                            paymentBooking.Status = PaymentStatusEnums.Cancelled.ToString();
+                            paymentsToUpdate.Add(paymentBooking);
+                        }
+                    }
+
+                    if (!booking.PaymentRecords.Any(x => x.Status == PaymentStatusEnums.Paid.ToString()) && booking.StartDate.Date < now.Date)
                     {
                         booking.Status = BookingStatusEnums.Cancelled.ToString();
                         bookingsToUpdate.Add(booking);
@@ -90,7 +102,7 @@ namespace Services.Services.BookingInformationService
                 }
                 else if (booking.Status == BookingStatusEnums.Confirmed.ToString())
                 {
-                    if (booking.StartDate.Day <= now.Day && booking.EndDate.Day >= now.Day)
+                    if (booking.StartDate.Date <= now.Date && booking.EndDate.Date >= now.Date)
                     {
                         booking.Status = BookingStatusEnums.Processing.ToString();
                         bookingsToUpdate.Add(booking);                        
@@ -98,13 +110,13 @@ namespace Services.Services.BookingInformationService
                 }
                 else if (booking.Status == BookingStatusEnums.Processing.ToString())
                 {
-                    if (booking.EndDate.Day < now.Day)
+                    if (booking.EndDate.Date < now.Date)
                     {
                         booking.Status = BookingStatusEnums.Completed.ToString();
                         bookingsToUpdate.Add(booking);
                     }
                 }
-            }
+             }
 
             if (bookingsToUpdate.Count > 0) {
                 _bookingInformationRepo.UpdateRange(bookingsToUpdate);

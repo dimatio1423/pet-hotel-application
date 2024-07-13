@@ -210,7 +210,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             }
 
             var existingBookings = _bookingInformationService.GetBookingInformations()
-                 .Where(x => x.PetId == Booking.PetId && x.Status.Equals(BookingStatusEnums.Pending.ToString()) &&
+                 .Where(x => x.PetId == Booking.PetId && (x.Status.Equals(BookingStatusEnums.Pending.ToString()) || x.Status.Equals(BookingStatusEnums.Confirmed.ToString())) &&
                  ((start <= x.StartDate && end >= x.StartDate) ||
                  (start <= x.EndDate && end >= x.EndDate) ||
                  (start >= x.StartDate && end <= x.EndDate)))
@@ -219,7 +219,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             List<Accommodation> bookedAccommdation = new List<Accommodation>();
 
             var accommodationBookings = _bookingInformationService.GetBookingInformations()
-                 .Where(x => x.Status.Equals(BookingStatusEnums.Pending.ToString()) &&
+                 .Where(x => (x.Status.Equals(BookingStatusEnums.Pending.ToString()) || x.Status.Equals(BookingStatusEnums.Confirmed.ToString())) &&
                  ((start <= x.StartDate && end >= x.StartDate) ||
                  (start <= x.EndDate && end >= x.EndDate) ||
                  (start >= x.StartDate && end <= x.EndDate)))
