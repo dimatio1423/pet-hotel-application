@@ -179,6 +179,11 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
 
             var selectedServiceId = SessionHelper.GetObjectSession<List<string>>(HttpContext.Session, "SelectedPetCareServices");
 
+            if (Booking is null || selectedServiceId is null)
+            {
+                return RedirectToPage("/Index");
+            }
+
             List<PetCareService> petCareServices = _petCareService.GetPetCareServicesByIds(selectedServiceId.ToList());
 
             var start = SessionHelper.GetObjectSession<DateTime>(HttpContext.Session, "start");
@@ -190,11 +195,6 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             decimal totalServicePrice = 0;
 
             int days;
-
-            if (Booking is null || selectedServiceId is null)
-            {
-                return RedirectToPage("/Index");
-            }
 
             if (Booking != null)
             {

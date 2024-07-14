@@ -21,12 +21,15 @@
                         </dt>
                         <dd class="col-sm-10">
                             <input type="text" class="form-control" asp-for="PetCareService.Type" />
-                            @* <span asp-validation-for="PetCareService.Type" class="text-danger"></span> *@
+
                             @if (TempData["ErrorType"] != null)
                             {
                                 <div class="alert alert-danger">
                                     <span>@TempData["ErrorType"] </span>
                                 </div>
+                            }else
+                            {
+                                <span asp-validation-for="PetCareService.Type" class="text-danger"></span>
                             }
                         </dd>
 
@@ -42,6 +45,9 @@
                                 <div class="alert alert-danger">
                                     <span>@TempData["ErrorDescription"] </span>
                                 </div>
+                            }else
+                            {
+                                <span asp-validation-for="PetCareService.Description" class="text-danger"></span>
                             }
                         </dd>
 

@@ -132,7 +132,13 @@
                             <li class="page-item @prevDisabled">
                                 <a class="page-link rounded-0" aria-label="Previous"
                                    asp-page="./Index"
-                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex - 1)">
+                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex - 1)"
+                                   asp-route-currentFilter="@Model.CurrentFilter"
+                                   asp-route-status = "@Model.StatusFilter"
+                                   asp-route-startDateFrom="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-startDateTo="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateFrom="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateTo="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
                                     <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                                 </a>
                             </li>
@@ -141,14 +147,27 @@
                             {
                                 <li class="page-item @(Model.BookingInformation.PageIndex == i ? "active" : "")">
                                     <a class="page-link" asp-page="./Index"
-                                       asp-route-pageIndex="@i">@i</a>
+                                       asp-route-pageIndex="@i"
+                                       asp-route-currentFilter="@Model.CurrentFilter"
+                                       asp-route-status="@Model.StatusFilter"
+                                       asp-route-startDateFrom="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                       asp-route-startDateTo="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")"
+                                       asp-route-endDateFrom="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                       asp-route-endDateTo="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                                    @i</a>
                                 </li>
                             }
 
                             <li class="page-item @nextDisabled">
                                 <a class="page-link rounded-0" aria-label="Next"
                                    asp-page="./Index"
-                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex + 1)">
+                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex - 1)"
+                                   asp-route-currentFilter="@Model.CurrentFilter"
+                                   asp-route-status="@Model.StatusFilter"
+                                   asp-route-startDateFrom="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-startDateTo="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateFrom="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateTo="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
                                     <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
                                 </a>
                             </li>
