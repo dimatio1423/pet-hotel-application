@@ -210,7 +210,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             }
 
             var existingBookings = _bookingInformationService.GetBookingInformations()
-                 .Where(x => x.PetId == Booking.PetId && (x.Status.Equals(BookingStatusEnums.Pending.ToString()) || x.Status.Equals(BookingStatusEnums.Confirmed.ToString())) &&
+                 .Where(x => x.PetId == Booking.PetId && (x.Status.Equals(BookingStatusEnums.Pending.ToString()) || x.Status.Equals(BookingStatusEnums.Confirmed.ToString()) || x.Status.Equals(BookingStatusEnums.Processing.ToString())) &&
                  ((start <= x.StartDate && end >= x.StartDate) ||
                  (start <= x.EndDate && end >= x.EndDate) ||
                  (start >= x.StartDate && end <= x.EndDate)))
@@ -219,7 +219,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             List<Accommodation> bookedAccommdation = new List<Accommodation>();
 
             var accommodationBookings = _bookingInformationService.GetBookingInformations()
-                 .Where(x => (x.Status.Equals(BookingStatusEnums.Pending.ToString()) || x.Status.Equals(BookingStatusEnums.Confirmed.ToString())) &&
+                 .Where(x => (x.Status.Equals(BookingStatusEnums.Pending.ToString()) || x.Status.Equals(BookingStatusEnums.Confirmed.ToString()) || x.Status.Equals(BookingStatusEnums.Processing.ToString())) &&
                  ((start <= x.StartDate && end >= x.StartDate) ||
                  (start <= x.EndDate && end >= x.EndDate) ||
                  (start >= x.StartDate && end <= x.EndDate)))
@@ -305,14 +305,14 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                     .Where(b => ((end >= DateOnly.FromDateTime(b.StartDate) && end <= DateOnly.FromDateTime(b.EndDate)) ||
                                 (start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate)) ||
                                 (start <= DateOnly.FromDateTime(b.StartDate) && end >= DateOnly.FromDateTime(b.EndDate)))
-                                && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()))
+                                && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()) || b.Status.Equals(BookingStatusEnums.Processing.ToString()))
                                 ).Select(b => b.AccommodationId).ToList();
             }
             else
             {
                 busyAccommodationIds = _bookingInformationService.GetBookingInformations()
                     .Where(b => (start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate))
-                    && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()))
+                    && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()) || b.Status.Equals(BookingStatusEnums.Processing.ToString()))
                     ).Select(b => b.AccommodationId).ToList();
             }
 
@@ -336,7 +336,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
                     .Where(b => ((end >= DateOnly.FromDateTime(b.StartDate) && end <= DateOnly.FromDateTime(b.EndDate)) ||
                                 (start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate)) ||
                                 (start <= DateOnly.FromDateTime(b.StartDate) && end >= DateOnly.FromDateTime(b.EndDate))) 
-                                && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()))
+                                && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()) || b.Status.Equals(BookingStatusEnums.Processing.ToString()))
                                 && petList.Select(x => x.Id).ToList().Contains(b.PetId)
                                 ).Select(b => b.PetId).ToList();
             }
@@ -344,7 +344,7 @@ namespace PetHotelApplicationRazorPage.Pages.User.Booking
             {
                 busyPets = _bookingInformationService.GetBookingInformations()
                     .Where(b => start <= DateOnly.FromDateTime(b.EndDate) && start >= DateOnly.FromDateTime(b.StartDate)
-                    && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()))
+                    && (b.Status.Equals(BookingStatusEnums.Pending.ToString()) || b.Status.Equals(BookingStatusEnums.Confirmed.ToString()) || b.Status.Equals(BookingStatusEnums.Processing.ToString()))
                     && petList.Select(x => x.Id).ToList().Contains(b.PetId) ).Select(b => b.PetId).ToList();
             }
 
