@@ -19,7 +19,7 @@ namespace BusinessObjects.Models.PetCareServiceModel.Request
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
+        [Range(50000.00, 300000.00, ErrorMessage = "Price must be between 50,000 and 300,000")]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage ="Status is required")]

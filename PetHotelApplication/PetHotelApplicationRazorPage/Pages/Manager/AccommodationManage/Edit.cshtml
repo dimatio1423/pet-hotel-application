@@ -23,6 +23,14 @@
                             <input asp-for="Accommodation.Name" class="form-control" />
                             <span asp-validation-for="Accommodation.Name" class="text-danger"></span>
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            @if (TempData["ErrorName"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorName"] </span>
+                                </div>
+                            }
+
                         </dd>
                         <dt class="col-sm-2 font-weight-bold">
                             @Html.DisplayNameFor(model => model.Accommodation.Type)
@@ -37,6 +45,14 @@
                         <dd class="col-sm-10">
                             <input asp-for="Accommodation.Capacity" class="form-control" />
                             <span asp-validation-for="Accommodation.Capacity" class="text-danger"></span>
+
+                            @if (TempData["ErrorCapacity"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorCapacity"] </span>
+                                </div>
+                            }
+
                         </dd>
 
                         <dt class="col-sm-2 font-weight-bold">

@@ -84,6 +84,22 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.ServicesManagement
                 //    return Page();
                 //}
 
+                if (String.IsNullOrEmpty(PetCareService.Type) || String.IsNullOrWhiteSpace(PetCareService.Type))
+                {
+                    TempData["ErrorType"] = "Service type can not be empty";
+                    ViewData["ServiceStatus"] = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString() }, updateService.Status);
+                    ServiceImages = updateService.ServiceImages.ToList();
+                    return Page();
+                }
+
+                if (String.IsNullOrEmpty(PetCareService.Description) || String.IsNullOrWhiteSpace(PetCareService.Description))
+                {
+                    TempData["ErrorDescription"] = "Description can not be empty";
+                    ViewData["ServiceStatus"] = new SelectList(new List<string> { StatusEnums.Available.ToString(), StatusEnums.Unavailable.ToString() }, updateService.Status);
+                    ServiceImages = updateService.ServiceImages.ToList();
+                    return Page();
+                }
+
 
                 if (!Enum.IsDefined(typeof(StatusEnums), PetCareService.Status))
                 {

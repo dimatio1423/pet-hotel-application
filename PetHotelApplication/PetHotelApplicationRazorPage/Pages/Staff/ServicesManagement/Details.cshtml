@@ -21,7 +21,7 @@
                         </dt>
                         <dd class="col-sm-10">
                             <input type="text" class="form-control" asp-for="PetCareService.Type" />
-                            <span asp-validation-for="PetCareService.Type" class="text-danger"></span>
+                            @* <span asp-validation-for="PetCareService.Type" class="text-danger"></span> *@
                             @if (TempData["ErrorType"] != null)
                             {
                                 <div class="alert alert-danger">
@@ -35,7 +35,14 @@
                         </dt>
                         <dd class="col-sm-10">
                             <textarea class="form-control fixed-size-textarea" asp-for="PetCareService.Description" rows="5"></textarea>
-                            <span asp-validation-for="PetCareService.Description" class="text-danger"></span>
+                            @* <span asp-validation-for="PetCareService.Description" class="text-danger"></span> *@
+
+                            @if (TempData["ErrorDescription"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorDescription"] </span>
+                                </div>
+                            }
                         </dd>
 
                         <dt class="col-sm-2 font-weight-bold">
@@ -121,6 +128,9 @@
 </div>
 
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         function previewImages() {
             var preview = document.getElementById('imagePreview');

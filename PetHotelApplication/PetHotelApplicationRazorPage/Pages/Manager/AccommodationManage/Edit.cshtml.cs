@@ -55,21 +55,57 @@ namespace PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
             var accommodation = _accommodationService.GetAccommodationById(Accommodation.Id);
             _mapper.Map(Accommodation, accommodation);
             var allAccommodationNames = _accommodationService.GetAccommodations().Where(a => a.Id != Accommodation.Id)
                                                              .Select(a => a.Name.ToLower())
                                                              .ToList();
 
-            if (allAccommodationNames.Contains(accommodation.Name.ToLower()))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Accommodation name is already existed");
+                var enumList = Enum.GetValues(typeof(AccommodationTypeEnums)).Cast<AccommodationTypeEnums>()
+                   .Select(e => new AccommodationTypeEnumModel
+                   {
+                       EnumId = (int)e,
+                       EnumValue = e.ToString()
+                   }).ToList();
+                Accommodation = _mapper.Map<AccommodationUpdateReqModel>(accommodation);
+
+                ViewData["AccommodationType"] = new SelectList(enumList, "EnumValue", "EnumValue", accommodation.Type);
                 return Page();
             }
+
+            if (allAccommodationNames.Contains(accommodation.Name.ToLower()))
+            {
+                var enumList = Enum.GetValues(typeof(AccommodationTypeEnums)).Cast<AccommodationTypeEnums>()
+                   .Select(e => new AccommodationTypeEnumModel
+                   {
+                       EnumId = (int)e,
+                       EnumValue = e.ToString()
+                   }).ToList();
+                Accommodation = _mapper.Map<AccommodationUpdateReqModel>(accommodation);
+
+                ViewData["AccommodationType"] = new SelectList(enumList, "EnumValue", "EnumValue", accommodation.Type);
+                TempData["ErrorName"] = "Accommodation name is already exist";
+                return Page();
+            }
+
+            if ((Accommodation.Type.Equals(AccommodationTypeEnums.Kennel.ToString())
+                || Accommodation.Type.Equals(AccommodationTypeEnums.Suite.ToString())) && Accommodation.Capacity > 2)
+            {
+                var enumList = Enum.GetValues(typeof(AccommodationTypeEnums)).Cast<AccommodationTypeEnums>()
+                               .Select(e => new AccommodationTypeEnumModel
+                               {
+                                   EnumId = (int)e,
+                                   EnumValue = e.ToString()
+                               }).ToList();
+
+                ViewData["AccommodationType"] = new SelectList(enumList, "EnumValue", "EnumValue");
+                //ModelState.AddModelError(string.Empty, "For Kennel and Suite, the capacity only accepts a maximum of 2");
+                TempData["ErrorCapacity"] = "For Kennel and Suite, the capacity only accepts a maximum of 2";
+                return Page();
+            }
+
             _accommodationService.Update(accommodation);
 
             return RedirectToPage("./Index");
