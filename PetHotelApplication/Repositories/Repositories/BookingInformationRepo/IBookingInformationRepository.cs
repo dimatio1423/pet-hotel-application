@@ -15,5 +15,6 @@ namespace Repositories.Repositories.BookingInformationRepo
         void Delete(BookingInformation bookingInformation);
         void Update(BookingInformation bookingInformation);
         List<BookingInformation> GetBookingInformationByUserId(string userId);
+        void UpdateRange(List<BookingInformation> list);
     }
 }

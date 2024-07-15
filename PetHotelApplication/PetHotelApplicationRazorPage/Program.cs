@@ -13,6 +13,7 @@ using Repositories.Repositories.ServiceImageRepo;
 using Repositories.Repositories.UserRepo;
 using Services.MapperProfiles;
 using Services.Services.AccommodationService;
+using Services.Services.BackgroundServices;
 using Services.Services.BookingInformationService;
 using Services.Services.CloudinaryService;
 using Services.Services.DashboardService;
@@ -30,6 +31,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddHostedService<BGService>();
 
 // Add session
 builder.Services.AddSession(option =>

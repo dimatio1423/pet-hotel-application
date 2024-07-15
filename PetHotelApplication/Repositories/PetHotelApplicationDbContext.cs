@@ -54,7 +54,7 @@ public partial class PetHotelApplicationDbContext : DbContext
     {
         modelBuilder.Entity<Accommodation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC27AE4280CC");
+            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC27E9057CEE");
 
             entity.ToTable("Accommodation");
 
@@ -70,7 +70,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<BookingInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC275998A604");
+            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC27773B53BC");
 
             entity.ToTable("BookingInformation");
 
@@ -83,7 +83,9 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("AccommodationID");
             entity.Property(e => e.BoardingType).HasMaxLength(50);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.PetId)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -113,7 +115,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC27F028BFD3");
+            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC27EEDAD943");
 
             entity.Property(e => e.Id)
                 .HasMaxLength(100)
@@ -134,7 +136,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<PaymentRecord>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC27F5911A35");
+            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC27F7B657C9");
 
             entity.ToTable("PaymentRecord");
 
@@ -172,7 +174,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Pet>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC278AB5F2DA");
+            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC27B6E4F753");
 
             entity.ToTable("Pet");
 
@@ -182,7 +184,6 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .HasColumnName("ID");
             entity.Property(e => e.Avatar).IsUnicode(false);
             entity.Property(e => e.Breed).HasMaxLength(50);
-            entity.Property(e => e.Dob).HasColumnName("DOB");
             entity.Property(e => e.PetName).HasMaxLength(100);
             entity.Property(e => e.Species).HasMaxLength(50);
             entity.Property(e => e.Status).HasMaxLength(20);
@@ -199,7 +200,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<PetCareService>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC2749E18AFB");
+            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC279D790E16");
 
             entity.ToTable("PetCareService");
 
@@ -217,7 +218,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC2733E35F4A");
+            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC2776C9DA81");
 
             entity.ToTable("Role");
 
@@ -232,7 +233,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<ServiceBooking>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27720A5158");
+            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27C35DF6EA");
 
             entity.ToTable("ServiceBooking");
 
@@ -261,7 +262,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<ServiceImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceI__3214EC2700A104A1");
+            entity.HasKey(e => e.Id).HasName("PK__ServiceI__3214EC2796ED5AAF");
 
             entity.ToTable("ServiceImage");
 
@@ -283,7 +284,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC27E89F24AF");
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC27E4ED9DC0");
 
             entity.ToTable("User");
 

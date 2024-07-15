@@ -20,14 +20,14 @@ namespace BusinessObjects.Models.AccommodationModel.Request
         public string Type { get; set; }
 
         [Required(ErrorMessage = "Please input accommodation capacity")]
-        [RegularExpression("([0-9]+)", ErrorMessage = "Please input a number")]
+        [Range(1, 20, ErrorMessage = "Please input a number between 1 and 20")]
         public int Capacity { get; set; }
 
         [Required(ErrorMessage = "Please input accommodation description")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Please input accommodation price")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
+        [Range(50000.00, 200000.00, ErrorMessage = "Price must be between 50,000 and 200,000")]
         public decimal Price { get; set; }
     }
 }

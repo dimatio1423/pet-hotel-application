@@ -23,6 +23,10 @@ public partial class BookingInformation
 
     public string PetId { get; set; } = null!;
 
+    public DateTime? CreatedDate { get; set; }
+
+    public DateTime? ModifiedDate { get; set; }
+
     public virtual Accommodation Accommodation { get; set; } = null!;
 
     public virtual ICollection<PaymentRecord> PaymentRecords { get; set; } = new List<PaymentRecord>();

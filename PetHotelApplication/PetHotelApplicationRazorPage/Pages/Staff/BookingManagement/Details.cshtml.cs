@@ -51,5 +51,43 @@ namespace PetHotelApplicationRazorPage.Pages.Staff.BookingManagement
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPostAsync(string id)
+        {
+            try
+            {
+                var currBooking = _bookingInformationService.GetBookingInformationById(id);
+                if (currBooking == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    currBooking.Status = BookingStatusEnums.Completed.ToString();
+                    currBooking.EndDate = DateTime.Now;
+
+                    _bookingInformationService.Update(currBooking);
+                }
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BookingExisted(BookingInfo.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToPage("/Staff/BookingManagement/Index");
+        }
+
+        private bool BookingExisted(string id)
+        {
+            return _bookingInformationService.GetBookingInformationById(id) != null ? true : false;
+        }
     }
 }

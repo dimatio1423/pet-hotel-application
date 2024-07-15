@@ -1,6 +1,8 @@
 ﻿@page
 @model PetHotelApplicationRazorPage.Pages.Staff.BookingManagement.DetailsModel
 
+@using BusinessObjects.Enums.BookingStatusEnums;
+
 @{
     var booking = Model.BookingInfo;
     Layout = "_LayoutManage";
@@ -45,6 +47,12 @@
             <div class="col-md-6">
                 <h3 class="mb-3">Booking Details</h3>
                 <dl class="dl-horizontal">
+
+                    @* <input type="hidden" asp-for="@Model.BookingId" value="@booking.Id" /> *@
+
+                    <dt>Booking ID:</dt>
+                    <dd>@booking.Id</dd>
+
                     <dt>Boarding Type:</dt>
                     <dd>@booking.BoardingType</dd>
 
@@ -89,6 +97,19 @@
                 </ul>
             </div>
         </div>
-        <a class="btn btn-secondary back-link" asp-page="./Index">Back to List</a>
+
+
+        <div>
+            <a class="btn btn-secondary back-link" asp-page="./Index">Back to List</a>
+
+            @if (Model.BookingInfo.Status.Equals(BookingStatusEnums.Processing.ToString()))
+            {
+                <form method="post" class="d-inline">
+                    <button type="submit" class="btn btn-primary back-link" asp-route-id="@booking.Id">Complete</button>
+                </form>
+            }
+        </div>
+        
+
     </div>
 </div>

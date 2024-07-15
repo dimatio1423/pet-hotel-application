@@ -21,12 +21,15 @@
                         </dt>
                         <dd class="col-sm-10">
                             <input type="text" class="form-control" asp-for="PetCareService.Type" />
-                            <span asp-validation-for="PetCareService.Type" class="text-danger"></span>
+
                             @if (TempData["ErrorType"] != null)
                             {
                                 <div class="alert alert-danger">
                                     <span>@TempData["ErrorType"] </span>
                                 </div>
+                            }else
+                            {
+                                <span asp-validation-for="PetCareService.Type" class="text-danger"></span>
                             }
                         </dd>
 
@@ -35,14 +38,27 @@
                         </dt>
                         <dd class="col-sm-10">
                             <textarea class="form-control fixed-size-textarea" asp-for="PetCareService.Description" rows="5"></textarea>
-                            <span asp-validation-for="PetCareService.Description" class="text-danger"></span>
+                            @* <span asp-validation-for="PetCareService.Description" class="text-danger"></span> *@
+
+                            @if (TempData["ErrorDescription"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorDescription"] </span>
+                                </div>
+                            }else
+                            {
+                                <span asp-validation-for="PetCareService.Description" class="text-danger"></span>
+                            }
                         </dd>
 
                         <dt class="col-sm-2 font-weight-bold">
                             @Html.DisplayNameFor(model => model.PetCareService.Status)
                         </dt>
                         <dd class="col-sm-10">
-                            <input type="text" class="form-control" asp-for="PetCareService.Status" />
+                            @* <input type="text" class="form-control" asp-for="PetCareService.Status" />
+                            <span asp-validation-for="PetCareService.Status" class="text-danger"></span> *@
+
+                            <select asp-for="PetCareService.Status" class="form-control" asp-items="ViewBag.ServiceStatus" id="status"></select>
                             <span asp-validation-for="PetCareService.Status" class="text-danger"></span>
 
                             @if (TempData["ErrorStatus"] != null)
@@ -97,6 +113,13 @@
                             <div id="imagePreviewContainer" class="mt-3">
                                 <div id="imagePreview" class="image-preview d-flex flex-wrap"></div>
                             </div>
+
+                            @if (TempData["ErrorServiceImage"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorServiceImage"] </span>
+                                </div>
+                            }
                         </dd>
 
                     </dl>
@@ -111,6 +134,9 @@
 </div>
 
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         function previewImages() {
             var preview = document.getElementById('imagePreview');
