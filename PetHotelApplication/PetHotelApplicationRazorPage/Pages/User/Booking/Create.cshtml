@@ -1,0 +1,304 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.CreateModel
+@{
+                <style>
+                    .image-container {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                        .image-container img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+
+                    .services-container {
+                        display: flex;
+                        flex-wrap: wrap;
+                    }
+
+                    .service-column {
+                        flex: 1;
+                        min-width: 50%;
+                        box-sizing: border-box;
+                        padding: 10px;
+                    }
+                </style>
+
+    var today = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+    var preselectedServiceId = Model.SelectedService != null ? Model.SelectedService.Id : null;
+}
+
+<div class="container-fluid mt-5">
+    <div class="container">
+        <div class="row d-flex align-items-stretch">
+            <!-- Image Column -->
+            <div class="col-md-6 d-flex align-items-stretch">
+                <div class="image-container">
+                    <img src="~/img/about.jpg" alt="Pet Image" class="img-fluid w-100" />
+                </div>
+            </div>
+            <!-- Form Column -->
+            <div class="col-md-6 d-flex align-items-stretch">
+                <form method="post" class="w-100">
+                    <h2>BOOKING FORM</h2>
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Booking.BoardingType">Boarding Type:</label>
+                        <select asp-for="Booking.BoardingType" class="form-control" asp-items="ViewBag.BoardingTypes" id="boardingType"></select>
+                        <span asp-validation-for="Booking.BoardingType" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Booking.StartDate">Start Date:</label>
+                        @if(Model.Booking != null)
+                        {
+                            <input asp-for="Booking.StartDate" class="form-control" type="date" id="startDate" />
+
+                        } else
+                        {
+                            <input asp-for="Booking.StartDate" class="form-control" type="date" id="startDate" value="@today" />
+
+                        }
+                        <span asp-validation-for="Booking.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Booking.EndDate">End Date:</label>
+                        @if(Model.Booking != null)
+                        {
+                            <input asp-for="Booking.EndDate" class="form-control" type="date" id="endDate" />
+
+                        }else
+                        {
+                            <input asp-for="Booking.EndDate" class="form-control" type="date" id="endDate" value="@today" />
+                        }
+                        <span asp-validation-for="Booking.EndDate" class="text-danger"></span>
+                    </div>
+
+                    @if (TempData["ErrorDate"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <span>@TempData["ErrorDate"] </span>
+                        </div>
+                    }
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Booking.Note">Note:</label>
+                        <textarea asp-for="Booking.Note" class="form-control"></textarea>
+                        <span asp-validation-for="Booking.Note" class="text-danger"></span>
+                    </div>
+
+
+                    <div id="accommodation-section">
+                        <div class="form-group mt-2">
+                            <label asp-for="Booking.AccommodationId">Accommodation:</label>
+                            <select asp-for="Booking.AccommodationId" class="form-control" asp-items="ViewBag.Accommodations"></select>
+                            @* <span asp-validation-for="Booking.AccommodationId" class="text-danger"></span> *@
+                        </div>
+                    </div>
+                    
+                    <div id="pet-section">
+                        @if (Model.Pets.Count > 0)
+                        {
+                            <div class="form-group mt-2">
+                                <label asp-for="Booking.PetId">Pet:</label>
+                                <select asp-for="Booking.PetId" class="form-control" asp-items="ViewBag.Pets"></select>
+                                @* <span asp-validation-for="Booking.PetId" class="text-danger"></span> *@
+                            </div>
+                        }
+                    </div>
+                    @* else
+                    {
+                        <div class="form-group mt-2">
+                            <label>Pet:</label>
+                            <p>No available pets found for the selected date range. Please <a asp-page="/User/Pets/Create" class="btn btn-primary m-2">Add Pet</a> or select a different date range.</p>
+                        </div>
+                    } *@
+
+                    <div class="form-group">
+                        <label>Services:</label>
+                        <div class="services-container">
+                            @for (int i = 0; i < Model.PetCareServices.Count; i++)
+                            {
+                                <div class="service-column">
+                                    <div class="form-check">
+                                        @{
+                                            bool isChecked = Model.BookingServices.Contains(Model.PetCareServices[i].Id) || Model.PetCareServices[i].Id == preselectedServiceId;
+                                        }
+                                        <input class="form-check-input" type="checkbox" value="@Model.PetCareServices[i].Id" name="BookingServices" @(isChecked ? "checked" : "") />
+                                        <label class="form-check-label">@Model.PetCareServices[i].Type - @Model.PetCareServices[i].Price.ToString("#,##0") VNĐ</label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="BookingServices" class="text-danger"></span>
+
+                        @if (TempData["ErrorPet"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <span>@TempData["ErrorPet"] </span>
+                            </div>
+                        }
+
+
+                        @if (TempData["ErrorAccommodation"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <span>@TempData["ErrorAccommodation"] </span>
+                            </div>
+                        }
+
+                        @if (TempData["ErrorServices"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <span>@TempData["ErrorServices"] </span>
+                            </div>
+                        }
+
+                        @if (TempData["ErrorPetBooking"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <span>@TempData["ErrorPetBooking"] </span>
+                            </div>
+                        }
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">BOOK NOW</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var boardingTypeSelect = document.getElementById('boardingType');
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+
+            function toggleEndDate() {
+                if (boardingTypeSelect.value === 'Day care') {
+                    endDateInput.readOnly = true;
+                    endDateInput.value = startDateInput.value; // Set end date to start date value
+                } else {
+                    endDateInput.readOnly = false;
+                }
+            }
+
+            // Initial call to set the correct state on page load
+            toggleEndDate();
+
+            // Add event listeners
+            boardingTypeSelect.addEventListener('change', toggleEndDate);
+            startDateInput.addEventListener('change', function () {
+                if (boardingTypeSelect.value === 'Day care') {
+                    endDateInput.value = startDateInput.value; // Sync end date with start date
+                    console.log("yes");
+
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.querySelector('input[name="Booking.StartDate"]');
+            const endDateInput = document.querySelector('input[name="Booking.EndDate"]');
+            const accommodationSelect = document.querySelector('select[name="Booking.AccommodationId"]');
+            const accommodationSection = document.getElementById('accommodation-section');
+            updateAccommodations();
+            function updateAccommodations() {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+
+                if (startDate && endDate) {
+                    console.log(startDate);
+                    console.log(endDate);
+                    fetch(`./Create?handler=ValidAccommodations&start=${startDate}&end=${endDate}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Network response was not ok: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            accommodationSection.innerHTML = '';
+                            
+                            if (data.error) {
+                                console.error(data.error);
+                            } else if (data.length === 0) {
+                                accommodationSection.innerHTML = '<div class="form-group mt-2"><label>Accommodation:</label><p>No available accommodations found for the selected date range. Please select a different date range.</p></div>';
+                            }else {
+                                accommodationSelect.innerHTML = '';
+                                data.forEach(accommodation => {
+                                    const option = document.createElement('option');
+                                    option.value = accommodation.accommodationId;
+                                    option.textContent = `${accommodation.name} (${accommodation.type}) - ${accommodation.price} VNĐ`;
+                                    accommodationSelect.appendChild(option);
+                                });
+                                accommodationSection.appendChild(accommodationSelect.parentElement);
+                            }
+                        })
+                        .catch(error => console.error('Error fetching accommodations:', error));
+                }
+            }
+
+            startDateInput.addEventListener('change', updateAccommodations);
+            endDateInput.addEventListener('change', updateAccommodations);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.querySelector('input[name="Booking.StartDate"]');
+            const endDateInput = document.querySelector('input[name="Booking.EndDate"]');
+            const petSelect = document.querySelector('select[name="Booking.PetId"]');
+            const petSection = document.getElementById('pet-section');
+            updatePet();
+            function updatePet() {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+
+                if (startDate && endDate) {
+                    console.log(startDate);
+                    console.log(endDate);
+                    fetch(`./Create?handler=ValidPets&start=${startDate}&end=${endDate}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Network response was not ok: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            petSection.innerHTML = '';
+                            if (data.error) {
+                                console.error(data.error);
+                            } else if (data.length === 0) {
+                                petSection.innerHTML = '<div class="form-group mt-2"><label>Pet:</label><p>No available pets found for the selected date range. Please <a href="/User/Pets/Create" class="btn btn-primary m-2">Add Pet</a> or select a different date range.</p></div>';
+                            } else {
+                                petSelect.innerHTML = '';
+                                data.forEach(pet => {
+                                    const option = document.createElement('option');
+                                    option.value = pet.petId;
+                                    option.textContent = `${pet.name} (${pet.breed})`;
+                                    petSelect.appendChild(option);
+                                });
+                                petSection.appendChild(petSelect.parentElement);
+                            }
+                        })
+                        .catch(error => console.error('Error fetching pet:', error));
+                }
+            }
+
+            startDateInput.addEventListener('change', updatePet);
+            endDateInput.addEventListener('change', updatePet);
+        });
+    </script>
+}

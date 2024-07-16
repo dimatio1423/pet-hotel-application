@@ -58,12 +58,56 @@ namespace Repositories.Repositories.AccommodationRepo
             }
         }
 
+        public Accommodation GetAccommodationByType(string type)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Accommodations.FirstOrDefault(x => x.Type.Equals(type));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<Accommodation> GetAccommodations()
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
                 return _context.Accommodations.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        
+        public List<Accommodation> GetAccommodationsWithSearchSort(string SearchValue, string sortOrder)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                var accommodations = _context.Accommodations.AsQueryable();
+
+                if (!string.IsNullOrEmpty(SearchValue))
+                {
+                    accommodations = accommodations.Where(a => a.Name.Contains(SearchValue) ||
+                                                               a.Type.Contains(SearchValue));
+                }
+
+                accommodations = sortOrder switch
+                {
+                    "Name" => accommodations.OrderBy(a => a.Name),
+                    "Type" => accommodations.OrderBy(a => a.Type),
+                    "Capacity" => accommodations.OrderBy(a => a.Capacity),
+                    "Status" => accommodations.OrderBy(a => a.Status),
+                    "Price" => accommodations.OrderBy(a => a.Price),
+                    _ => accommodations.OrderBy(a => a.Name),
+                };
+
+                return accommodations.ToList();
             }
             catch (Exception ex)
             {

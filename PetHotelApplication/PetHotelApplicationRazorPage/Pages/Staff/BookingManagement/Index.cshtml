@@ -1,0 +1,180 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.Staff.BookingManagement.IndexModel
+
+@{
+    Layout = "_LayoutManage";
+
+    var prevDisabled = !Model.BookingInformation.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.BookingInformation.HasNextPage ? "disabled" : "";
+
+    var minPage = Math.Max(1, Model.BookingInformation.PageIndex - 2);
+    var maxPage = Math.Min(minPage + 4, Model.BookingInformation.TotalPages);
+
+    var currentPageIndex = Model.BookingInformation.PageIndex;
+}
+<style>
+    .action-buttons .btn {
+        margin-right: 5px;
+    }
+
+        .action-buttons .btn:last-child {
+            margin-right: 0;
+        }
+
+    .pagination .page-item.disabled .page-link {
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .card {
+        margin-top: 20px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .status-text {
+        font-weight: bold;
+    }
+</style>
+<div class="container-fluid">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Booking Informations</h2>
+        </div>
+        <form asp-page="./Index" method="get" class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <div class="row gx-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="mb-1 fw-bold">Start Date:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="startDateFrom" class="mb-1">From:</label>
+                                <input type="date" id="startDateFrom" name="StartDateFrom" class="form-control" value="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="startDateTo" class="mb-1">To:</label>
+                                <input type="date" id="startDateTo" name="StartDateTo" class="form-control" value="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="mb-1 fw-bold">End Date:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="endDateFrom" class="mb-1">From:</label>
+                                <input type="date" id="endDateFrom" name="EndDateFrom" class="form-control" value="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="endDateTo" class="mb-1">To:</label>
+                                <input type="date" id="endDateTo" name="EndDateTo" class="form-control" value="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-3 mb-3">
+                    <div class="col-md-3">
+                        <label for="status" class="mb-1 fw-bold">Status:</label>
+                        <select asp-for="StatusFilter" asp-items="@Model.BookingStatus" id="status" name="Status" class="form-control bg-white">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search by user email" name="SearchString" value="@Model.CurrentFilter">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                    <button class="btn btn-warning" type="button"><a asp-page="./Index" class="text-white">Clear filter</a></button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].BoardingType)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].StartDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].EndDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].Status)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].Email)</th>
+                            <th>@Html.DisplayNameFor(model => model.BookingInformation[0].PetName)</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.BookingInformation)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.BoardingType)</td>
+                                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                                <td class="status-text">@Html.DisplayFor(modelItem => item.Status)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                <td>@Html.DisplayFor(modelItem => item.PetName)</td>
+                                <td>
+                                    <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-lg m-0">
+                            <li class="page-item @prevDisabled">
+                                <a class="page-link rounded-0" aria-label="Previous"
+                                   asp-page="./Index"
+                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex - 1)"
+                                   asp-route-currentFilter="@Model.CurrentFilter"
+                                   asp-route-status = "@Model.StatusFilter"
+                                   asp-route-startDateFrom="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-startDateTo="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateFrom="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateTo="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                                    <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+                                </a>
+                            </li>
+
+                            @for (var i = minPage; i <= maxPage; i++)
+                            {
+                                <li class="page-item @(Model.BookingInformation.PageIndex == i ? "active" : "")">
+                                    <a class="page-link" asp-page="./Index"
+                                       asp-route-pageIndex="@i"
+                                       asp-route-currentFilter="@Model.CurrentFilter"
+                                       asp-route-status="@Model.StatusFilter"
+                                       asp-route-startDateFrom="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                       asp-route-startDateTo="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")"
+                                       asp-route-endDateFrom="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                       asp-route-endDateTo="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                                    @i</a>
+                                </li>
+                            }
+
+                            <li class="page-item @nextDisabled">
+                                <a class="page-link rounded-0" aria-label="Next"
+                                   asp-page="./Index"
+                                   asp-route-pageIndex="@(Model.BookingInformation.PageIndex - 1)"
+                                   asp-route-currentFilter="@Model.CurrentFilter"
+                                   asp-route-status="@Model.StatusFilter"
+                                   asp-route-startDateFrom="@(Model.StartDateFrom.HasValue ? Model.StartDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-startDateTo="@(Model.StartDateTo.HasValue ? Model.StartDateTo.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateFrom="@(Model.EndDateFrom.HasValue ? Model.EndDateFrom.Value.ToString("yyyy-MM-dd") : "")"
+                                   asp-route-endDateTo="@(Model.EndDateTo.HasValue ? Model.EndDateTo.Value.ToString("yyyy-MM-dd") : "")">
+                                    <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

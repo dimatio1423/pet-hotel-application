@@ -1,5 +1,11 @@
-﻿using BusinessObjects.Entities;
+﻿using AutoMapper;
+using BusinessObjects.Entities;
+using BusinessObjects.Enums.BookingStatusEnums;
+using BusinessObjects.Enums.PaymenStatusEnums;
+using BusinessObjects.Enums.StatusEnums;
+using BusinessObjects.Models.BookingInformationModel.Response;
 using Repositories.Repositories.BookingInformationRepo;
+using Repositories.Repositories.PaymentRecordRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +17,16 @@ namespace Services.Services.BookingInformationService
     public class BookingInformatonService : IBookingInformationService
     {
         private readonly IBookingInformationRepository _bookingInformationRepo;
+        private readonly IPaymentRecordRepository _paymentRecordRepository;
+        private readonly IMapper _mapper;
 
-        public BookingInformatonService(IBookingInformationRepository bookingInformationRepo)
+        public BookingInformatonService(IBookingInformationRepository bookingInformationRepo, 
+            IPaymentRecordRepository paymentRecordRepository,
+            IMapper mapper)
         {
             _bookingInformationRepo = bookingInformationRepo;
+            _paymentRecordRepository = paymentRecordRepository;
+            _mapper = mapper;
         }
         public void Add(BookingInformation bookingInformation)
         {
@@ -40,5 +52,82 @@ namespace Services.Services.BookingInformationService
         {
             _bookingInformationRepo.Update(bookingInformation);
         }
+
+        public List<BookingInformationResModel> GetBookingInformationByUserId(string userId)
+        {
+            var list = _bookingInformationRepo.GetBookingInformationByUserId(userId);
+            return _mapper.Map<List<BookingInformationResModel>>(list);
+        }
+
+        public string AutoUpdatingBookingInformationStatus()
+        {
+            var now = DateTime.Now;
+
+            var allBookings = _bookingInformationRepo.GetBookingInformations()
+                .Where(x => x.Status == BookingStatusEnums.Pending.ToString() ||
+                            x.Status == BookingStatusEnums.Confirmed.ToString() ||
+                            x.Status == BookingStatusEnums.Processing.ToString())
+                .ToList();
+
+            var bookingsToUpdate = new List<BookingInformation>();
+            var paymentsToUpdate = new List<PaymentRecord>();
+
+            foreach (var booking in allBookings)
+            {
+                if (booking.Status == BookingStatusEnums.Pending.ToString())
+                {
+                        var newDate = booking.CreatedDate.Value.AddHours(48).Date;
+                    if (!booking.PaymentRecords.Any(x => x.Status.Equals(PaymentStatusEnums.Paid.ToString())) && newDate < now.Date)
+                    {
+                        booking.Status = BookingStatusEnums.Cancelled.ToString();
+                        bookingsToUpdate.Add(booking);
+                        foreach (var paymentBooking in booking.PaymentRecords)
+                        {
+                            paymentBooking.Status = PaymentStatusEnums.Cancelled.ToString();
+                            paymentsToUpdate.Add(paymentBooking);
+                        }
+                    }
+
+                    if (!booking.PaymentRecords.Any(x => x.Status == PaymentStatusEnums.Paid.ToString()) && booking.StartDate.Date < now.Date)
+                    {
+                        booking.Status = BookingStatusEnums.Cancelled.ToString();
+                        bookingsToUpdate.Add(booking);
+
+                        foreach(var paymentBooking in booking.PaymentRecords)
+                        {
+                            paymentBooking.Status = PaymentStatusEnums.Cancelled.ToString();
+                            paymentsToUpdate.Add(paymentBooking);
+                        }
+                    }
+                }
+                else if (booking.Status == BookingStatusEnums.Confirmed.ToString())
+                {
+                    if (booking.StartDate.Date <= now.Date && booking.EndDate.Date >= now.Date)
+                    {
+                        booking.Status = BookingStatusEnums.Processing.ToString();
+                        bookingsToUpdate.Add(booking);                        
+                    }
+                }
+                else if (booking.Status == BookingStatusEnums.Processing.ToString())
+                {
+                    if (booking.EndDate.Date < now.Date)
+                    {
+                        booking.Status = BookingStatusEnums.Completed.ToString();
+                        bookingsToUpdate.Add(booking);
+                    }
+                }
+             }
+
+            if (bookingsToUpdate.Count > 0) {
+                _bookingInformationRepo.UpdateRange(bookingsToUpdate);
+            }
+
+            if (paymentsToUpdate.Count > 0) {
+                _paymentRecordRepository.UpdateRange(paymentsToUpdate);
+            }
+
+            return "Update successfully";
+        }
+            
     }
 }

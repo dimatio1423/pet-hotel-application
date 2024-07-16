@@ -1,0 +1,70 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.PaymentRecordsModel
+
+@using BusinessObjects.Enums.PaymenStatusEnums;
+
+@{
+    ViewData["Title"] = "Payment Records";
+}
+
+<div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
+    <nav class="nav nav-borders mb-4">
+        <a class="active ms-0" asp-page="./BookingHistory">Go back</a>
+    </nav>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="card-title mb-0">Payment Records</h2>
+        </div>
+        <div class="card-body">
+            @if (Model.PaymentRecords.Count == 0)
+            {
+                <div class="alert alert-info">
+                    No payment records found.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>ID</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model.PaymentRecords)
+                            {
+                                <tr>
+                                    <td>@record.Id</td>
+                                    <td>@record.Price.ToString("#,##0 VNĐ")</td>
+                                    <td>@record.Date</td>
+                                    <td>@record.Method</td>
+                                    <td>
+                                        @{
+                                            string statusColor;
+                                            switch (record.Status)
+                                            {
+                                                case nameof(PaymentStatusEnums.Paid): statusColor = "success"; break;
+                                                case nameof(PaymentStatusEnums.Unpaid): statusColor = "warning"; break;
+                                                case nameof(PaymentStatusEnums.Cancelled): statusColor = "secondary"; break;
+                                                default: statusColor = "danger"; break; // Error
+                                            }
+                                        }
+                                        <span class="badge bg-@statusColor">
+                                            @record.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

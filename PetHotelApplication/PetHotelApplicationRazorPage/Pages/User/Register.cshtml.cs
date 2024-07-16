@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BusinessObjects.Models.UserModel;
 using Services.Services.UserService;
+using BusinessObjects.Models.UserModel.Request;
 
 namespace PetHotelApplicationRazorPage.Pages.User
 {
@@ -24,7 +24,12 @@ namespace PetHotelApplicationRazorPage.Pages.User
         public async Task<IActionResult> OnPost()
         {
             var currUser = _userService.GetUserByEmail(register.Email);
-            var currUserPhoneNumber = _userService.GetUsers().FirstOrDefault(x => x.PhoneNumber.Equals(register.PhoneNumber));
+            var currUserPhoneNumber = _userService.GetUsers("", null).FirstOrDefault(x => x.PhoneNumber.Equals(register.PhoneNumber));
+
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             if (currUser != null)
             {

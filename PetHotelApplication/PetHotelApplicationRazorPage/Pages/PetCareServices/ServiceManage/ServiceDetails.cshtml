@@ -128,11 +128,22 @@
             <div class="service-image">
                 <div id="petCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        @for (int i = 0; i < imageUrls.Count; i++)
+                        @if (Model.ServiceImage.Count > 0)
                         {
-                            <div class="carousel-item @(i == 0 ? "active" : "")">
-                                <img src="@imageUrls[i]" alt="Service Image @i" />
-                            </div>
+                            @for (int i = 0; i < Model.ServiceImage.Count; i++)
+                            {
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <img src="@Model.ServiceImage[i].Image" alt="Service Image @i" />
+                                </div>
+                            }
+                        }else
+                        {
+                            @for (int i = 0; i < imageUrls.Count; i++)
+                            {
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <img src="@imageUrls[i]" alt="Service Image @i" />
+                                </div>
+                            }
                         }
                     </div>
                     <a class="carousel-control-prev" href="#petCarousel" role="button" data-bs-slide="prev">
@@ -147,7 +158,7 @@
             </div>
             <div class="buttons">
                 <a asp-page="/PetCareServices/ServiceManage/Services" class="btn btn-custom btn-back">Back to Services</a>
-                <a asp-page="/PetCareServices/BookNow" class="btn btn-custom btn-book-now">Book Now</a>
+                <a asp-page="/User/Booking/Create" asp-route-serviceId="@Model.Service.Id" class="btn btn-custom btn-book-now">Book Now</a>
             </div>
         </div>
     </div>

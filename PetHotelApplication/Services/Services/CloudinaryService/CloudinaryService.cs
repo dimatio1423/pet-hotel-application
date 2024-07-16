@@ -1,19 +1,16 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace PetHotelApplicationRazorPage
+namespace Services.Services.CloudinaryService
 {
-    public class CloudinarySettings
-    {
-        public string CloudName { get; set; }
-
-        public string ApiKey { get; set; }
-
-        public string ApiSecret { get; set; }
-    }
-
-    public class CloudinaryService
+    public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary _cloudinary;
 
@@ -26,7 +23,6 @@ namespace PetHotelApplicationRazorPage
                 );
             _cloudinary = new Cloudinary(acc);
         }
-
         public async Task<ImageUploadResult> AddPhoto(IFormFile file)
         {
             var uploadResult = new ImageUploadResult();

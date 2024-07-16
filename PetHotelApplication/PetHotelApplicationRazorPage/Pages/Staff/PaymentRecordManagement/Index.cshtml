@@ -1,0 +1,169 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.Staff.PaymentRecordManagement.IndexModel
+
+@using BusinessObjects.Enums.PaymenStatusEnums;
+
+@{
+    Layout = "_LayoutManage";
+    ViewData["Title"] = "Index";
+
+    var prevDisabled = !Model.PaymentRecord.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PaymentRecord.HasNextPage ? "disabled" : "";
+
+    // Paging to show at max 5 pages
+    var minPage = Math.Max(1, Model.PaymentRecord.PageIndex - 2);
+    var maxPage = Math.Min(minPage + 4, Model.PaymentRecord.TotalPages);
+}
+
+<div class="container-xl px-4 mt-4">
+    <h2 class="card-title mb-4">Payment record</h2>
+
+    <!-- Search & Filter -->
+    <form asp-page="./Index" method="get" class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <div class="row gx-3 mb-3">
+                <div class="col-md-3">
+                    <label for="startDate" class="mb-1 fw-bold">Start Date:</label>
+                    <input type="date" id="startDate" name="StartDate" class="form-control w-75" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("yyyy-MM-dd") : "")">
+                </div>
+                <div class="col-md-3">
+                    <label for="endDate" class="mb-1 fw-bold">End Date:</label>
+                    <input type="date" id="endDate" name="EndDate" class="form-control w-75" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")">
+                </div>
+                <div class="col-md-2">
+                    <label for="status" class="mb-1 fw-bold">Status:</label>
+                    <select asp-for="StatusFilter" asp-items="@Model.PaymentStatus" id="status" name="Status" class="form-control w-75 bg-white">
+                        <option value="">All</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="status" class="mb-1 fw-bold">Method:</label>
+                    <select asp-for="MethodFilter" asp-items="@Model.PaymentMethod" id="method" name="Method" class="form-control w-75 bg-white">
+                        <option value="">All</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search by user email" name="SearchValue" value="@Model.CurrentFilter">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-warning" type="button"><a asp-page="./Index" class="text-white">Clear filter</a></button>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.PaymentRecord.Count == 0)
+    {
+        <div class="alert alert-info">
+            No payment records found.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th>Method</th>
+                        <th>Status</th>
+                        <th>BookingId</th>
+                        <th>User Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in Model.PaymentRecord)
+                    {
+                        <tr>
+                            <td>@record.Id</td>
+                            <td>@record.Price</td>
+                            <td>@record.Date</td>
+                            <td>@record.Method</td>
+                            <td>
+                                @{
+                                    string statusColor;
+                                    switch (record.Status)
+                                    {
+                                        case nameof(PaymentStatusEnums.Paid): statusColor = "success"; break;
+                                        case nameof(PaymentStatusEnums.Unpaid): statusColor = "warning"; break;
+                                        case nameof(PaymentStatusEnums.Cancelled): statusColor = "secondary"; break;
+                                        default: statusColor = "danger"; break; // Error
+                                    }
+                                }
+                                <span class="badge bg-@statusColor">
+                                    @record.Status
+                                </span>
+                            </td>
+
+                            <td>@record.BookingId</td>
+                            <td>@record.User.Email</td>
+
+                            <td>
+                                <a asp-page="./Details" asp-route-id="@record.Id">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <!-- Paging Start -->
+    @if (Model.PaymentRecord.Count > 0)
+    {
+        <div class="col-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-lg m-0 justify-content-center">
+                    <li class="page-item @prevDisabled">
+                        <a class="page-link rounded-0" aria-label="Previous"
+                           asp-page="./Index"
+                           asp-route-pageIndex="@(Model.PaymentRecord.PageIndex - 1)"
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter"
+                           asp-route-method="@Model.MethodFilter">
+                            <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+                        </a>
+                    </li>
+
+                    @for (var i = minPage; i <= maxPage; i++)
+                    {
+                        <li class="page-item @(Model.PaymentRecord.PageIndex == i ? "active" : "")">
+                            <a class="page-link"
+                               asp-page="./Index"
+                               asp-route-pageIndex="@i"
+                               asp-route-currentFilter="@Model.CurrentFilter"
+                               asp-route-startDate="@Model.StartDate"
+                               asp-route-endDate="@Model.EndDate"
+                               asp-route-status="@Model.StatusFilter"
+                               asp-route-method="@Model.MethodFilter">
+                               @i
+                               </a>
+                        </li>
+                    }
+
+                    <li class="page-item @nextDisabled">
+                        <a class="page-link rounded-0" aria-label="Next"
+                           asp-page="./Index"
+                           asp-route-pageIndex="@(Model.PaymentRecord.PageIndex + 1)"
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           asp-route-startDate="@Model.StartDate"
+                           asp-route-endDate="@Model.EndDate"
+                           asp-route-status="@Model.StatusFilter"
+                           asp-route-method="@Model.MethodFilter">
+                            <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+    <!-- Paging End -->

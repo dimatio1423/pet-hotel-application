@@ -1,4 +1,7 @@
-﻿using BusinessObjects.Entities;
+﻿using AutoMapper;
+using BusinessObjects.Entities;
+using BusinessObjects.Enums.PaymenStatusEnums;
+using BusinessObjects.Models.PaymentRecordModel.Response;
 using Repositories.Repositories.PaymentRecordRepo;
 using System;
 using System.Collections.Generic;
@@ -11,10 +14,12 @@ namespace Services.Services.PaymentRecordService
     public class PaymenRecordService : IPaymentRecordService
     {
         private readonly IPaymentRecordRepository _paymentRecordRepo;
+        private readonly IMapper _mapper;
 
-        public PaymenRecordService(IPaymentRecordRepository paymentRecordRepo)
+        public PaymenRecordService(IPaymentRecordRepository paymentRecordRepo, IMapper mapper)
         {
             _paymentRecordRepo = paymentRecordRepo;
+            _mapper = mapper;
         }
         public void Add(PaymentRecord paymentRecord)
         {
@@ -39,6 +44,21 @@ namespace Services.Services.PaymentRecordService
         public void Update(PaymentRecord paymentRecord)
         {
             _paymentRecordRepo.Update(paymentRecord);
+        }
+
+        public List<PaymentRecordResModel> GetPaymentRecordsFromBookingId(string bookingId)
+        {
+            var list = _paymentRecordRepo.GetPaymentRecordsFromBookingId(bookingId);
+            return _mapper.Map<List<PaymentRecordResModel>>(list);
+        }
+
+        public void CancelBookingPaymentRecords(string bookingId)
+        {
+            var list = _paymentRecordRepo.GetPaymentRecordsFromBookingId(bookingId);
+            list.Where(p => p.Status.Equals(nameof(PaymentStatusEnums.Unpaid)))
+                .ToList()
+                .ForEach(p => p.Status = nameof(PaymentStatusEnums.Cancelled));
+            _paymentRecordRepo.UpdateRange(list);
         }
     }
 }

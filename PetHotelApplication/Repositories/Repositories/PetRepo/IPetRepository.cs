@@ -11,8 +11,10 @@ namespace Repositories.Repositories.PetRepo
     {
         List<Pet> GetPets();
         Pet GetPetById(string id);
+        Pet? GetPetDetailsById(string id);
         void Add(Pet pet);
         void Delete(Pet pet);
         void Update(Pet pet);
+        public List<Pet> GetUserPets(string userId, string petName);
     }
 }

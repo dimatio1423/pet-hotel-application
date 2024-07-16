@@ -2,9 +2,107 @@
 @model PetHotelApplicationRazorPage.Pages.Admin.IndexModel
 @{
     Layout = "_LayoutManage";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome, admin</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col text-center">
+            <h1 class="display-4">Welcome to Admin Dashboard</h1>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-3 col-sm-6">
+            <a href="/Admin/UserManagement/Index" class="card text-center text-decoration-none">
+                <div class="card-body">
+                    <h2 class="card-title">Total Users</h2>
+                    <p class="card-text display-4">@Model.TotalUsers</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <a href="/Admin/Index" class="card text-center text-decoration-none">
+                <div class="card-body">
+                    <h2 class="card-title">Total Bookings</h2>
+                    <p class="card-text display-4">@Model.TotalBookings</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <a href="/Admin/Index" class="card text-center text-decoration-none">
+                <div class="card-body">
+                    <h2 class="card-title">Total Services</h2>
+                    <p class="card-text display-4">@Model.TotalServices</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <a href="/Admin/Index" class="card text-center text-decoration-none">
+                <div class="card-body">
+                    <h2 class="card-title">Total Accommodations</h2>
+                    <p class="card-text display-4">@Model.TotalAccommodations</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <h2>Feedback Ratings:</h2>
+            @for (int i = 0; i < Model.FeedbackCounts.Length; i++)
+            {
+                <p>
+                    Rating @(i + 1) ⭐:
+                    @for (int j = 0; j < i + 1; j++)
+                    {
+                        <span class="fa fa-star checked"></span>
+                    }
+                    @Model.FeedbackCounts[i]
+                </p>
+            }
+        </div>
+    </div>
 </div>
+
+<style>
+    .checked {
+        color: orange;
+    }
+
+    .row {
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-top: 20px;
+    }
+
+    .fa-star {
+        font-size: 1.5rem;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    .card-text {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    .text-decoration-none {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>

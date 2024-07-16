@@ -53,7 +53,7 @@ public partial class PetHotelApplicationDbContext : DbContext
     {
         modelBuilder.Entity<Accommodation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC270A4CF51F");
+            entity.HasKey(e => e.Id).HasName("PK__Accommod__3214EC27E9057CEE");
 
             entity.ToTable("Accommodation");
 
@@ -61,22 +61,15 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("ID");
-            entity.Property(e => e.Description).IsRequired();
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+            entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(20);
-            entity.Property(e => e.Type)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.Status).HasMaxLength(20);
+            entity.Property(e => e.Type).HasMaxLength(50);
         });
 
         modelBuilder.Entity<BookingInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC27D8B17012");
+            entity.HasKey(e => e.Id).HasName("PK__BookingI__3214EC27773B53BC");
 
             entity.ToTable("BookingInformation");
 
@@ -85,25 +78,20 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID");
             entity.Property(e => e.AccommodationId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("AccommodationID");
-            entity.Property(e => e.BoardingType)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.BoardingType).HasMaxLength(50);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.PetId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("PetID");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(20);
+            entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.UserId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("UserID");
@@ -126,18 +114,15 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC27D932B3E1");
+            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC27EEDAD943");
 
             entity.Property(e => e.Id)
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("ID");
-            entity.Property(e => e.Comment)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.Comment).IsUnicode(false);
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.UserId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("UserID");
@@ -150,7 +135,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<PaymentRecord>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC27DB977409");
+            entity.HasKey(e => e.Id).HasName("PK__PaymentR__3214EC27F7B657C9");
 
             entity.ToTable("PaymentRecord");
 
@@ -159,25 +144,18 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID");
             entity.Property(e => e.BookingId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("BookingID");
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.Method)
-                .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Price)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Status)
-                .IsRequired()
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.UserId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("UserID");
@@ -195,7 +173,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<Pet>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC274877DC85");
+            entity.HasKey(e => e.Id).HasName("PK__Pet__3214EC27B6E4F753");
 
             entity.ToTable("Pet");
 
@@ -204,20 +182,11 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID");
             entity.Property(e => e.Avatar).IsUnicode(false);
-            entity.Property(e => e.Breed)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.PetName)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.Species)
-                .IsRequired()
-                .HasMaxLength(50);
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(20);
+            entity.Property(e => e.Breed).HasMaxLength(50);
+            entity.Property(e => e.PetName).HasMaxLength(100);
+            entity.Property(e => e.Species).HasMaxLength(50);
+            entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.UserId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("UserID");
@@ -230,7 +199,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<PetCareService>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC274EE4A915");
+            entity.HasKey(e => e.Id).HasName("PK__PetCareS__3214EC279D790E16");
 
             entity.ToTable("PetCareService");
 
@@ -240,18 +209,15 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .HasColumnName("ID");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(20);
+            entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.Type)
-                .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC27BE20FEDA");
+            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC2776C9DA81");
 
             entity.ToTable("Role");
 
@@ -260,14 +226,13 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID");
             entity.Property(e => e.RoleName)
-                .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
 
         modelBuilder.Entity<ServiceBooking>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27290D8194");
+            entity.HasKey(e => e.Id).HasName("PK__ServiceB__3214EC27C35DF6EA");
 
             entity.ToTable("ServiceBooking");
 
@@ -276,11 +241,9 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID");
             entity.Property(e => e.BookingId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.ServiceId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("ServiceID");
@@ -298,7 +261,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<ServiceImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceI__3214EC270928FA9D");
+            entity.HasKey(e => e.Id).HasName("PK__ServiceI__3214EC2796ED5AAF");
 
             entity.ToTable("ServiceImage");
 
@@ -306,11 +269,8 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("ID");
-            entity.Property(e => e.Image)
-                .IsRequired()
-                .IsUnicode(false);
+            entity.Property(e => e.Image).IsUnicode(false);
             entity.Property(e => e.ServiceId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("ServiceID");
@@ -323,7 +283,7 @@ public partial class PetHotelApplicationDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC27970EDD5A");
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC27E4ED9DC0");
 
             entity.ToTable("User");
 
@@ -331,31 +291,19 @@ public partial class PetHotelApplicationDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("ID");
-            entity.Property(e => e.Address)
-                .IsRequired()
-                .HasMaxLength(255);
+            entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.Avatar).IsUnicode(false);
-            entity.Property(e => e.Email)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.FullName)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.Password)
-                .IsRequired()
-                .HasMaxLength(100);
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Password).HasMaxLength(100);
             entity.Property(e => e.PhoneNumber)
-                .IsRequired()
                 .HasMaxLength(15)
                 .IsUnicode(false);
             entity.Property(e => e.RoleId)
-                .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("RoleID");
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(20);
+            entity.Property(e => e.Status).HasMaxLength(20);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)

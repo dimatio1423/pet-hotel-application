@@ -1,0 +1,80 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.Manager.AccommodationManage.CreateModel
+
+@{
+    Layout = "_LayoutManage";
+    ViewData["Title"] = "Create";
+}
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="card shadow-1g">
+            <div class="card-header">
+                <h2 class="card-title">Add New Accommodation</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" asp-for="Accommodation.Name" class="control-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="Accommodation.Name" class="form-control" />
+                            <span asp-validation-for="Accommodation.Name" class="text-danger"></span>
+                            @if (TempData["ErrorName"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorName"] </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" asp-for="Accommodation.Type" class="control-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="Accommodation.Type" class="form-control" asp-items="ViewBag.AccommodationType"></select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" asp-for="Accommodation.Capacity" class="control-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="Accommodation.Capacity" class="form-control" />
+                            <span asp-validation-for="Accommodation.Capacity" class="text-danger"></span>
+                            @if (TempData["ErrorCapacity"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    <span>@TempData["ErrorCapacity"] </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" asp-for="Accommodation.Description" class="control-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="Accommodation.Description" class="form-control" />
+                            <span asp-validation-for="Accommodation.Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" asp-for="Accommodation.Price" class="control-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="Accommodation.Price" class="form-control" />
+                            <span asp-validation-for="Accommodation.Price" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

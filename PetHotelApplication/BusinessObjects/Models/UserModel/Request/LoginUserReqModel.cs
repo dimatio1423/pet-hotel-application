@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObjects.Models.UserModel
+namespace BusinessObjects.Models.UserModel.Request
 {
     public class LoginUserReqModel
     {
@@ -13,6 +13,7 @@ namespace BusinessObjects.Models.UserModel
         [Required(ErrorMessage = "Email is required")]
         public required string Email { get; set; }
         [Required(ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
         public required string Password { get; set; }
     }
 }

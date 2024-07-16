@@ -4,7 +4,16 @@
     Layout = "_LayoutManage";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome, Staff</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4">Welcome, Staff</h1>
+        </div>
+        <div class="mt-4">
+            <a class="btn btn-primary d-block mx-auto mb-4" asp-page="/Staff/ServicesManagement/Index">Services Management</a>
+            <a class="btn btn-primary d-block mx-auto mb-4" asp-page="/Staff/PaymentRecordManagement/Index">Payment Record Management</a>
+            <a class="btn btn-primary d-block mx-auto mb-4" asp-page="/Staff/BookingManagement/Index">Booking Information Management</a>
+            <a class="btn btn-primary d-block mx-auto mb-4" asp-page="/Staff/FeedbacksManagement/Index">Feedbacks Management</a>
+        </div>
+    </div>
 </div>

@@ -74,6 +74,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
+                @{
+                    var user = SessionHelper.GetObjectSession<BusinessObjects.Entities.User>(Context.Session, "Account");
+                }
                 <a asp-page="/Index" class="nav-item nav-link ">Home</a>
                 <a asp-page="/Index" class="nav-item nav-link">About</a>
                 <a asp-page="/PetCareServices/ServiceManage/Services" class="nav-item nav-link">Service</a>
@@ -81,11 +84,19 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
                         <a asp-page="/Index" class="dropdown-item">The Team</a>
-                        <a asp-page="/Index" class="dropdown-item">Feedback</a>
+                        <a asp-page="/User/Feedbacks/Index" class="dropdown-item">Feedback</a>
+                        @{
+                            if (user != null)
+                            {
+                                <a asp-page="/User/Pets/Index" class="dropdown-item">My Pet</a>
+                                <a asp-page="/User/Profiles/Edit" class="dropdown-item">My Profile</a>
+                                <a asp-page="/User/Booking/BookingHistory" class="dropdown-item">Booking History</a>
+                            }
+                        }
                     </div>
                 </div>
+                <a asp-page="/User/Booking/Create" class="nav-item nav-link">Booking</a>
                 @{
-                    var user = SessionHelper.GetObjectSession<BusinessObjects.Entities.User>(Context.Session, "Account");
                     if (user != null)
                     {
                         <a asp-page="/SignOut" class="nav-item nav-link">Sign out</a>

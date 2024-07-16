@@ -11,6 +11,8 @@ namespace Repositories.Repositories.AccommodationRepo
     {
         List<Accommodation> GetAccommodations();
         Accommodation GetAccommodationById(string id);
+        Accommodation GetAccommodationByType(string type);
+        List<Accommodation> GetAccommodationsWithSearchSort(string searchValue, string sortOrder);
         void Add(Accommodation accommodation);
         void Delete(Accommodation accommodation);
         void Update(Accommodation accommodation);

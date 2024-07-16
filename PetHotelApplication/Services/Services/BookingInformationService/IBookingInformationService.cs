@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Entities;
+using BusinessObjects.Models.BookingInformationModel.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Services.Services.BookingInformationService
         void Add(BookingInformation bookingInformation);
         void Delete(BookingInformation bookingInformation);
         void Update(BookingInformation bookingInformation);
+        List<BookingInformationResModel> GetBookingInformationByUserId(string userId);
+        string AutoUpdatingBookingInformationStatus();
     }
 }

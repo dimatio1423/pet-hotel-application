@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Entities;
+using BusinessObjects.Models.PaymentRecordModel.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Services.Services.PaymentRecordService
         void Add(PaymentRecord paymentRecord);
         void Delete(PaymentRecord paymentRecord);
         void Update(PaymentRecord paymentRecord);
+        List<PaymentRecordResModel> GetPaymentRecordsFromBookingId(string bookingId);
+        void CancelBookingPaymentRecords(string bookingId);
     }
 }

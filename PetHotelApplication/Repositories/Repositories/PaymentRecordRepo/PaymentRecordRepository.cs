@@ -15,11 +15,8 @@ namespace Repositories.Repositories.PaymentRecordRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                var currPaymentRecord = _context.PaymentRecords.FirstOrDefault(x => x.Id.Equals(paymentRecord.Id));
-
-                currPaymentRecord.Status = "Inactive";
-
-                _context.Update(currPaymentRecord);
+               
+                _context.Add(paymentRecord);
 
                 _context.SaveChanges();
             }
@@ -39,7 +36,10 @@ namespace Repositories.Repositories.PaymentRecordRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.PaymentRecords.FirstOrDefault(x => x.Id.Equals(id));
+                return _context.PaymentRecords
+                    .Include(x => x.User)
+                    .Include(x => x.Booking)
+                    .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
             {
@@ -52,7 +52,10 @@ namespace Repositories.Repositories.PaymentRecordRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.PaymentRecords.ToList();
+                return _context.PaymentRecords
+                    .Include(x => x.User)
+                    .Include(x => x.Booking)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -67,6 +70,41 @@ namespace Repositories.Repositories.PaymentRecordRepo
                 using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<PaymentRecord>(paymentRecord).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<PaymentRecord> GetPaymentRecordsFromBookingId(string bookingId)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.PaymentRecords
+                            .Include(p => p.Booking)
+                            .Where(p => p.Booking.Id.Equals(bookingId))
+                            .OrderByDescending(p => p.Date)
+                            .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void UpdateRange(List<PaymentRecord> paymentRecords)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                //_context.Categories.Update(category);
+                foreach (var paymentRecord in paymentRecords)
+                {
+                    _context.Entry(paymentRecord).State = EntityState.Modified;
+                }
                 _context.SaveChanges();
             }
             catch (Exception ex)

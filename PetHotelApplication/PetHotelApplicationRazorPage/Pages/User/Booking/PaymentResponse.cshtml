@@ -1,0 +1,17 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.User.Booking.PaymentResponseModel
+@{
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="container-fluid mt-5">
+        <div class="container p-4 bg-light rounded">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span>@TempData["Error"]</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+}

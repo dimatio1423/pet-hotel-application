@@ -1,0 +1,194 @@
+﻿@page
+@model PetHotelApplicationRazorPage.Pages.Admin.UserManagement.IndexModel
+
+@{
+    Layout = "_LayoutManage";
+    ViewData["Title"] = "User Management";
+
+    var prevDisabled = !Model.Users.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Users.HasNextPage ? "disabled" : "";
+    var minPage = Math.Max(1, Model.Users.PageIndex - 2);
+    var maxPage = Math.Min(minPage + 4, Model.Users.TotalPages);
+}
+
+<style>
+    h1 {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .btn-primary.rounded-pill {
+        border-radius: 50px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-top: -5px;
+    }
+
+    .form-inline {
+        display: flex;
+        align-items: center;
+    }
+
+        .form-inline .form-control {
+            width: 300px;
+            margin-right: 10px;
+        }
+
+    .btn-create {
+        margin-left: 10px; /* Khoảng cách giữa nút Search và nút Create New */
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-4">User Management</h1>
+                <div class="d-flex justify-content-center mt-3">
+                    <form method="get" class="form-inline">
+                        <div class="form-group">
+                            <input type="text" name="SearchValue" value="@Model.CurrentFilter" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a asp-page="Create" class="btn btn-success btn-create">Create New</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Users[0].Avatar)</th>
+                    <th>
+                        <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
+                            @Html.DisplayNameFor(model => model.Users[0].FullName)
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index" asp-route-sortOrder="@Model.PhoneSort">
+                            @Html.DisplayNameFor(model => model.Users[0].PhoneNumber)
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index" asp-route-sortOrder="@Model.EmailSort">
+                            @Html.DisplayNameFor(model => model.Users[0].Email)
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index" asp-route-sortOrder="@Model.AddressSort">
+                            @Html.DisplayNameFor(model => model.Users[0].Address)
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index" asp-route-sortOrder="@Model.StatusSort">
+                            @Html.DisplayNameFor(model => model.Users[0].Status)
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-page="./Index" asp-route-sortOrder="@Model.RoleSort">
+                            @Html.DisplayNameFor(model => model.Users[0].Role.RoleName)
+                        </a>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    <tr>
+                        <td class="text-center align-middle">
+                            <img src="@item.Avatar" alt="avt" class="rounded-circle avatar" onerror="this.onerror=null; this.src='default-avatar.png';">
+                        </td>
+                        <td class="align-middle">@Html.DisplayFor(modelItem => item.FullName)</td>
+                        <td class="align-middle">@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                        <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td class="align-middle">@Html.DisplayFor(modelItem => item.Address)</td>
+                        <td class="align-middle">@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td class="align-middle">@Html.DisplayFor(modelItem => item.Role.RoleName)</td>
+                        <td class="align-middle">
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a>
+                            @if (item.Status == "Active")
+                            {
+                                <a asp-page="./ChangeStatus" asp-route-id="@item.Id" asp-route-status="Inactive" class="btn btn-danger btn-sm">Deactivate</a>
+                            }
+                            else
+                            {
+                                <a asp-page="./ChangeStatus" asp-route-id="@item.Id" asp-route-status="Active" class="btn btn-success btn-sm">Activate</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="col-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-lg m-0">
+                    <li class="page-item @prevDisabled">
+                        <a class="page-link rounded-0" aria-label="Previous"
+                           asp-page="./Index"
+                           asp-route-pageIndex="@(Model.Users.PageIndex - 1)">
+                            <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+                        </a>
+                    </li>
+
+                    @for (var i = minPage; i <= maxPage; i++)
+                    {
+                        <li class="page-item @(Model.Users.PageIndex == i ? "active" : "")">
+                            <a class="page-link" asp-page="./Index"
+                               asp-route-pageIndex="@i">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @nextDisabled">
+                        <a class="page-link rounded-0" aria-label="Next"
+                           asp-page="./Index"
+                           asp-route-pageIndex="@(Model.Users.PageIndex + 1)">
+                            <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

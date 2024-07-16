@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BusinessObjects.Models.UserModel;
 using Services.Services.UserService;
 using BusinessObjects.Enums.RoleEnums;
+using BusinessObjects.Enums.StatusEnums;
+using BusinessObjects.Models.UserModel.Request;
 
 namespace PetHotelApplicationRazorPage.Pages.User
 {
@@ -28,9 +29,21 @@ namespace PetHotelApplicationRazorPage.Pages.User
         public async Task<IActionResult> OnPost()
         {
             var currEmail = loginModel.Email;
+
+            if (!ModelState.IsValid)
+            {
+                loginModel.Email = currEmail;
+                return Page();
+            }
+
             BusinessObjects.Entities.User currUser = _userService.GetUserByEmail(loginModel.Email);
             if (currUser != null)
             {
+                if (currUser.Status.Equals(StatusEnums.Inactive.ToString()))
+                {
+                    return RedirectToPage("/Forbidden");
+                }
+
                 var isPasswordValid = _userService.VerifyPassword(loginModel.Password, currUser.Password);
                 if (isPasswordValid)
                 {

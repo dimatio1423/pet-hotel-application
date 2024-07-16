@@ -1,12 +1,9 @@
 ﻿using BusinessObjects.Entities;
 using BusinessObjects.Enums.StatusEnums;
 using Microsoft.EntityFrameworkCore;
-using Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Repositories.UserRepo
 {
@@ -31,13 +28,17 @@ namespace Repositories.Repositories.UserRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                var currUser = _context.Pets.FirstOrDefault(x => x.Id.Equals(user.Id));
-
-                currUser.Status = StatusEnums.Inactive.ToString();
-
-                _context.Update(currUser);
-
-                _context.SaveChanges();
+                var currUser = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+                if (currUser != null)
+                {
+                    currUser.Status = StatusEnums.Inactive.ToString();
+                    _context.Update(currUser);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("User not found");
+                }
             }
             catch (Exception ex)
             {
@@ -54,16 +55,47 @@ namespace Repositories.Repositories.UserRepo
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception(ex.ToString());
             }
         }
 
-        public List<User> GetUsers()
+        public List<User> GetUsers(string SearchValue, string sortOrder)
         {
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.Users.ToList();
+                var users = _context.Users.Include(x => x.Role)
+                                          .Where(x => x.Role.RoleName != "Admin")
+                                          .AsQueryable();
+
+                if (!string.IsNullOrEmpty(SearchValue))
+                {
+                    users = users.Where(x => x.FullName.Contains(SearchValue) ||
+                                             x.PhoneNumber.Contains(SearchValue) ||
+                                             x.Email.Contains(SearchValue) ||
+                                             x.Address.Contains(SearchValue) ||
+                                             x.Status.Contains(SearchValue) ||
+                                             x.Role.RoleName.Contains(SearchValue));
+                }
+
+                users = sortOrder switch
+                {
+                    "name_asc" => users.OrderBy(x => x.FullName),
+                    "name_desc" => users.OrderByDescending(x => x.FullName),
+                    "phone_asc" => users.OrderBy(x => x.PhoneNumber),
+                    "phone_desc" => users.OrderByDescending(x => x.PhoneNumber),
+                    "email_asc" => users.OrderBy(x => x.Email),
+                    "email_desc" => users.OrderByDescending(x => x.Email),
+                    "address_asc" => users.OrderBy(x => x.Address),
+                    "address_desc" => users.OrderByDescending(x => x.Address),
+                    "status_asc" => users.OrderBy(x => x.Status),
+                    "status_desc" => users.OrderByDescending(x => x.Status),
+                    "role_asc" => users.OrderBy(x => x.Role.RoleName),
+                    "role_desc" => users.OrderByDescending(x => x.Role.RoleName),
+                    _ => users.OrderBy(x => x.FullName),
+                };
+
+                return users.ToList();
             }
             catch (Exception ex)
             {
@@ -76,13 +108,51 @@ namespace Repositories.Repositories.UserRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                //_context.Categories.Update(category);
-                _context.Entry<User>(user).State = EntityState.Modified;
+                _context.Entry(user).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public bool isEmailExist(string email)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.Any(x => x.Email.Equals(email));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        public bool isPhoneNumberExist(string phoneNumber)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.Any(x => x.PhoneNumber.Equals(phoneNumber));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        public User GetUserById(string id)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.Users.FirstOrDefault(x => x.Id.Equals(id.ToString()));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
             }
         }
     }

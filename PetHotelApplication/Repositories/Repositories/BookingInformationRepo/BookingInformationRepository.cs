@@ -48,7 +48,12 @@ namespace Repositories.Repositories.BookingInformationRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.BookingInformations.ToList();
+                return _context.BookingInformations
+                    .Include(x => x.User)
+                    .Include(x => x.Accommodation)
+                    .Include(x => x.Pet)
+                    .Include(x => x.ServiceBookings)
+                    .Include(x => x.PaymentRecords).ToList();
             }
             catch (Exception ex)
             {
@@ -61,7 +66,13 @@ namespace Repositories.Repositories.BookingInformationRepo
             try
             {
                 using var _context = new PetHotelApplicationDbContext();
-                return _context.BookingInformations.FirstOrDefault(x => x.Id.Equals(id));
+                return _context.BookingInformations
+                    .Include(x => x.User)
+                    .Include(x => x.Accommodation)
+                    .Include(x => x.Pet)
+                    .Include(x => x.ServiceBookings)
+                        .ThenInclude(sb => sb.Service)
+                    .FirstOrDefault(x => x.Id.Equals(id));
             }
             catch (Exception ex)
             {
@@ -76,6 +87,45 @@ namespace Repositories.Repositories.BookingInformationRepo
                 using var _context = new PetHotelApplicationDbContext();
                 //_context.Categories.Update(category);
                 _context.Entry<BookingInformation>(bookingInformation).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<BookingInformation> GetBookingInformationByUserId(string userId)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                return _context.BookingInformations
+                            .Include(b => b.User)
+                            .Include(b => b.Accommodation)
+                            .Include(b => b.Pet)
+                            .Include(b => b.ServiceBookings)
+                                .ThenInclude(sb => sb.Service)
+                            .OrderBy(b => b.Pet.PetName)
+                            .OrderByDescending(b => b.StartDate)
+                            .Where(b => b.User.Id.Equals(userId))
+                            .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        
+        public void UpdateRange(List<BookingInformation> list)
+        {
+            try
+            {
+                using var _context = new PetHotelApplicationDbContext();
+                foreach (var bookingInformation in list) 
+                {
+                    _context.Entry(bookingInformation).State = EntityState.Modified;
+                }
                 _context.SaveChanges();
             }
             catch (Exception ex)
